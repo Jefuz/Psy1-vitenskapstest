@@ -4,9 +4,27 @@
 spørsmålene i en bolk deler de samme fem alternativene. Ren statisk HTML/CSS/JS
 uten byggverktøy, samme mønster som `Politikk-test`.
 
-- **Test:** <https://jefuz.github.io/Psy1-vitenskapstest/psy1-vitenskap-og-metode.html> (rot-URL-en videresender hit)
-
 Testen er et øvingsverktøy, ikke en vurdering. Ingen data forlater nettleseren.
+
+## Bruk
+
+**Lokalt, virker med én gang:** åpne `psy1-vitenskap-og-metode.html` i nettleseren.
+Filen er selvstendig og trenger verken server eller nett.
+
+**Publisert:** etter at repoet er pushet og GitHub Pages er slått på, ligger testen på
+`https://jefuz.github.io/Psy1-vitenskapstest/psy1-vitenskap-og-metode.html`
+(rot-URL-en videresender hit). Lenka er død fram til det er gjort.
+
+Publisering, kjørt fra Windows (ikke fra en mountet Linux-sesjon, der låser
+`git` seg på filrettigheter):
+
+```
+gh repo create jefuz/Psy1-vitenskapstest --public --source . --push
+```
+
+eller, uten `gh`: opprett et tomt repo med navnet `Psy1-vitenskapstest` på
+github.com, og kjør `git push -u origin main`. Slå deretter på Pages fra
+`main` / rot under Settings → Pages.
 
 ## Filer
 
