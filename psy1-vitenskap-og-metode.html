@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Psykologi 1: Vitenskap og metode</title>
+<meta name="description" content="Ovingstest med 60 flervalgsoppgaver i 12 bolker. Psykologi 1, okt 1A.">
+<style>
+  :root{
+    --bg:#f6f7fb; --card:#ffffff; --ink:#1c2333; --muted:#5b6478;
+    --line:#e4e7ef; --accent:#3f51b5;
+    --ok:#15803d; --okbg:#eefaf1; --okline:#a7e0ba;
+    --err:#b91c1c; --errbg:#fef2f2; --errline:#f3c2c2;
+    --shadow:0 1px 3px rgba(20,30,60,.08),0 8px 24px rgba(20,30,60,.06);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:28px 18px 80px}
+  h1{font-size:1.7rem;margin:.2em 0 .1em;letter-spacing:-.01em}
+  h2{font-size:1.15rem;margin:0}
+  h3{font-size:1rem;margin:0 0 8px}
+  .sub{color:var(--muted);font-size:.98rem;margin:.2em 0 0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    box-shadow:var(--shadow);padding:22px}
+  .card + .card{margin-top:16px}
+  .pill{display:inline-block;font-size:.74rem;font-weight:600;letter-spacing:.03em;
+    text-transform:uppercase;padding:4px 10px;border-radius:999px;background:#eef0f7;color:var(--muted)}
+  .btn{appearance:none;border:0;border-radius:12px;background:var(--accent);color:#fff;
+    font-size:1rem;font-weight:600;padding:12px 20px;cursor:pointer;transition:.15s}
+  .btn:hover{filter:brightness(1.06)}
+  .btn.ghost{background:#eef0f7;color:var(--ink)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .between{justify-content:space-between}
+  .muted{color:var(--muted)}
+  .small{font-size:.88rem}
+  .disc{background:#fff8e9;border:1px solid #f3e2b8;border-radius:12px;padding:12px 14px;
+    font-size:.9rem;color:#6b5a23}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:14px}
+  .bolk{text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;
+    padding:12px 14px;cursor:pointer;transition:.12s;font:inherit;color:inherit}
+  .bolk:hover{border-color:#c7ccdc;background:#fafbff}
+  .bolk b{display:block;font-size:.98rem}
+  .bolk span{display:block;color:var(--muted);font-size:.84rem;margin-top:2px}
+  .bolk .done{color:var(--ok);font-weight:600}
+  .opts{display:grid;gap:8px;margin-top:14px}
+  .opt{display:flex;align-items:flex-start;gap:11px;border:1px solid var(--line);border-radius:11px;
+    padding:11px 13px;cursor:pointer;transition:.12s;font-size:.96rem;background:#fff;
+    text-align:left;font-family:inherit;color:inherit;width:100%}
+  .opt:hover{border-color:#c7ccdc;background:#fafbff}
+  .opt .key{flex:none;width:22px;height:22px;border-radius:6px;background:#eef0f7;color:var(--muted);
+    font-size:.78rem;font-weight:700;display:grid;place-items:center;margin-top:1px}
+  .opt.sel{border-color:var(--accent);background:#f1f3ff}
+  .opt.correct{border-color:var(--okline);background:var(--okbg)}
+  .opt.correct .key{background:var(--ok);color:#fff}
+  .opt.wrong{border-color:var(--errline);background:var(--errbg)}
+  .opt.wrong .key{background:var(--err);color:#fff}
+  .opt:disabled{cursor:default}
+  .pbar{height:8px;background:#e9ecf5;border-radius:99px;overflow:hidden;margin:14px 0 4px}
+  .pbar>i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
+  .fb{margin-top:14px;border-radius:12px;padding:13px 15px;font-size:.94rem;border:1px solid}
+  .fb.ok{background:var(--okbg);border-color:var(--okline)}
+  .fb.no{background:var(--errbg);border-color:var(--errline)}
+  .fb b{display:block;margin-bottom:3px}
+  .nav{display:flex;justify-content:space-between;margin-top:20px;gap:12px}
+  .qt{font-weight:600;margin:10px 0 0;font-size:1.06rem}
+  .scorebig{font-size:2.4rem;font-weight:700;letter-spacing:-.02em;margin:6px 0 0}
+  table{border-collapse:collapse;width:100%;font-size:.9rem;margin-top:10px}
+  th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600;font-size:.82rem;text-transform:uppercase;letter-spacing:.03em}
+  .hide{display:none}
+  footer{margin-top:26px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ============ FORSIDE ============ -->
+  <section id="home">
+    <h1>Vitenskap og metode</h1>
+    <p class="sub">Psykologi 1, økt 1A. 60 flervalgsoppgaver i 12 bolker på fem.
+      Alle fem spørsmålene i en bolk deler de samme fem alternativene.</p>
+
+    <div class="card" style="margin-top:18px">
+      <h2>Slik virker øvingen</h2>
+      <p class="small muted" style="margin:.5em 0 0">
+        Du får svaret rett etter hvert spørsmål, med en kort forklaring på hvorfor det du valgte
+        er riktig eller galt. Spørsmål du bommer på kommer igjen senere i runden, til de sitter.
+        Poengsummen teller bare første forsøk.</p>
+      <div id="resumeBox" class="hide" style="margin-top:14px">
+        <div class="row between">
+          <div class="small"><b id="resumeTxt"></b></div>
+          <div class="row">
+            <button class="btn ghost small" id="resumeNo">Start på nytt</button>
+            <button class="btn" id="resumeYes">Fortsett</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Velg bolk</h2>
+      <p class="small muted" style="margin:.4em 0 0">Fem spørsmål tar rundt tre minutter.</p>
+      <div class="grid" id="bolkGrid"></div>
+      <div class="row" style="margin-top:16px">
+        <button class="btn" data-set="all">Kjør alle 60</button>
+        <button class="btn ghost" data-set="random">20 tilfeldige</button>
+        <button class="btn ghost" id="resetAll">Nullstill fremdrift</button>
+      </div>
+    </div>
+
+    <div class="card disc">
+      Testen er et øvingsverktøy, ikke en vurdering. Ingenting sendes noe sted:
+      svarene dine ligger bare i denne nettleseren.
+    </div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section id="quiz" class="hide">
+    <div class="row between">
+      <span class="pill" id="qPill"></span>
+      <button class="btn ghost small" id="quitBtn" style="padding:7px 13px">Avslutt</button>
+    </div>
+    <div class="pbar"><i id="pbar"></i></div>
+    <div class="row between small muted"><span id="pTxt"></span><span id="qTema"></span></div>
+
+    <div class="card" style="margin-top:14px">
+      <p class="qt" id="qText"></p>
+      <div class="opts" id="qOpts"></div>
+      <div id="fb"></div>
+    </div>
+
+    <div class="nav">
+      <span></span>
+      <button class="btn hide" id="nextBtn">Neste</button>
+    </div>
+    <p class="small muted" style="text-align:center;margin-top:14px">
+      Tastatur: 1 til 5 for å svare, Enter for neste.</p>
+  </section>
+
+  <!-- ============ RESULTAT ============ -->
+  <section id="result" class="hide">
+    <div class="card">
+      <span class="pill">Resultat</span>
+      <p class="scorebig" id="rScore"></p>
+      <p class="sub" id="rSub"></p>
+      <div class="pbar"><i id="rBar"></i></div>
+    </div>
+    <div class="card" id="rWeakCard">
+      <h3>Verdt å repetere</h3>
+      <div id="rWeak"></div>
+    </div>
+    <div class="card">
+      <h3>Fasit for runden</h3>
+      <table id="rTable"></table>
+    </div>
+    <div class="row" style="margin-top:16px">
+      <button class="btn" id="againBtn">Ta samme runde igjen</button>
+      <button class="btn ghost" id="homeBtn">Velg annen bolk</button>
+    </div>
+  </section>
+
+  <footer class="small muted">Psykologi 1, Sonans. Laget som øving til muntlig eksamen.</footer>
+</div>
+
+<script>
+/* ---------------- DATA ----------------
+   o: [alternativ, kortforklaring]  q: [spørsmål, riktig indeks, begrunnelse] */
+const B=[
+{n:1,tema:"Grunnbegreper",
+ o:[["Atferd","alt andre kan observere at du gjør"],
+    ["Mentale prosesser","det indre: tanker, følelser, minner, motiver og sansing"],
+    ["Hverdagspsykologi","uetterprøvde antakelser om mennesker bygget på sunn fornuft"],
+    ["Empiri","kunnskap bygget på systematisk innsamlede data"],
+    ["Etterprøving","at andre kan gjenta studien og kontrollere resultatet"]],
+ q:[["En elev sier hen bare vet at folk blir urolige ved fullmåne, uten å ha telt noe. Hva hviler påstanden på?",2,"Magefølelsen er utestet og bygger på sunn fornuft. Når noen faktisk teller, forsvinner fullmåneeffekten."],
+    ["En forsker registrerer hvor mange ganger et barn rekker opp hånda i løpet av en skoletime. Hva er det som registreres?",0,"Håndsopprekning er en synlig handling, altså atferd."],
+    ["Et tidsskrift krever at prosedyre og rådata publiseres slik at andre kan gjøre studien om igjen. Hvilket kjennetegn ved vitenskap sikres?",4,"Kravet gjelder at andre skal kunne kontrollere funnet. Dataene i seg selv er empirien, kontrollmuligheten er etterprøvingen."],
+    ["Deltakerne blir bedt om å beskrive hva de husket og hva de kjente da de fikk nyheten. Hva undersøkes primært?",1,"Minner og følelser er indre prosesser ingen kan observere direkte."],
+    ["Påstanden om at søvnmangel svekker konsentrasjon bygger på systematisk innsamlede måledata fra mange studier. Hva kalles dette grunnlaget?",3,"Systematisk innsamlede data er selve definisjonen på empiri."]]},
+
+{n:2,tema:"Vitenskapsteori",
+ o:[["Hypotese","en presis påstand som kan testes"],
+    ["Vitenskapelig teori","en godt underbygd forklaring prøvd mot mye data over tid"],
+    ["Falsifiserbarhet","at en påstand er formulert slik at den i prinsippet kan vise seg feil"],
+    ["Pseudovitenskap","noe som ligner vitenskap, men som ikke kan tape mot data"],
+    ["Demarkasjon","grensedragningen mellom vitenskap og ikke-vitenskap"]],
+ q:[["Elever som sover under seks timer skårer lavere på en konsentrasjonstest enn elever som sover over åtte timer. Hva er dette et eksempel på?",0,"Påstanden er presis, målbar og kan slå feil. Det er en hypotese, ikke en teori."],
+    ["Kravet Popper stilte: en påstand må i prinsippet kunne vise seg feil.",2,"Popper gjorde muligheten for å bli motbevist til kjennetegnet på god vitenskap."],
+    ["En horoskoptekst passer på nesten alle og kan aldri tape mot data, men presenteres som kunnskap.",3,"Den ligner vitenskap uten å kunne tape mot data. Det er pseudovitenskap."],
+    ["Spørsmålet om hvor grensen mellom vitenskap og ikke-vitenskap skal trekkes.",4,"Selve grensedragningen heter demarkasjon. Pseudovitenskap er det som havner på feil side av grensa."],
+    ["En godt underbygd forklaring som har stått imot mange forsøk på å rive den ned.",1,"Å ha overlevd mange forsøk på motbevis er kjennetegnet på en vitenskapelig teori. I dagligtale betyr teori bare en gjetning."]]},
+
+{n:3,tema:"Fagpersoner og klassiske tilfeller",
+ o:[["Wilhelm Wundt","åpnet verdens første psykologiske laboratorium, Leipzig 1879"],
+    ["Karl Popper","vitenskapsfilosof, kjent for kravet om falsifiserbarhet"],
+    ["Phineas Gage","overlevde en jernstang gjennom frontallappen i 1848"],
+    ["Stanley Milgram","sto bak lydighetsforsøkene på 1960-tallet"],
+    ["Lille Albert (Watson og Rayner)","spedbarn betinget til frykt i 1920"]],
+ q:[["Åpnet det første psykologiske laboratoriet i Leipzig i 1879 og løsrev faget fra filosofien.",0,"1879 i Leipzig regnes som fagets startpunkt som egen vitenskap. Poenget er skiftet fra å tenke ut svar til å undersøke dem."],
+    ["Enkelttilfellet som ga mye av den tidlige kunnskapen om frontallappens rolle for personlighet og impulskontroll.",2,"Gage er urkasuset i nevropsykologien og standardeksempelet på hva en kasusstudie kan gi."],
+    ["Vitenskapsfilosofen som gjorde muligheten for å bli motbevist til et kjennetegn på god vitenskap.",1,"Popper står bak falsifiserbarhet. Nevn ham ved navn til muntlig, det løfter svaret."],
+    ["Lydighetsstudien som i dag ville strandet på kravet om at deltakere ikke skal påføres alvorlig psykisk belastning.",3,"Milgrams deltakere ble utsatt for betydelig påkjenning under forsøket."],
+    ["Et spedbarn ble betinget til å frykte et dyr, uten samtykke og uten avbetinging etterpå.",4,"Lille Albert bryter med kravet om gyldig samtykke og vern av sårbare deltakere."]]},
+
+{n:4,tema:"Metodevalg",
+ o:[["Eksperiment","forskeren kontrollerer forholdene og endrer én variabel"],
+    ["Systematisk observasjon","registrering av atferd der den faktisk skjer"],
+    ["Spørreskjema","standardiserte spørsmål til mange på én gang"],
+    ["Intervju","samtale med oppfølgingsspørsmål, ofte kvalitativ"],
+    ["Kasusstudie","grundig studie av ett enkelt tilfelle"]],
+ q:[["Sterkest til å vise hva som forårsaker hva, svakest på naturlighet.",0,"Bare eksperimentet gir nok kontroll til å vise årsak. Prisen er at situasjonen blir kunstig."],
+    ["Når mange på kort tid, men hviler helt på at folk rapporterer sant om seg selv.",2,"Spørreskjema gir bredde, men alt hviler på selvrapport."],
+    ["Fanger atferd der den faktisk skjer, men folk kan endre seg når de vet de blir sett på.",1,"Observasjon gir naturlig atferd, men observatøreffekten truer."],
+    ["Gir dybde gjennom oppfølgingsspørsmål, men er tidkrevende og vanskelig å tallfeste.",3,"Intervjuets styrke er dybden, svakheten er tid og tallfesting."],
+    ["Uvurderlig når fenomenet er sjeldent, men gir svakt grunnlag for å si noe om folk flest.",4,"Kasusstudien er designet rundt ett tilfelle, og generaliserer derfor dårlig."]]},
+
+{n:5,tema:"Sammenheng og årsak",
+ o:[["Korrelasjon","en målt sammenheng som ikke i seg selv viser årsak"],
+    ["Kausalitet","at noe faktisk forårsaker noe annet"],
+    ["Tredjevariabel","en bakenforliggende faktor som skaper begge deler"],
+    ["Skinnsammenheng","en sammenheng som forsvinner når du kontrollerer for tredjevariabelen"],
+    ["Omvendt årsaksretning","årsak og virkning er byttet om"]],
+ q:[["Iskremsalg og drukningsulykker følger hverandre. Varmt vær er et eksempel på dette.",2,"Varmt vær skaper både iskremsalget og badingen. Det er den bakenforliggende faktoren, altså tredjevariabelen."],
+    ["En målt samvariasjon mellom to forhold, uten at årsak er vist.",0,"Samvariasjon alene er korrelasjon. Kursets viktigste enkeltpoeng."],
+    ["Sammenhengen mellom antall bøker hjemme og karakterer forsvinner når foreldrenes utdanning holdes konstant.",3,"At sammenhengen forsvinner ved kontroll er definisjonen på en skinnsammenheng. Foreldrenes utdanning er tredjevariabelen som skaper den."],
+    ["Forskeren antar at trening gir bedre humør, men det kan like gjerne være godt humør som får folk til å trene.",4,"Her kan virkningen være årsaken. Dette er en av de tre mulighetene når to ting følger hverandre."],
+    ["Det bare eksperimentet kan vise, fordi forskeren styrer forholdene og endrer én ting av gangen.",1,"Kontroll over forholdene er det som gjør at eksperimentet kan vise årsak. Merk ordbruken: vise, ikke bevise."]]},
+
+{n:6,tema:"Forskningsetikk",
+ o:[["Informert samtykke","deltakeren vet på forhånd hva hen sier ja til"],
+    ["Anonymitet og konfidensialitet","svarene kan ikke spores tilbake til enkeltpersoner"],
+    ["Retten til å trekke seg","deltakeren kan avslutte når som helst, uten begrunnelse"],
+    ["Debrifing","full forklaring i etterkant, særlig etter villedning"],
+    ["Vern mot skade og belastning","deltakeren skal ikke ta skade av å delta"]],
+ q:[["Deltakerne får vite formål, omfang og mulig ubehag før de sier ja.",0,"Informasjonen gis før deltakelsen. Det er kjernen i samtykket."],
+    ["Deltakerne får full forklaring i etterkant, særlig viktig når studien innebar villedning.",3,"Debrifing kommer etter og retter opp villedning underveis."],
+    ["Svarene lagres uten navn, og ingen enkeltperson kan gjenkjennes i publiseringen.",1,"Dette handler om hvordan svarene håndteres, ikke om hva deltakeren sa ja til."],
+    ["En deltaker som ombestemmer seg midtveis kan avslutte uten begrunnelse og uten konsekvenser.",2,"Retten til å trekke seg gjelder underveis. Samtykket gis før."],
+    ["Den tyngste innvendingen mot Milgrams design vurdert etter dagens regelverk.",4,"Belastningen på deltakerne er hovedproblemet. Omtal studien nøkternt og med respekt for dem det gikk ut over."]]},
+
+{n:7,tema:"Replikasjon og skjevheter",
+ o:[["Replikasjon","å gjenta en studie for å se om resultatet holder"],
+    ["Falsk positiv","vi tror vi har funnet en effekt som egentlig ikke finnes"],
+    ["Publiseringsskjevhet","positive funn kommer oftere på trykk enn nullfunn"],
+    ["Forhåndsregistrering","hypotese og analyseplan låses før datainnsamling"],
+    ["Metaanalyse","statistisk sammenslåing av mange studier til ett anslag"]],
+ q:[["Å gjenta en studie for å se om resultatet holder.",0,"Gjentakelsen er selve replikasjonen. Replikasjonskrisen viser ikke at faget er verdiløst, men at det avdekker egne feil."],
+    ["Et resultat rapporteres som en reell effekt, men skyldes tilfeldig variasjon.",1,"Fire kron på rad kan være ren flaks. Det er en falsk positiv."],
+    ["Studier som viser effekt kommer oftere på trykk enn studier som ikke finner noe, slik at det samlede bildet blir skjevt.",2,"Skjevheten oppstår i litteraturen samlet, ikke i den enkelte studien."],
+    ["Hypotese og analyseplan låses offentlig før data samles inn.",3,"Å låse planen på forhånd hindrer at analysen tilpasses funnet i etterkant."],
+    ["Resultater fra mange enkeltstudier slås statistisk sammen til ett samlet anslag.",4,"Sammenslåing av mange studier er en metaanalyse. Den arver skjevheten i det som faktisk ble publisert."]]},
+
+{n:8,tema:"Eksperimentets deler",
+ o:[["Uavhengig variabel","den forskeren endrer på"],
+    ["Avhengig variabel","den forskeren måler"],
+    ["Kontrollgruppe","gruppen uten tiltak, som resultatet sammenlignes mot"],
+    ["Randomisering","tilfeldig fordeling av deltakere til gruppene"],
+    ["Dobbel blinding","verken deltaker eller den som måler vet hvem som fikk hva"]],
+ q:[["Søvnlengde settes av forskeren til enten fire eller åtte timer.",0,"Det forskeren styrer, er den uavhengige variabelen."],
+    ["Skår på konsentrasjonstesten måles dagen etter.",1,"Utfallet som måles, er den avhengige variabelen. Den avhenger av den uavhengige."],
+    ["Deltakerne fordeles ved loddtrekning, slik at gruppene i snitt blir like på alt annet.",3,"Loddtrekning jevner ut alt annet mellom gruppene. Det er fordelingsmåten, ikke gruppen."],
+    ["Gruppen uten tiltak, som resultatet sammenlignes mot.",2,"Uten en kontrollgruppe vet du ikke hva tiltaket faktisk utrettet."],
+    ["Verken deltakeren eller den som måler vet hvem som fikk virkestoffet.",4,"Når begge parter er blindet, kan ikke forventninger farge resultatet."]]},
+
+{n:9,tema:"Måling og slutning",
+ o:[["Reliabilitet","at målingen er stabil og gir samme svar ved gjentakelse"],
+    ["Validitet","at målingen faktisk måler det den skal måle"],
+    ["Operasjonalisering","å gjøre et begrep målbart"],
+    ["Representativt utvalg","et utvalg som speiler populasjonen"],
+    ["Generalisering","å overføre funn fra utvalg til populasjon"]],
+ q:[["Å gjøre konsentrasjon om til noe målbart, for eksempel antall riktige på en to minutters oppmerksomhetstest.",2,"Å oversette et begrep til noe tellbart er operasjonalisering."],
+    ["Samme måling gir omtrent samme resultat når den gjentas under like forhold.",0,"Stabilitet ved gjentakelse er reliabilitet. En måling kan være svært stabil og likevel måle feil ting."],
+    ["Testen måler faktisk konsentrasjon og ikke lesehastighet.",1,"At riktig egenskap måles, er validitet."],
+    ["Deltakerne speiler populasjonen på alder, kjønn og bakgrunn.",3,"Et utvalg som ligner populasjonen, er representativt."],
+    ["Å trekke slutninger fra dem du målte til alle du ikke målte.",4,"Slutningen fra utvalg til populasjon er generalisering, og den krever et representativt utvalg."]]},
+
+{n:10,tema:"Datatyper og design",
+ o:[["Kvantitativ metode","forskning som teller og måler"],
+    ["Kvalitativ metode","forskning som beskriver og fortolker"],
+    ["Introspeksjon","å rapportere sine egne indre opplevelser"],
+    ["Selvrapport","informasjon deltakeren selv oppgir om seg selv"],
+    ["Longitudinell studie","de samme personene følges og måles over tid"]],
+ q:[["Hvor stor andel av norske 16-åringer sover under sju timer på hverdager?",0,"Andeler og antall krever telling. Ingen av metodene er finere enn den andre, de svarer på ulike spørsmål."],
+    ["Hvordan oppleves det å begynne på en ny skole midt i skoleåret?",1,"Opplevelse må beskrives og fortolkes, ikke telles."],
+    ["Trente deltakere rapporterer sine egne indre opplevelser under kontrollerte forhold, en metode Wundt selv var kritisk til som eneste kilde.",2,"Rapport om egne indre prosesser er introspeksjon."],
+    ["Data der deltakeren oppgir informasjon om seg selv, med risiko for at svaret pyntes.",3,"Selvrapport dekker alt deltakeren oppgir om seg selv, også ytre forhold som søvn og trening."],
+    ["De samme personene måles gjentatte ganger over flere år.",4,"Gjentatte målinger av de samme personene er et longitudinelt design."]]},
+
+{n:11,tema:"Tankefeller og effekter",
+ o:[["Bekreftelsestendens","vi leter etter og husker det som støtter det vi alt tror"],
+    ["Barnum-effekten","vage beskrivelser oppleves som personlig treffende"],
+    ["Observatøreffekt","folk endrer atferd når de vet de blir sett"],
+    ["Etterpåklokskapsskjevhet","vi tror i ettertid at vi visste det hele tiden"],
+    ["Forskerforventningseffekt","forskerens forventning smitter over på deltakerne"]],
+ q:[["En vag personbeskrivelse oppleves som usedvanlig treffende nettopp fordi den passer på nesten alle.",1,"Barnum-effekten er hele grunnen til at horoskoper føles treffende."],
+    ["Man leter etter, husker og vektlegger det som støtter det man allerede tror.",0,"Bekreftelsestendens er det motsatte av vilje til å ta feil, altså det som skiller vitenskap fra synsing."],
+    ["De ansatte jobber mer nøyaktig så lenge forskeren står i lokalet.",2,"Endringen skjer hos den som blir observert. Dette er hovedsvakheten ved observasjon."],
+    ["Dette så jeg komme, sies om et resultat man faktisk ikke forutsa på forhånd.",3,"Følelsen av å ha visst det på forhånd er etterpåklokskap, og den gjør funn som var overraskende til selvfølgeligheter."],
+    ["Forskeren vet hvem som er i tiltaksgruppen og gir dem ubevisst litt mer oppmuntring underveis.",4,"Her starter påvirkningen hos forskeren. Dobbel blinding er motgiften."]]},
+
+{n:12,tema:"Kildekritikk og formidling",
+ o:[["Kildekritikk","å vurdere avsender, pålitelighet og grunnlag"],
+    ["Primærkilde","den opprinnelige framstillingen fra dem som gjorde arbeidet"],
+    ["Sekundærkilde","en framstilling som bygger på og gjenforteller primærkilden"],
+    ["Fagfellevurdering","andre fagfolk vurderer arbeidet før publisering"],
+    ["Interessekonflikt","avsenderen har egeninteresse i resultatet"]],
+ q:[["Å vurdere hvem som står bak en påstand, hvor pålitelig avsenderen er og hva påstanden bygger på.",0,"Dette gjør leseren. I Psykologi 1 trengs ikke presise henvisninger, men du bør kunne si omtrent hvor kunnskapen kommer fra."],
+    ["Den opprinnelige forskningsartikkelen, skrevet av dem som gjennomførte studien.",1,"Primærkilden er førstehåndsframstillingen."],
+    ["En artikkel på forskning.no som gjenforteller hva studien fant.",2,"Formidlingsartikler er sekundærkilder. De er trygge startpunkter, men ikke originalen."],
+    ["Andre fagfolk vurderer manuskriptet før det kommer på trykk.",3,"Fagfellevurdering er fagmiljøets kvalitetssikring før publisering."],
+    ["Studien av en søvnapp er finansiert av selskapet som selger appen.",4,"Egeninteresse i resultatet er en interessekonflikt, og skal oppgis."]]}
+];
+
+/* ---------------- STATE ---------------- */
+const LS="psy1-vitenskap-fremdrift", LSB="psy1-vitenskap-bolker";
+const FLAT=[]; B.forEach((b,bi)=>b.q.forEach((q,qi)=>FLAT.push({b:bi,q:qi,i:FLAT.length})));
+let S=null;
+const $=id=>document.getElementById(id);
+const el=(t,c,x)=>{const e=document.createElement(t); if(c)e.className=c; if(x!=null)e.textContent=x; return e;};
+
+function bestOf(){ try{return JSON.parse(localStorage.getItem(LSB))||{}}catch(e){return {}} }
+function saveBest(k,pct){ const o=bestOf(); if(!(k in o)||pct>o[k]){o[k]=pct; try{localStorage.setItem(LSB,JSON.stringify(o))}catch(e){}} }
+function save(){ try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){} }
+function clearSave(){ try{localStorage.removeItem(LS)}catch(e){} }
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
+
+function makeSet(set){
+  let ids;
+  if(set==="all") ids=FLAT.map(f=>f.i);
+  else if(set==="random") ids=shuffle(FLAT.map(f=>f.i)).slice(0,20);
+  else ids=FLAT.filter(f=>f.b===+set).map(f=>f.i);
+  return {set:set, queue:ids.slice(), total:ids.length, ids:ids,
+          first:{}, done:0, cur:null, answered:false};
+}
+
+/* ---------------- FORSIDE ---------------- */
+function renderHome(){
+  const g=$("bolkGrid"); g.innerHTML=""; const best=bestOf();
+  B.forEach((b,i)=>{
+    const btn=el("button","bolk"); btn.dataset.set=i;
+    btn.appendChild(el("b","", "Bolk "+b.n+": "+b.tema));
+    const sp=el("span","", b.o.map(o=>o[0]).join(" · "));
+    btn.appendChild(sp);
+    if(best[i]!=null){ const d=el("span","done","Beste: "+best[i]+" %"); btn.appendChild(d); }
+    g.appendChild(btn);
+  });
+  let saved=null; try{saved=JSON.parse(localStorage.getItem(LS))}catch(e){}
+  if(saved&&saved.queue&&saved.queue.length){
+    S=saved; $("resumeBox").classList.remove("hide");
+    $("resumeTxt").textContent="Du har en påbegynt runde: "+labelOf(saved.set)+", "+saved.done+" av "+saved.total+" ferdig.";
+  } else { $("resumeBox").classList.add("hide"); }
+  show("home");
+}
+function labelOf(set){
+  if(set==="all") return "alle 60";
+  if(set==="random") return "20 tilfeldige";
+  return "bolk "+B[+set].n+", "+B[+set].tema;
+}
+function show(id){ ["home","quiz","result"].forEach(x=>$(x).classList.toggle("hide",x!==id)); window.scrollTo(0,0); }
+
+/* ---------------- QUIZ ---------------- */
+function start(set){ S=makeSet(set); save(); next(); }
+
+function next(){
+  if(!S.queue.length){ return finish(); }
+  S.cur=S.queue[0]; S.answered=false;
+  const f=FLAT[S.cur], b=B[f.b], q=b.q[f.q];
+  $("qPill").textContent="Bolk "+b.n;
+  $("qTema").textContent=b.tema;
+  $("qText").textContent=q[0];
+  $("pTxt").textContent=S.done+" av "+S.total+" sitter";
+  $("pbar").style.width=(100*S.done/S.total)+"%";
+  const box=$("qOpts"); box.innerHTML="";
+  b.o.forEach((o,i)=>{
+    const btn=el("button","opt"); btn.type="button"; btn.dataset.i=i;
+    btn.appendChild(el("span","key","ABCDE"[i]));
+    btn.appendChild(el("span","",o[0]));
+    btn.onclick=()=>answer(i);
+    box.appendChild(btn);
+  });
+  $("fb").innerHTML=""; $("nextBtn").classList.add("hide");
+  show("quiz");
+}
+
+function answer(i){
+  if(S.answered) return;
+  S.answered=true;
+  const f=FLAT[S.cur], b=B[f.b], q=b.q[f.q], right=q[1];
+  const opts=[...$("qOpts").children];
+  opts.forEach((o,k)=>{ o.disabled=true;
+    if(k===right) o.classList.add("correct");
+    else if(k===i) o.classList.add("wrong"); });
+  const firstTime = !(S.cur in S.first);
+  if(firstTime) S.first[S.cur] = (i===right);
+  const fb=el("div","fb "+(i===right?"ok":"no"));
+  if(i===right){
+    fb.appendChild(el("b","","Riktig: "+b.o[right][0]));
+    fb.appendChild(el("div","",q[2]));
+    S.queue.shift(); S.done++;
+  } else {
+    fb.appendChild(el("b","","Ikke helt. Riktig er "+b.o[right][0]));
+    fb.appendChild(el("div","",q[2]));
+    const d=el("div","small muted"); d.style.marginTop="7px";
+    d.textContent="Du valgte "+b.o[i][0]+": "+b.o[i][1]+".";
+    fb.appendChild(d);
+    S.queue.shift(); S.queue.push(S.cur);
+    const d2=el("div","small muted"); d2.style.marginTop="3px";
+    d2.textContent="Dette spørsmålet kommer igjen senere i runden.";
+    fb.appendChild(d2);
+  }
+  $("fb").innerHTML=""; $("fb").appendChild(fb);
+  $("pTxt").textContent=S.done+" av "+S.total+" sitter";
+  $("pbar").style.width=(100*S.done/S.total)+"%";
+  const nb=$("nextBtn"); nb.classList.remove("hide");
+  nb.textContent = S.queue.length ? "Neste" : "Se resultat";
+  nb.focus();
+  save();
+}
+
+/* ---------------- RESULTAT ---------------- */
+function finish(){
+  const ids=S.ids, n=ids.length;
+  const ok=ids.filter(i=>S.first[i]).length;
+  const pct=Math.round(100*ok/n);
+  $("rScore").textContent=ok+" av "+n+" på første forsøk";
+  $("rSub").textContent=labelOf(S.set).charAt(0).toUpperCase()+labelOf(S.set).slice(1)+". "+pct+" prosent.";
+  $("rBar").style.width=pct+"%";
+  if(S.set!=="all"&&S.set!=="random") saveBest(+S.set,pct);
+
+  const weak=ids.filter(i=>!S.first[i]);
+  const w=$("rWeak"); w.innerHTML="";
+  if(!weak.length){ $("rWeakCard").classList.add("hide"); }
+  else{
+    $("rWeakCard").classList.remove("hide");
+    const byB={};
+    weak.forEach(i=>{const f=FLAT[i]; (byB[f.b]=byB[f.b]||[]).push(f);});
+    Object.keys(byB).forEach(bi=>{
+      const b=B[bi];
+      const p=el("p","small"); p.style.margin=".4em 0";
+      p.innerHTML="<b>Bolk "+b.n+", "+b.tema+"</b> ("+byB[bi].length+" av "+b.q.length+")";
+      w.appendChild(p);
+      byB[bi].forEach(f=>{
+        const li=el("div","small muted"); li.style.margin="0 0 4px 0";
+        li.textContent="→ "+b.o[b.q[f.q][1]][0]+": "+b.o[b.q[f.q][1]][1];
+        w.appendChild(li);
+      });
+    });
+  }
+  const t=$("rTable"); t.innerHTML="";
+  const hr=el("tr"); ["Bolk","Spørsmål","Riktig svar"].forEach(h=>hr.appendChild(el("th","",h))); t.appendChild(hr);
+  ids.forEach(i=>{
+    const f=FLAT[i], b=B[f.b], q=b.q[f.q];
+    const tr=el("tr");
+    tr.appendChild(el("td","",String(b.n)));
+    const td=el("td","", q[0].length>72? q[0].slice(0,72)+"…" : q[0]);
+    if(!S.first[i]) td.style.color="var(--err)";
+    tr.appendChild(td);
+    tr.appendChild(el("td","", "ABCDE"[q[1]]+". "+b.o[q[1]][0]));
+    t.appendChild(tr);
+  });
+  clearSave();
+  show("result");
+}
+
+/* ---------------- EVENTS ---------------- */
+document.addEventListener("click",e=>{
+  const s=e.target.closest("[data-set]");
+  if(s){ start(s.dataset.set); }
+});
+$("nextBtn").onclick=next;
+$("quitBtn").onclick=()=>{ save(); renderHome(); };
+$("againBtn").onclick=()=>start(S.set);
+$("homeBtn").onclick=renderHome;
+$("resumeYes").onclick=()=>{ if(S.queue.length) next(); else renderHome(); };
+$("resumeNo").onclick=()=>{ clearSave(); renderHome(); };
+$("resetAll").onclick=()=>{ try{localStorage.removeItem(LS);localStorage.removeItem(LSB)}catch(e){} renderHome(); };
+
+document.addEventListener("keydown",e=>{
+  if($("quiz").classList.contains("hide")) return;
+  if(e.key>="1"&&e.key<="5"){ e.preventDefault(); if(!S.answered) answer(+e.key-1); }
+  else if(e.key==="Enter"||e.key===" "){ if(S.answered){ e.preventDefault(); next(); } }
+});
+
+renderHome();
+</script>
+</body>
+</html>
