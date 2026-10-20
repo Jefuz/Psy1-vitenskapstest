@@ -74,6 +74,16 @@
   th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
   th{color:var(--muted);font-weight:600;font-size:.82rem;text-transform:uppercase;letter-spacing:.03em}
   .hide{display:none}
+  .seg{display:inline-flex;background:#eef0f7;border-radius:12px;padding:4px;gap:4px;margin-top:12px}
+  .seg button{appearance:none;border:0;background:transparent;border-radius:9px;padding:9px 16px;
+    font:inherit;font-weight:600;font-size:.94rem;color:var(--muted);cursor:pointer}
+  .seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(20,30,60,.12)}
+  .typein{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .typein input{flex:1 1 220px;min-width:0;font:inherit;font-size:1rem;padding:11px 13px;
+    border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink)}
+  .typein input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+  .hint{margin-top:10px;font-size:.92rem;color:var(--muted)}
+  .hint code{font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.12em;color:var(--ink)}
   footer{margin-top:26px;text-align:center}
 </style>
 </head>
@@ -100,6 +110,16 @@
             <button class="btn" id="resumeYes">Fortsett</button>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Svarform</h2>
+      <p class="small muted" style="margin:.4em 0 0">«Skriv svaret» er tyngre, men det er der gjenhentingen skjer:
+        du må hente begrepet fram selv i stedet for å kjenne det igjen. Små skrivefeil godtas.</p>
+      <div class="seg" id="modeSeg">
+        <button type="button" data-mode="skriv">Skriv svaret</button>
+        <button type="button" data-mode="velg">Velg alternativ</button>
       </div>
     </div>
 
@@ -147,7 +167,7 @@
       <button class="btn hide" id="nextBtn">Neste</button>
     </div>
     <p class="small muted" style="text-align:center;margin-top:14px">
-      Tastatur: 1 til 5 for å svare, Enter for neste.</p>
+      <span id="kbTxt">Tastatur: 1 til 5 for å svare, Enter for neste.</span></p>
   </section>
 
   <!-- ============ RESULTAT ============ -->
@@ -663,7 +683,10 @@ const B=[
 B.forEach(b=>{ if(!b.del) b.del="Vitenskap og metode"; });
 
 /* ---------------- STATE ---------------- */
-const LS="psy1-vitenskap-fremdrift", LSB="psy1-vitenskap-bolker";
+const LS="psy1-vitenskap-fremdrift", LSB="psy1-vitenskap-bolker", LSM="psy1-svarform";
+function getMode(){ try{return localStorage.getItem(LSM)||"skriv"}catch(e){return "skriv"} }
+function setMode(m){ try{localStorage.setItem(LSM,m)}catch(e){} renderMode(); }
+function renderMode(){ const m=getMode(); [...$("modeSeg").children].forEach(b=>b.classList.toggle("on",b.dataset.mode===m)); }
 const DELER=[...new Set(B.map(b=>b.del))];
 const FLAT=[]; B.forEach((b,bi)=>b.q.forEach((q,qi)=>FLAT.push({b:bi,q:qi,i:FLAT.length})));
 let S=null;
@@ -689,7 +712,7 @@ function makeSet(set){
     ids=FLAT.filter(f=>B[f.b].del===d).map(f=>f.i); }
   else ids=FLAT.filter(f=>f.b===+set).map(f=>f.i);
   return {set:set, queue:ids.slice(), total:ids.length, ids:ids,
-          first:{}, done:0, cur:null, answered:false};
+          first:{}, done:0, cur:null, answered:false, mode:getMode()};
 }
 
 /* ---------------- FORSIDE ---------------- */
@@ -716,8 +739,9 @@ function renderHome(){
   let saved=null; try{saved=JSON.parse(localStorage.getItem(LS))}catch(e){}
   if(saved&&saved.queue&&saved.queue.length){
     S=saved; $("resumeBox").classList.remove("hide");
-    $("resumeTxt").textContent="Du har en påbegynt runde: "+labelOf(saved.set)+", "+saved.done+" av "+saved.total+" ferdig.";
+    $("resumeTxt").textContent="Du har en påbegynt runde: "+labelOf(saved.set)+(saved.mode==="skriv"?" (skriv svaret)":"")+", "+saved.done+" av "+saved.total+" ferdig.";
   } else { $("resumeBox").classList.add("hide"); }
+  renderMode();
   show("home");
 }
 function labelOf(set){
@@ -742,50 +766,189 @@ function next(){
   $("pTxt").textContent=S.done+" av "+S.total+" sitter";
   $("pbar").style.width=(100*S.done/S.total)+"%";
   const box=$("qOpts"); box.innerHTML="";
+  $("fb").innerHTML=""; $("nextBtn").classList.add("hide");
+  S.hint=0;
+  if(S.mode==="skriv"){
+    $("kbTxt").textContent="Enter for å svare og for neste.";
+    const w=el("div","typein");
+    const inp=el("input"); inp.id="typeIn"; inp.type="text"; inp.placeholder="Skriv begrepet";
+    inp.autocomplete="off"; inp.spellcheck=false; inp.setAttribute("autocapitalize","off"); inp.setAttribute("autocorrect","off");
+    inp.addEventListener("keydown",e=>{ if(e.key==="Enter"){ e.preventDefault(); e.stopPropagation(); if(!S.answered) answerText(inp.value); } });
+    const go=el("button","btn","Svar"); go.type="button"; go.onclick=()=>answerText(inp.value);
+    const hb=el("button","btn ghost","Hint"); hb.type="button"; hb.id="hintBtn"; hb.onclick=showHint;
+    w.appendChild(inp); w.appendChild(go); w.appendChild(hb);
+    box.appendChild(w); box.appendChild(el("div","hint")).id="hintTxt";
+    show("quiz"); inp.focus();
+  } else {
+    $("kbTxt").textContent="Tastatur: 1 til 5 for å svare, Enter for neste.";
+    renderOpts(b);
+    show("quiz");
+  }
+}
+
+function renderOpts(b,locked){
+  const box=$("qOpts"); box.innerHTML="";
   b.o.forEach((o,i)=>{
     const btn=el("button","opt"); btn.type="button"; btn.dataset.i=i;
     btn.appendChild(el("span","key","ABCDE"[i]));
     btn.appendChild(el("span","",o[0]));
-    btn.onclick=()=>answer(i);
+    if(locked) btn.disabled=true; else btn.onclick=()=>answer(i);
     box.appendChild(btn);
   });
-  $("fb").innerHTML=""; $("nextBtn").classList.add("hide");
-  show("quiz");
 }
 
-function answer(i){
-  if(S.answered) return;
-  S.answered=true;
+/* Felles retting. ok = riktig, note = ekstra linje i tilbakemeldingen */
+function grade(ok,note,keepQueue){
   const f=FLAT[S.cur], b=B[f.b], q=b.q[f.q], right=q[1];
-  const opts=[...$("qOpts").children];
-  opts.forEach((o,k)=>{ o.disabled=true;
-    if(k===right) o.classList.add("correct");
-    else if(k===i) o.classList.add("wrong"); });
-  const firstTime = !(S.cur in S.first);
-  if(firstTime) S.first[S.cur] = (i===right);
-  const fb=el("div","fb "+(i===right?"ok":"no"));
-  if(i===right){
-    fb.appendChild(el("b","","Riktig: "+b.o[right][0]));
-    fb.appendChild(el("div","",q[2]));
-    S.queue.shift(); S.done++;
-  } else {
-    fb.appendChild(el("b","","Ikke helt. Riktig er "+b.o[right][0]));
-    fb.appendChild(el("div","",q[2]));
-    const d=el("div","small muted"); d.style.marginTop="7px";
-    d.textContent="Du valgte "+b.o[i][0]+": "+b.o[i][1]+".";
-    fb.appendChild(d);
-    S.queue.shift(); S.queue.push(S.cur);
+  if(!(S.cur in S.first)) S.first[S.cur]=ok;
+  const fb=el("div","fb "+(ok?"ok":"no"));
+  fb.appendChild(el("b","", ok ? "Riktig: "+b.o[right][0] : "Ikke helt. Riktig er "+b.o[right][0]));
+  fb.appendChild(el("div","",q[2]));
+  if(note){ const d=el("div","small muted"); d.style.marginTop="7px"; d.textContent=note; fb.appendChild(d); }
+  if(ok){ S.queue.shift(); S.done++; }
+  else if(!keepQueue){ S.queue.shift(); S.queue.push(S.cur);
     const d2=el("div","small muted"); d2.style.marginTop="3px";
-    d2.textContent="Dette spørsmålet kommer igjen senere i runden.";
-    fb.appendChild(d2);
-  }
+    d2.textContent="Dette spørsmålet kommer igjen senere i runden."; fb.appendChild(d2); }
   $("fb").innerHTML=""; $("fb").appendChild(fb);
   $("pTxt").textContent=S.done+" av "+S.total+" sitter";
   $("pbar").style.width=(100*S.done/S.total)+"%";
   const nb=$("nextBtn"); nb.classList.remove("hide");
   nb.textContent = S.queue.length ? "Neste" : "Se resultat";
-  nb.focus();
   save();
+  return fb;
+}
+
+function answer(i){
+  if(S.answered) return;
+  S.answered=true;
+  const f=FLAT[S.cur], b=B[f.b], right=b.q[f.q][1];
+  [...$("qOpts").children].forEach((o,k)=>{ o.disabled=true;
+    if(k===right) o.classList.add("correct");
+    else if(k===i) o.classList.add("wrong"); });
+  grade(i===right, i===right ? null : "Du valgte "+b.o[i][0]+": "+b.o[i][1]+".");
+  $("nextBtn").focus();
+}
+
+/* Synonymer som også godtas når eleven skriver svaret */
+const ALIAS={
+ "Empiri":["empirisk data","data"],"Etterprøving":["etterprøvbarhet","replikerbarhet","kontrollerbarhet"],
+ "Hverdagspsykologi":["sunn fornuft","folkepsykologi"],
+ "Vitenskapelig teori":["teori"],"Falsifiserbarhet":["falsifikasjon","falsifisering"],"Demarkasjon":["demarkasjonsproblemet"],
+ "Lille Albert (Watson og Rayner)":["watson","watson og rayner","albert"],"Phineas Gage":["gage"],"Wilhelm Wundt":["wundt"],"Karl Popper":["popper"],"Stanley Milgram":["milgram"],
+ "Kasusstudie":["casestudie","case studie","kasus"],"Systematisk observasjon":["observasjon"],"Spørreskjema":["spørreundersøkelse","survey"],
+ "Korrelasjon":["samvariasjon"],"Kausalitet":["årsakssammenheng","årsak"],"Tredjevariabel":["tredje variabel","bakenforliggende variabel"],
+ "Skinnsammenheng":["spuriøs sammenheng","spuriøs korrelasjon"],"Omvendt årsaksretning":["omvendt kausalitet"],
+ "Anonymitet og konfidensialitet":["anonymitet","konfidensialitet"],"Retten til å trekke seg":["trekke seg","rett til å trekke seg"],
+ "Debrifing":["debriefing"],"Vern mot skade og belastning":["vern mot skade","beskyttelse mot skade"],
+ "Falsk positiv":["type 1 feil","type i feil"],"Publiseringsskjevhet":["publikasjonsskjevhet","publication bias"],"Forhåndsregistrering":["preregistrering"],
+ "Dobbel blinding":["dobbeltblind","dobbelblind","dobbeltblinding"],"Randomisering":["tilfeldig fordeling","loddtrekning"],
+ "Representativt utvalg":["representativitet"],"Operasjonalisering":["operasjonalisere"],
+ "Kvantitativ metode":["kvantitativ"],"Kvalitativ metode":["kvalitativ"],"Longitudinell studie":["longitudinell","langtidsstudie","panelstudie"],
+ "Bekreftelsestendens":["bekreftelsesfeil","bekreftelsesskjevhet","confirmation bias"],"Barnum-effekten":["barnum","forer effekten"],
+ "Observatøreffekt":["hawthorne effekten","hawthorneeffekt"],"Etterpåklokskapsskjevhet":["etterpåklokskap","hindsight bias"],
+ "Forskerforventningseffekt":["forventningseffekt","rosenthal effekten"],"Fagfellevurdering":["peer review","fagfelle"],
+ "William James":["james"],"Sigmund Freud":["freud"],"John B. Watson":["watson"],"Carl Rogers":["rogers"],"Lev Vygotskij":["vygotskij","vygotsky"],
+ "Ovenfra og ned":["top down","ovenfra ned"],"Nedenfra og opp":["bottom up","nedenfra opp"],"Selektiv oppmerksomhet":["oppmerksomhet","selektiv persepsjon"],
+ "Perseptuell beredskap":["perseptuelt sett","persepsjonsberedskap","perceptual set"],"Selvoppfyllende profeti":["pygmalioneffekten","pygmalion"],
+ "Stereotypi":["stereotyp","stereotypier"],"Fordom":["fordommer"],
+ "Sensorisk register":["sensorisk minne","sensorisk hukommelse"],"Korttidsminne":["korttidshukommelse"],"Arbeidsminne":["arbeidshukommelse"],"Langtidsminne":["langtidshukommelse"],
+ "Episodisk hukommelse":["episodisk minne"],"Semantisk hukommelse":["semantisk minne"],"Prosedural hukommelse":["prosedyrehukommelse","prosedurelt minne","implisitt hukommelse"],
+ "Rekonstruksjon":["rekonstruktiv hukommelse","rekonstruering"],
+ "Ubetinget stimulus":["ubs","us","ubetinget stimuli"],"Betinget stimulus":["bs","cs","betinget stimuli"],"Betinget respons":["br","cr"],
+ "Ekstinksjon":["utslukking"],"Modellæring":["observasjonslæring","sosial læring"],
+ "Lært hjelpeløshet":["hjelpeløshet"],"Mestringstro":["mestringsforventning","self efficacy"],"Flyt":["flow"],
+ "Attribusjon":["attribusjonsteori"],"Selvbestemmelsesteori":["sdt","self determination theory"],"Vekstorientert tankesett":["growth mindset","vekst tankesett","tankesett"],
+ "Gjenhenting":["testing","gjenhentingspraksis","aktiv gjenhenting","uthenting"],"Spredt øving":["spredt repetisjon","distribuert øving","spaced repetition"],
+ "Åpenhet for erfaring":["åpenhet"],"Planmessighet":["samvittighetsfullhet"],"Medmenneskelighet":["omgjengelighet","vennlighet"],"Nevrotisisme":["emosjonell ustabilitet"],"Ekstroversjon":["utadvendthet"],
+ "Selvbilde og idealselv":["selvbilde","idealselv","selvkongruens"],"Gjensidig determinisme":["resiprok determinisme"],"Superego":["overjeg"],"Id":["det"],
+ "Polygent trekk":["polygen","polygenisitet"],"Eneggede tvillinger":["eneggede","eneggede tvillingene","monozygote"],"Ikke-delt miljø":["ikke delt miljø","unikt miljø"],
+ "Samspill mellom gener og miljø":["gen miljø samspill","samspill"],"Korrelasjon mellom gener og miljø":["gen miljø korrelasjon"],
+ "Diatese-stress-modellen":["diatese stress","sårbarhet stress modellen","sårbarhetsmodellen"],"Differensiell mottakelighet":["orkidé og løvetann"],
+ "Den nærmeste utviklingssonen":["nærmeste utviklingssone","nus","proksimal utviklingssone"],"Fremmedsituasjonen":["strange situation","fremmedsituasjon"],
+ "Moratorium":["identitetsmoratorium"],"Overtatt identitet":["overtatt","foreclosure","lånt identitet"],"Den generaliserte andre":["generaliserte andre","generalisert andre"],
+ "Opphavsårsak":["ultimat årsak","ultimat forklaring"],"Røykvarslerprinsippet":["røykvarsler"],"Naturalistisk feilslutning":["naturalistisk feilslutning"],
+ "Gjensidig altruisme":["resiprok altruisme","gjengjeld"],"Forberedt læring":["preparedness","biologisk beredskap"],
+ "Myelin":["myelinskjede","myelinskjeden"],"Aksjonspotensial":["nerveimpuls"],"Synapse":["synapsen","synapsespalten"],
+ "Sympatisk nervesystem":["sympatikus"],"Parasympatisk nervesystem":["parasympatikus"],"Frontallappen":["pannelappen"],
+ "Hypofysen":["hypofyse"],"Biopsykososial modell":["biopsykososial"],"Den biopsykososiale modellen":["biopsykososial modell","biopsykososial"],
+ "Alarmfasen":["alarm","alarmreaksjon"],"Utmattelsesfasen":["utmattelse"],"Primærvurdering":["primær vurdering"],"Sekundærvurdering":["sekundær vurdering"],
+ "Problemfokusert mestring":["problemfokusert"],"Emosjonsfokusert mestring":["emosjonsfokusert"],"Resiliens":["motstandskraft"],
+ "Livskrise":["utviklingskrise","livsfasekrise"],"Posttraumatisk stresslidelse":["ptsd","posttraumatisk stress"],"Forlenget sorglidelse":["komplisert sorg"],
+ "Psykososial førstehjelp":["psykologisk førstehjelp"],"Posttraumatisk vekst":["vekst"],
+ "Belønningssystemet":["belønningssenteret","belønningsbanen"],"Reopptak":["reopptaket","gjenopptak"],
+ "Insentiv-sensitisering":["incentive sensitization","sensitisering"],"Situasjonsbetinget toleranse":["betinget toleranse"],"Tosystemmodellen":["to system modellen","dobbeltsystemmodellen"]
+};
+/* ---------- Skriv svaret ---------- */
+const STOP=new Set(["den","det","de","en","et","ei","the","a"]);
+function norm(t){ return t.toLowerCase().normalize("NFC").replace(/[«»"'’().,;:!?]/g," ").replace(/-/g," ").replace(/\s+/g," ").trim(); }
+function lev(a,b){ const m=a.length,n=b.length; if(!m) return n; if(!n) return m;
+  let p=Array.from({length:n+1},(_,j)=>j);
+  for(let i=1;i<=m;i++){ const c=[i]; for(let j=1;j<=n;j++)
+    c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1)); p=c; } return p[n]; }
+function tol(t){ const L=t.replace(/ /g,"").length; return L<=3?0:L<=7?1:2; }
+/* Ord som går igjen i minst tre alternativer i bolken (som «perspektiv»), trengs ikke for å skille dem */
+function commonTok(b){ const c={}; b.o.forEach(o=>new Set(norm(o[0]).split(" ")).forEach(w=>c[w]=(c[w]||0)+1));
+  return Object.keys(c).filter(w=>c[w]>=3&&w.length>=4); }
+function strip(t,common){ return norm(t).split(" ").filter(w=>w&&!STOP.has(w)&&!common.some(c=>w.startsWith(c.slice(0,Math.max(4,c.length-1))))).join(" "); }
+function variants(label,common){
+  const v=new Set(), n=norm(label);
+  v.add(n.replace(/ /g,""));
+  const noPar=label.replace(/\(.*?\)/g,""); v.add(norm(noPar).replace(/ /g,""));
+  const par=(label.match(/\((.*?)\)/)||[])[1]; if(par) v.add(norm(par).replace(/ /g,""));
+  const st=strip(noPar,common); if(st) v.add(st.replace(/ /g,""));
+  if(/ og /.test(noPar)) noPar.split(/ og /).forEach(x=>{ const y=strip(x,common); if(y.length>=5) v.add(y.replace(/ /g,"")); });
+  (ALIAS[label]||[]).forEach(a=>v.add(norm(a).replace(/ /g,"")));
+  v.delete(""); return [...v];
+}
+function matchIdx(typed,b){
+  const common=commonTok(b), raw=norm(typed).replace(/ /g,""), st=strip(typed,common).replace(/ /g,"");
+  if(!raw) return -1;
+  let best=-1, bd=1e9;
+  b.o.forEach((o,i)=>variants(o[0],common).forEach(v=>{
+    [raw,st].forEach(t=>{ if(!t) return; const d=lev(t,v); if(d>0&&t[0]!==v[0]) return; if(d<=tol(v)&&d<bd){bd=d;best=i;} }); }));
+  return best;
+}
+function showHint(){
+  if(S.answered) return;
+  const f=FLAT[S.cur], b=B[f.b], lab=b.o[b.q[f.q][1]][0].replace(/\s*\(.*?\)/g,"");
+  S.hint=(S.hint||0)+1;
+  const ht=$("hintTxt");
+  if(S.hint===1){ ht.innerHTML=""; ht.appendChild(document.createTextNode("Begynner på "));
+    const c=el("code","",lab.split(" ").map(w=>w[0]+"_".repeat(w.length-1)).join("  ")); ht.appendChild(c); }
+  else { if(!(S.cur in S.first)) S.first[S.cur]=false;
+    ht.textContent="Alternativene er vist. Velg ett. Spørsmålet teller ikke som riktig på første forsøk.";
+    renderOpts(b); $("hintBtn").disabled=true; }
+}
+function answerText(val){
+  if(S.answered) return;
+  if(!norm(val)){ $("typeIn").focus(); return; }
+  S.answered=true;
+  const f=FLAT[S.cur], b=B[f.b], right=b.q[f.q][1];
+  const m=matchIdx(val,b), firstAttempt=!(S.cur in S.first);
+  $("typeIn").disabled=true; [...$("qOpts").querySelectorAll(".typein button")].forEach(x=>x.disabled=true);
+  if(m===right){
+    const exact=norm(val).replace(/ /g,"")===norm(b.o[right][0]).replace(/ /g,"");
+    grade(true, exact ? null : "Du skrev «"+val.trim()+"». Det godtas.");
+  } else {
+    const note = m>=0 ? "Du skrev «"+val.trim()+"», som ligner "+b.o[m][0]+": "+b.o[m][1]+"."
+                      : "Du skrev «"+val.trim()+"».";
+    const fb=grade(false,note,true);
+    const row=el("div","row"); row.style.marginTop="10px";
+    const yes=el("button","btn ghost small","Jeg mente det samme"); yes.type="button";
+    yes.style.padding="7px 13px";
+    yes.onclick=()=>{ if(firstAttempt) S.first[S.cur]=true; S.pendingRequeue=false; S.queue.shift(); S.done++; row.remove();
+      fb.className="fb ok"; fb.firstChild.textContent="Godtatt: "+b.o[right][0];
+      $("pTxt").textContent=S.done+" av "+S.total+" sitter"; $("pbar").style.width=(100*S.done/S.total)+"%";
+      $("nextBtn").textContent=S.queue.length?"Neste":"Se resultat"; save(); $("nextBtn").focus(); };
+    row.appendChild(yes); fb.appendChild(row);
+    S.pendingRequeue=true;
+  }
+  $("nextBtn").focus();
+}
+function goNext(){
+  if(S.pendingRequeue){ S.pendingRequeue=false;
+    if(S.queue[0]===S.cur){ S.queue.shift(); S.queue.push(S.cur); } }
+  next();
 }
 
 /* ---------------- RESULTAT ---------------- */
@@ -841,7 +1004,8 @@ document.addEventListener("click",e=>{
   const s=e.target.closest("[data-set]");
   if(s){ start(s.dataset.set); }
 });
-$("nextBtn").onclick=next;
+$("nextBtn").onclick=goNext;
+$("modeSeg").addEventListener("click",e=>{ const b=e.target.closest("[data-mode]"); if(b) setMode(b.dataset.mode); });
 $("quitBtn").onclick=()=>{ save(); renderHome(); };
 $("againBtn").onclick=()=>start(S.set);
 $("homeBtn").onclick=renderHome;
@@ -851,8 +1015,10 @@ $("resetAll").onclick=()=>{ try{localStorage.removeItem(LS);localStorage.removeI
 
 document.addEventListener("keydown",e=>{
   if($("quiz").classList.contains("hide")) return;
-  if(e.key>="1"&&e.key<="5"){ e.preventDefault(); if(!S.answered) answer(+e.key-1); }
-  else if(e.key==="Enter"||e.key===" "){ if(S.answered){ e.preventDefault(); next(); } }
+  const typing=document.activeElement&&document.activeElement.id==="typeIn";
+  const optsShown=$("qOpts").querySelector(".opt");
+  if(!typing&&optsShown&&e.key>="1"&&e.key<="5"){ e.preventDefault(); if(!S.answered) answer(+e.key-1); }
+  else if(e.key==="Enter"||(e.key===" "&&!typing)){ if(S.answered&&!(document.activeElement&&document.activeElement.tagName==="BUTTON"&&document.activeElement.id!=="nextBtn")){ e.preventDefault(); goNext(); } }
 });
 
 renderHome();

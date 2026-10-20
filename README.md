@@ -58,6 +58,24 @@ github.com, og kjør `git push -u origin main`. Slå deretter på Pages fra
 **Legge til en bolk:** legg til et objekt i `B`. Ingenting annet må endres,
 bolkvelgeren, temaknappene og fasittabellen genereres fra `B`.
 
+## Svarform
+
+Forsiden har en bryter mellom «Skriv svaret» (standard) og «Velg alternativ». Valget
+lagres i `localStorage` under `psy1-svarform` og følger med hver runde.
+
+- I «Skriv svaret» skriver eleven begrepet før alternativene vises. Svaret normaliseres
+  (små bokstaver, uten tegnsetting og bindestrek) og godtas ved små skrivefeil:
+  0 tegn avvik for svar på inntil 3 bokstaver, 1 for inntil 7, ellers 2. Første bokstav
+  må stemme, slik at «ubetinget» ikke godtas for «betinget».
+- Ord som går igjen i minst tre alternativer i bolken (som «perspektiv»), kan utelates.
+  Tekst i parentes og hver del av «X og Y» godtas også.
+- Synonymer ligger i `ALIAS`, nøkkel er alternativteksten slik den står i `B`.
+- Hint 1 viser forbokstaver og antall bokstaver, uten trekk. Hint 2 viser alternativene,
+  og da teller ikke spørsmålet som riktig på første forsøk.
+- Godtas ikke svaret, kan eleven trykke «Jeg mente det samme». Da teller det som riktig.
+- Ved endring av alternativer eller `ALIAS`: kontroller at hvert alternativ og hvert
+  synonym bare godtas for sitt eget alternativ i bolken.
+
 ## Runder
 
 - Én bolk, et helt tema, 20 tilfeldige fra hele faget, eller alle 200.
