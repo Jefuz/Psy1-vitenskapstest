@@ -1,7 +1,9 @@
-# Vitenskap og metode, Psykologi 1
+# Psykologi 1, repetisjon av hele faget
 
-Øvingstest til økt 1A. 60 flervalgsoppgaver i 12 bolker på fem, der alle fem
-spørsmålene i en bolk deler de samme fem alternativene. Ren statisk HTML/CSS/JS
+Øvingstest til repetisjonen før muntlig eksamen. 200 flervalgsoppgaver i 40 bolker
+på fem, fordelt på 15 temaer, der alle fem spørsmålene i en bolk deler de samme fem
+alternativene. Bolk 1 til 12 er den opprinnelige testen i vitenskap og metode (økt 1A),
+uendret. Bolk 13 til 40 dekker resten av faget, to bolker per tema. Ren statisk HTML/CSS/JS
 uten byggverktøy, samme mønster som `Politikk-test`.
 
 Testen er et øvingsverktøy, ikke en vurdering. Ingen data forlater nettleseren.
@@ -30,16 +32,16 @@ github.com, og kjør `git push -u origin main`. Slå deretter på Pages fra
 
 | Fil | Innhold |
 |---|---|
-| `psy1-vitenskap-og-metode.html` | Hele testen: spørsmål, alternativer, forklaringer, øvingslogikk og resultatside |
+| `psy1-vitenskap-og-metode.html` | Hele testen (filnavnet er beholdt så gamle lenker virker): spørsmål, alternativer, forklaringer, øvingslogikk og resultatside |
 | `index.html` | Videresending fra rot-URL til testen |
 | `.nojekyll` | Slår av Jekyll-prosessering på GitHub Pages |
 
 ## Datamodell (alt ligger i `psy1-vitenskap-og-metode.html`)
 
-Én array `B` med 12 bolker:
+Én array `B` med 40 bolker:
 
 ```js
-{n:5, tema:"Sammenheng og årsak",
+{n:5, del:"Vitenskap og metode", tema:"Sammenheng og årsak",
  o:[["Korrelasjon","en målt sammenheng som ikke i seg selv viser årsak"], ...],   // 5 alternativer
  q:[["Spørsmålstekst", 2, "Begrunnelse som vises etter svar"], ...]}              // 5 spørsmål
 ```
@@ -50,8 +52,17 @@ github.com, og kjør `git push -u origin main`. Slå deretter på Pages fra
 - Hver bolk bruker hvert alternativ som riktig svar nøyaktig én gang. Testen i
   `/tmp`-skriptet sjekker denne invarianten; behold den ved redigering.
 
+- `del` er temaet bolken hører til. Forsiden grupperer bolkene etter `del` i den
+  rekkefølgen temaene først dukker opp. Bolker uten `del` havner under Vitenskap og metode.
+
 **Legge til en bolk:** legg til et objekt i `B`. Ingenting annet må endres,
-bolkvelgeren og fasittabellen genereres fra `B`.
+bolkvelgeren, temaknappene og fasittabellen genereres fra `B`.
+
+## Runder
+
+- Én bolk, et helt tema, 20 tilfeldige fra hele faget, eller alle 200.
+- «Det jeg kan dårligst» trekker 20 spørsmål fra bolker eleven ikke har tatt eller
+  har under 80 prosent på. Beste skår lagres også når en hel bolk inngår i en temarunde.
 
 ## Øvingslogikk
 
@@ -73,15 +84,17 @@ Knappen «Nullstill fremdrift» sletter begge.
 
 ## Fasit
 
-Bolk 1 til 12, riktig alternativ per spørsmål:
+Riktig alternativ per spørsmål, bolk 1 til 40:
 
 ```
-CAEBD  ACDEB  ACBDE  ACBDE  CADEB  ADBCE
-ABCDE  ABDCE  CABDE  ABCDE  BACDE  ABCDE
+CAEBD  ACDEB  ACBDE  ACBDE  CADEB  ADBCE  ABCDE  ABDCE  CABDE  ABCDE
+BACDE  ABCDE  BCDEA  CDEAB  DAEBC  DAEBC  EDACB  EBDCA  CEADB  BDEAC
+BEDAC  EABDC  BECDA  CEDAB  CDAEB  BDECA  DACEB  CBEAD  BDEAC  ECABD
+CEADB  CAEBD  EBACD  DABEC  DACBE  ECADB  EBADC  BDEAC  DBEAC  CAEDB
 ```
 
-Samme fasit gjelder Forms-versjonen «Psy-1 intro quiz», som har de samme 60
-spørsmålene i samme rekkefølge.
+Forms-versjonen «Psy-1 intro quiz» har bare bolk 1 til 12, med samme fasit og
+rekkefølge som her.
 
 ## Lokal utvikling
 

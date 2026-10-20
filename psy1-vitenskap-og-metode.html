@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Psykologi 1: Vitenskap og metode</title>
-<meta name="description" content="Ovingstest med 60 flervalgsoppgaver i 12 bolker. Psykologi 1, okt 1A.">
+<title>Psykologi 1: Repetisjon av hele faget</title>
+<meta name="description" content="Ovingstest med 200 flervalgsoppgaver i 40 bolker, hele Psykologi 1.">
 <style>
   :root{
     --bg:#f6f7fb; --card:#ffffff; --ink:#1c2333; --muted:#5b6478;
@@ -38,6 +38,9 @@
   .small{font-size:.88rem}
   .disc{background:#fff8e9;border:1px solid #f3e2b8;border-radius:12px;padding:12px 14px;
     font-size:.9rem;color:#6b5a23}
+  .tema{margin-top:20px}
+  .tema .row{margin-bottom:-4px}
+  .tema h3{margin:0}
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:14px}
   .bolk{text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;
     padding:12px 14px;cursor:pointer;transition:.12s;font:inherit;color:inherit}
@@ -79,8 +82,8 @@
 
   <!-- ============ FORSIDE ============ -->
   <section id="home">
-    <h1>Vitenskap og metode</h1>
-    <p class="sub">Psykologi 1, økt 1A. 60 flervalgsoppgaver i 12 bolker på fem.
+    <h1>Psykologi 1: hele faget</h1>
+    <p class="sub">200 flervalgsoppgaver i 40 bolker på fem, fordelt på 15 temaer.
       Alle fem spørsmålene i en bolk deler de samme fem alternativene.</p>
 
     <div class="card" style="margin-top:18px">
@@ -101,14 +104,21 @@
     </div>
 
     <div class="card">
-      <h2>Velg bolk</h2>
-      <p class="small muted" style="margin:.4em 0 0">Fem spørsmål tar rundt tre minutter.</p>
-      <div class="grid" id="bolkGrid"></div>
-      <div class="row" style="margin-top:16px">
-        <button class="btn" data-set="all">Kjør alle 60</button>
-        <button class="btn ghost" data-set="random">20 tilfeldige</button>
+      <h2>Bland temaene</h2>
+      <p class="small muted" style="margin:.4em 0 0">Blandede spørsmål ligner eksamen mest.
+        «Det jeg kan dårligst» trekker fra bolker du ikke har tatt eller har under 80 prosent på.</p>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" data-set="random">20 tilfeldige</button>
+        <button class="btn ghost" data-set="weak">Det jeg kan dårligst</button>
+        <button class="btn ghost" data-set="all">Alle 200</button>
         <button class="btn ghost" id="resetAll">Nullstill fremdrift</button>
       </div>
+    </div>
+
+    <div class="card">
+      <h2>Velg tema eller bolk</h2>
+      <p class="small muted" style="margin:.4em 0 0">Fem spørsmål tar rundt tre minutter.</p>
+      <div id="bolkGrid"></div>
     </div>
 
     <div class="card disc">
@@ -169,7 +179,7 @@
 /* ---------------- DATA ----------------
    o: [alternativ, kortforklaring]  q: [spørsmål, riktig indeks, begrunnelse] */
 const B=[
-{n:1,tema:"Grunnbegreper",
+{n:1,del:"Vitenskap og metode",tema:"Grunnbegreper",
  o:[["Atferd","alt andre kan observere at du gjør"],
     ["Mentale prosesser","det indre: tanker, følelser, minner, motiver og sansing"],
     ["Hverdagspsykologi","uetterprøvde antakelser om mennesker bygget på sunn fornuft"],
@@ -311,11 +321,350 @@ const B=[
     ["Den opprinnelige forskningsartikkelen, skrevet av dem som gjennomførte studien.",1,"Primærkilden er førstehåndsframstillingen."],
     ["En artikkel på forskning.no som gjenforteller hva studien fant.",2,"Formidlingsartikler er sekundærkilder. De er trygge startpunkter, men ikke originalen."],
     ["Andre fagfolk vurderer manuskriptet før det kommer på trykk.",3,"Fagfellevurdering er fagmiljøets kvalitetssikring før publisering."],
-    ["Studien av en søvnapp er finansiert av selskapet som selger appen.",4,"Egeninteresse i resultatet er en interessekonflikt, og skal oppgis."]]}
+    ["Studien av en søvnapp er finansiert av selskapet som selger appen.",4,"Egeninteresse i resultatet er en interessekonflikt, og skal oppgis."]]},
+
+{n:13,del:"Perspektiver og faghistorie",tema:"Perspektivene",
+ o:[["Biologisk perspektiv","forklarer atferd ut fra nervesystem, hormoner og gener"],
+    ["Psykodynamisk perspektiv","forklarer atferd ut fra ubevisste prosesser og tidlige erfaringer"],
+    ["Behavioristisk perspektiv","studerer observerbar atferd og hvordan den formes av omgivelsene"],
+    ["Kognitivt perspektiv","studerer hvordan vi tar inn, bearbeider og lagrer informasjon"],
+    ["Humanistisk perspektiv","vektlegger fri vilje, selvbilde og vekst"]],
+ q:[["En psykolog forklarer angsten til en klient med ubevisste konflikter som stammer fra barndommen.",1,"Det ubevisste og barndommen er kjennetegnene på det psykodynamiske perspektivet, som går tilbake til Freud."],
+    ["En forsker mener psykologien bare bør studere det som kan observeres, og at atferd formes av konsekvensene den får.",2,"Kravet om observerbar atferd og vekten på konsekvenser er behaviorismens kjerne."],
+    ["En forsker sammenligner hjernen med en datamaskin som tar inn, bearbeider og lagrer informasjon.",3,"Datamaskinanalogien er typisk for det kognitive perspektivet. Merk at det er en analogi, ikke en beskrivelse av hvordan hjernen er bygd."],
+    ["En terapeut legger vekt på klientens frie vilje og ønske om å vokse mot sitt fulle potensial.",4,"Fri vilje og selvrealisering er humanismens kjennetegn, med Maslow og Rogers som hovedpersoner."],
+    ["En forsker undersøker om depresjon henger sammen med gener og med aktivitet i bestemte hjernenettverk. Evolusjonspsykologien regnes ofte som en gren av dette perspektivet.",0,"Gener, hjerne og hormoner hører til det biologiske perspektivet. Noen lærebøker skiller ut evolusjonspsykologi som et eget perspektiv."]]},
+
+{n:14,del:"Perspektiver og faghistorie",tema:"Nøkkelpersoner",
+ o:[["William James","spurte hva bevisstheten er til for, ikke bare hva den består av"],
+    ["Sigmund Freud","grunnla psykoanalysen og la vekt på det ubevisste"],
+    ["John B. Watson","grunnla behaviorismen i 1913"],
+    ["Carl Rogers","utviklet klientsentrert terapi"],
+    ["Lev Vygotskij","mente at språk og kultur former tenkningen"]],
+ q:[["Ville i 1913 at psykologien bare skulle studere observerbar atferd, ikke bevisstheten.",2,"Watson ga behaviorismen navn og program. Skinner kom senere og utviklet operant betinging."],
+    ["Mente at terapeuten skulle møte klienten med ubetinget positiv aksept, empati og ekthet.",3,"Ubetinget positiv aksept er Rogers sitt begrep og en hjørnestein i humanistisk terapi."],
+    ["Mente at kultur, språk og samhandling med andre former hvordan barn lærer å tenke.",4,"Vygotskij regnes som en viktig kilde til det sosiokulturelle perspektivet, og står bak begrepet den nærmeste utviklingssonen."],
+    ["Spurte hva bevisstheten er til for, og knyttes til retningen funksjonalisme.",0,"James spurte etter funksjon, mens Wundt og hans elever spurte etter bestanddeler."],
+    ["Mente at mye av det som styrer oss, ligger utenfor bevisstheten, og brukte drømmetolkning og fri assosiasjon.",1,"Det ubevisste og metodene fri assosiasjon og drømmetolkning er psykoanalysens kjennetegn."]]},
+
+{n:15,del:"Persepsjon og kognisjon",tema:"Fra sanseinntrykk til opplevelse",
+ o:[["Sansing","reseptorene registrerer energi og sender signaler videre"],
+    ["Persepsjon","hjernen organiserer og tolker sanseinntrykkene"],
+    ["Nedenfra og opp","bildet bygges opp av enkle trekk i stimulusen"],
+    ["Ovenfra og ned","forkunnskap og forventning styrer tolkningen"],
+    ["Selektiv oppmerksomhet","noe velges ut, resten filtreres bort"]],
+ q:[["Du leser det samme tegnet som B mellom A og C, men som 13 mellom 12 og 14.",3,"Sammenhengen avgjør tolkningen. Det er forkunnskap og forventning som styrer, altså ovenfra og ned."],
+    ["Lys treffer netthinnen og omdannes til nervesignaler.",0,"Registreringen og omdanningen av energi er sansing. Tolkningen kommer etterpå."],
+    ["Du klarer å følge én samtale på en støyende fest og legger knapt merke til de andre.",4,"Hjernen velger ut én informasjonsstrøm og demper resten. Det er selektiv oppmerksomhet."],
+    ["Hjernen gjør signalene om til opplevelsen av at du ser en hund.",1,"At signalene får mening, er persepsjon. Sansing er data, persepsjon er tolkning."],
+    ["Du ser en ukjent figur og bygger opp bildet av kanter, linjer og farger uten forkunnskap å støtte deg på.",2,"Når tolkningen starter i trekkene ved selve stimulusen, går den nedenfra og opp."]]},
+
+{n:16,del:"Persepsjon og kognisjon",tema:"Skjema og forventninger",
+ o:[["Skjema","et mentalt rammeverk for hvordan noe pleier å være"],
+    ["Stereotypi","en forenklet forestilling om hvordan medlemmer av en gruppe er"],
+    ["Fordom","en negativ holdning til noen bare fordi de tilhører en gruppe"],
+    ["Perseptuell beredskap","det du nettopp har sett, gjør deg klar til å se bestemte ting"],
+    ["Selvoppfyllende profeti","en forventning som får seg selv til å slå til"]],
+ q:[["Etter å ha sett bilder av dyr tolker deltakerne en tvetydig tegning som en rotte. Andre, som har sett ansikter, ser et ansikt.",3,"Det man nettopp har sett, styrer tolkningen. Bugelski og Alampay (1961) viste dette med figuren som kan leses både som rotte og mann."],
+    ["Du vet uten å tenke over det at et restaurantbesøk starter med bestilling og slutter med regning.",0,"Et skjema er et rammeverk for hvordan noe pleier å foregå. Det gjør verden forutsigbar, men kan også få oss til å overse det som avviker."],
+    ["En lærer forventer lite av en elev, gir hen mindre oppfølging, og eleven presterer faktisk svakere.",4,"Forventningen skaper sin egen bekreftelse. Ifølge Jussim og Harber (2005) finnes slike effekter, men de er ofte små."],
+    ["Forestillingen om at alle i en bestemt yrkesgruppe er innadvendte.",1,"En forenklet generalisering om en gruppe er en stereotypi. Den kan være positiv eller negativ og trenger ikke være bevisst."],
+    ["En arbeidsgiver liker ikke en søker bare fordi hen kommer fra et bestemt land.",2,"Den negative holdningen er fordommen. Stereotypien er den forenklede forestillingen den kan bygge på."]]},
+
+{n:17,del:"Hukommelse",tema:"Hukommelsens oppbygning",
+ o:[["Sensorisk register","holder sanseinntrykk i et brøkdels sekund til noen sekunder"],
+    ["Korttidsminne","holder lite informasjon kort tid uten repetisjon"],
+    ["Arbeidsminne","bearbeider aktivt det vi holder i tankene akkurat nå"],
+    ["Langtidsminne","lagrer informasjon over lang tid med svært stor kapasitet"],
+    ["Chunking","å gruppere informasjon i meningsfulle enheter"]],
+ q:[["Du husker telefonnummeret som tre grupper: 482, 19 og 337.",4,"Å slå sammen enkeltelementer til større enheter er chunking. Det utvider hvor mye korttidsminnet ser ut til å romme."],
+    ["Lager som kan holde informasjon fra minutter til resten av livet, med kapasitet vi ikke kjenner grensa for.",3,"Langtidsminnet er lageret uten kjent kapasitetsgrense."],
+    ["Et inntrykk fra synet blir liggende et brøkdels sekund etter at bildet er borte.",0,"Det kortvarige ekkoet av sanseinntrykket er det sensoriske registeret. Det meste forsvinner før det når videre."],
+    ["Baddeleys modell med en fonologisk sløyfe og et visuospatialt skisseark som arbeider med informasjonen.",2,"Baddeley beskrev arbeidsminnet som et aktivt system med flere deler, ikke bare et passivt lager."],
+    ["Lageret i flerlagermodellen der informasjon forsvinner i løpet av rundt et halvt minutt hvis du ikke repeterer den.",1,"Kort varighet og liten kapasitet er korttidsminnets kjennetegn i Atkinson og Shiffrins modell."]]},
+
+{n:18,del:"Hukommelse",tema:"Minnetyper og glemsel",
+ o:[["Episodisk hukommelse","minner om egne opplevelser, knyttet til tid og sted"],
+    ["Semantisk hukommelse","faktakunnskap løsrevet fra når du lærte den"],
+    ["Prosedural hukommelse","ferdigheter du utfører uten å tenke over hvordan"],
+    ["Interferens","annen informasjon forstyrrer det du prøver å huske"],
+    ["Rekonstruksjon","minnet bygges opp på nytt hver gang og kan endres"]],
+ q:[["Deltakerne anslo høyere fart når spørsmålet sa at bilene «knuste» inn i hverandre, enn når det sa at de «traff» hverandre.",4,"Loftus og Palmer (1974) viste at ordvalget i spørsmålet endret selve minnet. Minner hentes ikke fram som opptak, de bygges opp igjen."],
+    ["Du vet at Oslo er hovedstaden i Norge, men husker ikke når du lærte det.",1,"Fakta uten tilknytning til tid og sted er semantisk hukommelse."],
+    ["Den gamle PIN-koden dukker stadig opp når du prøver å huske den nye.",3,"Når gammel informasjon forstyrrer ny, er det interferens, nærmere bestemt proaktiv interferens."],
+    ["Du sykler hjem uten å tenke på hvordan du holder balansen.",2,"Ferdigheter som går av seg selv, er prosedural hukommelse. H.M. kunne fortsatt lære slike ferdigheter."],
+    ["Du husker hvor du var og hvem du var sammen med på 18-årsdagen din.",0,"Egne opplevelser knyttet til tid og sted er episodisk hukommelse."]]},
+
+{n:19,del:"Læring",tema:"Klassisk betinging",
+ o:[["Ubetinget stimulus","utløser en respons uten at den er lært"],
+    ["Betinget stimulus","et opprinnelig nøytralt signal som har fått kraft gjennom læring"],
+    ["Betinget respons","den lærte reaksjonen på signalet"],
+    ["Ekstinksjon","den lærte responsen svekkes når koblingen opphører"],
+    ["Generalisering","responsen utløses også av stimuli som ligner"]],
+ q:[["Hunden skiller ut spytt når bjella ringer, selv om ingen mat kommer.",2,"Spyttet ved bjella er lært, altså en betinget respons. Spyttet ved maten var den ubetingede."],
+    ["Lille Albert ble redd også for en kanin og en pelskåpe, ikke bare for den hvite rotta.",4,"Når frykten sprer seg til lignende stimuli, er det generalisering."],
+    ["Maten i munnen som får hunden til å skille ut spytt uten noen læring.",0,"Maten virker uten læring. Den er den ubetingede stimulusen."],
+    ["Bjella ringer gang på gang uten mat, og spyttet avtar. Responsen kan likevel komme tilbake senere.",3,"Svekkelsen er ekstinksjon. At responsen kan komme tilbake (spontan gjenoppretting), viser at ekstinksjon ikke er sletting."],
+    ["Bjella, etter at den mange ganger har kommet like før maten.",1,"Bjella var nøytral, men har gjennom koblingen blitt en betinget stimulus."]]},
+
+{n:20,del:"Læring",tema:"Konsekvenser og modeller",
+ o:[["Positiv forsterkning","noe behagelig tilføres, så atferden øker"],
+    ["Negativ forsterkning","noe ubehagelig fjernes, så atferden øker"],
+    ["Positiv straff","noe ubehagelig tilføres, så atferden minker"],
+    ["Negativ straff","noe behagelig fjernes, så atferden minker"],
+    ["Modellæring","atferd læres ved å se andre utføre den"]],
+ q:[["Pipelyden i bilen stopper når du fester setebeltet, og du fester det raskere neste gang.",1,"Ubehaget fjernes og atferden øker. Negativ betyr fjerne, ikke vond. Dette blandes ofte med straff."],
+    ["En elev mister mobilen for kvelden etter å ha kommet hjem for sent.",3,"Noe behagelig fjernes for å få atferden til å minke. Det er negativ straff."],
+    ["Barn som hadde sett en voksen slå en oppblåsbar dukke, slo den selv da de fikk sjansen.",4,"Banduras Bobo-forsøk viste modellæring. Funnet sier lite om vold i samfunnet utenfor laboratoriet."],
+    ["Du får lommepenger hver gang du tar oppvasken, og tar den oftere.",0,"Noe behagelig tilføres, og atferden øker. Det er positiv forsterkning."],
+    ["En elev som kommer for sent, får ekstra lekser.",2,"Noe ubehagelig tilføres for å få atferden til å minke. Det er positiv straff."]]},
+
+{n:21,del:"Motivasjon, mestring og læringsstrategier",tema:"Motivasjon og mestring",
+ o:[["Indre motivasjon","du gjør noe fordi aktiviteten i seg selv gir glede"],
+    ["Ytre motivasjon","du gjør noe for en belønning eller for å unngå noe"],
+    ["Mestringstro","troen på at du klarer en bestemt oppgave"],
+    ["Lært hjelpeløshet","du slutter å prøve fordi du tror det ikke nytter"],
+    ["Flyt","du er helt oppslukt, og utfordring og ferdighet er i balanse"]],
+ q:[["Du jobber ekstra med et fag mest fordi du trenger karakteren for å komme inn på studiet.",1,"Målet ligger utenfor aktiviteten. Ytre motivasjon er ikke dårlig i seg selv, den kan bære deg gjennom kjedelige deler."],
+    ["Du er så oppslukt av en oppgave at du mister tidssansen.",4,"Csikszentmihalyi beskrev flyt som en tilstand der utfordring og ferdighet passer sammen."],
+    ["Etter mange nederlag du ikke kunne påvirke, slutter du å prøve, også når det faktisk ville nyttet.",3,"Dette er lært hjelpeløshet. Maier og Seligman (2016) mener nå at passiviteten er utgangspunktet, og at det er kontroll som læres."],
+    ["Du leser om psykologi på fritida fordi du synes det er spennende.",0,"Aktiviteten er belønningen. Det er indre motivasjon."],
+    ["En elev er sikker på at hen klarer å holde en muntlig presentasjon, men ikke på at hen klarer statistikk.",2,"Mestringstro gjelder en bestemt oppgave. Den er ikke det samme som generell selvtillit."]]},
+
+{n:22,del:"Motivasjon, mestring og læringsstrategier",tema:"Forklaringer og strategier",
+ o:[["Attribusjon","hvordan vi forklarer årsaken til suksess og nederlag"],
+    ["Selvbestemmelsesteori","autonomi, kompetanse og tilhørighet som grunnleggende behov"],
+    ["Vekstorientert tankesett","troen på at evner kan utvikles"],
+    ["Gjenhenting","å hente fram stoffet fra hukommelsen, for eksempel ved å teste seg selv"],
+    ["Spredt øving","å fordele læringen over flere økter med tid imellom"]],
+ q:[["Å lese litt hver dag gjennom tre uker, i stedet for alt kvelden før.",4,"Fordelingen over tid er spredt øving. Sammen med gjenhenting har den blant den beste støtten av læringsstrategiene."],
+    ["En elev som stryker, sier: «Jeg er bare dum.» En annen sier: «Jeg leste for lite.»",0,"Forskjellen ligger i forklaringen. Weiner skiller mellom indre og ytre, stabil og ustabil, kontrollerbar og ukontrollerbar."],
+    ["Deci og Ryans teori om at motivasjonen blir sterkest når grunnleggende psykologiske behov dekkes.",1,"De tre behovene autonomi, kompetanse og tilhørighet er selvbestemmelsesteorien."],
+    ["Å lukke boka og skrive ned alt du husker, i stedet for å lese kapittelet en gang til.",3,"Å hente fram fra hukommelsen gir bedre langtidslæring enn ny gjennomlesning (Rowland 2014)."],
+    ["Dwecks begrep. Metaanalyser finner små gjennomsnittlige effekter av å prøve å endre det (Sisk mfl. 2018).",2,"Det vekstorienterte tankesettet er godt kjent, men effekten av kurs som skal endre det, ser ut til å være liten."]]},
+
+{n:23,del:"Personlighet",tema:"Femfaktormodellen",
+ o:[["Åpenhet for erfaring","nysgjerrig, fantasifull og åpen for nye ideer"],
+    ["Planmessighet","strukturert, pliktoppfyllende og målrettet"],
+    ["Ekstroversjon","pratsom, sosial og energisk sammen med andre"],
+    ["Medmenneskelighet","tillitsfull, hjelpsom og opptatt av å unngå konflikt"],
+    ["Nevrotisisme","bekymrer seg lett og svinger mye i humøret"]],
+ q:[["Hen lager alltid leseplan, leverer i tide og rydder før hen går fra seg.",1,"Struktur og pliktfølelse er planmessighet. Trekket henger ifølge mange studier sammen med skoleprestasjoner."],
+    ["Hen bekymrer seg lett, blir raskt nervøs og svinger mye i humøret.",4,"Dette er nevrotisisme. Den motsatte polen kalles ofte emosjonell stabilitet."],
+    ["Hen henter energi av å være sammen med mange og snakker gjerne først i en ny gruppe.",2,"Energi fra sosialt samvær er kjernen i ekstroversjon."],
+    ["Hen er hjelpsom, stoler på folk og gir seg heller enn å havne i krangel.",3,"Tillit og ønske om harmoni er medmenneskelighet."],
+    ["Hen elsker nye ideer, kunst og uvanlige tanker.",0,"Nysgjerrighet og fantasi er åpenhet for erfaring."]]},
+
+{n:24,del:"Personlighet",tema:"Personlighetsteorier",
+ o:[["Id","den delen av psyken som krever umiddelbar behovstilfredsstillelse"],
+    ["Superego","samvittigheten, de normene vi har tatt inn fra andre"],
+    ["Forsvarsmekanisme","en ubevisst måte å beskytte seg mot angst på"],
+    ["Selvbilde og idealselv","hvem du opplever at du er, og hvem du ønsker å være"],
+    ["Gjensidig determinisme","person, atferd og miljø påvirker hverandre"]],
+ q:[["Hen husker ingenting fra en vond periode i barndommen. Freud ville sagt at minnene er fortrengt.",2,"Fortrengning er en forsvarsmekanisme. Kritikken er at slike påstander er vanskelige å teste."],
+    ["Banduras syn på at personlighet, handlinger og omgivelser hele tiden virker inn på hverandre.",4,"Påvirkning i alle retninger er gjensidig determinisme, kjernen i det sosialkognitive synet."],
+    ["Ifølge Rogers oppstår mistrivsel når det er stor avstand mellom disse to.",3,"Avstanden mellom selvbilde og idealselv er sentral hos Rogers. Ubetinget positiv aksept skal redusere den."],
+    ["Den delen av psyken som ifølge Freud følger lystprinsippet.",0,"Id følger lystprinsippet og vil ha behovene dekket med en gang. Ego følger realitetsprinsippet."],
+    ["Stemmen som sier at du burde skamme deg fordi du jukset.",1,"Samvittigheten og de innlærte normene er superego."]]},
+
+{n:25,del:"Arv og miljø",tema:"Metoder og begreper",
+ o:[["Arvbarhet","andelen av variasjonen i en gruppe som skyldes genetiske forskjeller"],
+    ["Eneggede tvillinger","deler i praksis alle gener"],
+    ["Adopsjonsstudie","sammenligner barn med biologiske foreldre og med oppvekstforeldre"],
+    ["Ikke-delt miljø","miljøfaktorer som gjør søsken ulike"],
+    ["Polygent trekk","påvirkes av svært mange gener med små effekter hver"]],
+ q:[["Forskerne undersøker om adopterte barn ligner mest på foreldrene de vokste opp med, eller på dem de ble født av.",2,"Sammenligningen av biologiske og sosiale foreldre er adopsjonsstudiens grunnidé."],
+    ["Søsken som vokser opp i samme hjem, blir likevel ulike, blant annet på grunn av ulike venner og tilfeldige hendelser.",3,"Det som skiller søsken, er det ikke-delte miljøet. Ifølge mange tvillingstudier forklarer det mer av personligheten enn det delte."],
+    ["Et tall på 0,5 for et trekk betyr at halvparten av forskjellene mellom folk i gruppa kan knyttes til genetiske forskjeller.",0,"Arvbarhet handler om variasjon i en gruppe. Den sier ingenting om hvor mye av ett menneske som er arvet."],
+    ["Personlighetstrekk som påvirkes av tusenvis av genvarianter, hver med svært liten effekt.",4,"Slike trekk er polygene. Derfor finnes det ikke ett gen for utadvendthet."],
+    ["Gruppen som sammenlignes med toeggede tvillinger, som i snitt deler halvparten av genvariantene sine.",1,"Hvis eneggede ligner hverandre mer enn toeggede, tolkes det som tegn på genetisk påvirkning."]]},
+
+{n:26,del:"Arv og miljø",tema:"Samspill",
+ o:[["Samspill mellom gener og miljø","samme miljø virker ulikt avhengig av genene"],
+    ["Korrelasjon mellom gener og miljø","genene påvirker hvilke miljøer vi havner i"],
+    ["Epigenetikk","miljøet påvirker om gener slås av eller på, uten å endre DNA-sekvensen"],
+    ["Diatese-stress-modellen","sårbarhet og belastning må til sammen"],
+    ["Differensiell mottakelighet","noen påvirkes mer av både gode og dårlige miljøer"]],
+ q:[["Et musikalsk anlagt barn oppsøker korps og får musikalske venner.",1,"Genene påvirker hvilket miljø barnet havner i. Det er en korrelasjon mellom gener og miljø."],
+    ["En psykisk lidelse bryter bare ut når en medfødt sårbarhet møter en stor nok påkjenning.",3,"Sårbarhet pluss belastning er diatese-stress-modellen."],
+    ["Bildet av orkidébarn og løvetannbarn.",4,"Metaforen hører til differensiell mottakelighet (Belsky og Pluess): de mest sårbare kan også ha mest utbytte av gode miljøer."],
+    ["Mekanismer som påvirker hvilke gener som er aktive, uten at selve gensekvensen endres.",2,"Det er epigenetikk. Mye av forskningen er gjort på dyr, og overføringen til mennesker er usikker."],
+    ["Mishandling i oppveksten ser ut til å gi ulik risiko for senere problemer, avhengig av hvilke genvarianter barnet har.",0,"Når virkningen av miljøet avhenger av genene, er det et samspill. Mange slike enkeltfunn har vært vanskelige å gjenta."]]},
+
+{n:27,del:"Utvikling og identitet",tema:"Piaget og Vygotskij",
+ o:[["Assimilasjon","ny erfaring passes inn i et skjema du allerede har"],
+    ["Akkommodasjon","skjemaet endres eller et nytt lages"],
+    ["Objektpermanens","forståelsen av at ting finnes selv om du ikke ser dem"],
+    ["Konservering","forståelsen av at mengden er den samme selv om formen endres"],
+    ["Den nærmeste utviklingssonen","det barnet klarer med hjelp, men ikke alene ennå"]],
+ q:[["Et barn forstår at vannet i et høyt, smalt glass er like mye som i et lavt, bredt glass.",3,"Forståelsen av at mengden ikke endres med formen, er konservering. Ifølge Piaget kommer den i konkret operasjonelt stadium."],
+    ["En toåring kaller alle firbente dyr «vovvov», også katten.",0,"Det nye dyret passes inn i det skjemaet barnet allerede har. Det er assimilasjon."],
+    ["En baby leter etter leken som ble gjemt under et teppe.",2,"Barnet vet at leken finnes selv om den er ute av syne. Det er objektpermanens."],
+    ["Med litt hjelp fra læreren løser eleven en oppgave hen ikke klarte alene.",4,"Det rommet mellom det eleven klarer alene og det hen klarer med støtte, er Vygotskijs nærmeste utviklingssone."],
+    ["Barnet oppdager at katter ikke sier vov, og lager en egen kategori for katt.",1,"Skjemaet må endres for å passe erfaringen. Det er akkommodasjon."]]},
+
+{n:28,del:"Utvikling og identitet",tema:"Tilknytning og identitet",
+ o:[["Fremmedsituasjonen","Ainsworths metode for å måle tilknytning"],
+    ["Trygg tilknytning","barnet bruker omsorgspersonen som en trygg base"],
+    ["Moratorium","utforsker alternativer uten å ha forpliktet seg ennå"],
+    ["Overtatt identitet","har forpliktet seg uten å ha utforsket alternativer"],
+    ["Den generaliserte andre","samfunnets samlede forventninger slik barnet forstår dem"]],
+ q:[["En 18-åring prøver ut flere studieretninger og verdisyn, men har ikke bestemt seg.",2,"Utforskning uten forpliktelse er moratorium i Marcias modell."],
+    ["Et barn utforsker rommet når mor er der, blir lei seg når hun går, og trøstes raskt når hun kommer tilbake.",1,"Dette er mønsteret for trygg tilknytning. Tilknytningsmønster er ikke skjebne; det kan endre seg."],
+    ["Mead mente at barnet gjennom organiserte spill lærer å forstå det denne representerer.",4,"Den generaliserte andre er de felles normene og forventningene barnet tar inn, ikke én bestemt person."],
+    ["Laboratorieprosedyren der barnet skilles fra og gjenforenes med omsorgspersonen mens en fremmed er til stede.",0,"Fremmedsituasjonen er metoden. Trygg, unnvikende og ambivalent tilknytning er kategoriene den brukes til å skille."],
+    ["En ungdom skal overta familiebedriften og har aldri vurdert noe annet.",3,"Forpliktelse uten utforskning er overtatt identitet. Statusene er ikke stadier i fast rekkefølge."]]},
+
+{n:29,del:"Evolusjonspsykologi",tema:"Seleksjon",
+ o:[["Naturlig seleksjon","egenskaper som gir flere etterkommere, blir vanligere"],
+    ["Seksuell seleksjon","konkurranse om, og valg av, partnere"],
+    ["Foreldreinvestering","tid og ressurser lagt i hvert avkom"],
+    ["Mismatch","en tilpasning til fortidens miljø passer dårlig i dagens"],
+    ["Opphavsårsak","hvorfor en mekanisme finnes, altså funksjonen"]],
+ q:[["Påfuglhanens store hale gjør ham lettere å fange for rovdyr, men mer attraktiv for hunnene.",1,"Halen hjelper ikke overlevelsen, men parringen. Det er seksuell seleksjon."],
+    ["Søtsuget lønte seg da sukker var sjeldent, men bidrar til helseproblemer når sukker er overalt.",3,"Tilpasningen passer ikke lenger til miljøet. Det er mismatch."],
+    ["Spørsmålet om hvilken nytte frykt hadde for forfedrene våre, ikke hvordan frykt virker i hjernen.",4,"Funksjonsspørsmålet er opphavsårsaken (Mayr, Tinbergen). Hvordan mekanismen virker, er den nærliggende årsaken."],
+    ["Under en tørke på Galápagos overlevde finker med store nebb best, og nebbstørrelsen økte i neste generasjon.",0,"Variasjon, arv og ulik overlevelse gir naturlig seleksjon. Grant-paret kunne observere den direkte."],
+    ["Trivers (1972): kjønnet som legger mest i hvert avkom, blir ifølge teorien mest kresent i partnervalget.",2,"Dette er foreldreinvesteringsteorien. Kjønnsforskjellene i partnerpreferanser som er målt, er små (Walter mfl. 2020)."]]},
+
+{n:30,del:"Evolusjonspsykologi",tema:"Samarbeid, frykt og feilslutninger",
+ o:[["Slektsseleksjon","å hjelpe slektninger som deler gener med deg"],
+    ["Gjensidig altruisme","jeg hjelper deg nå, du hjelper meg senere"],
+    ["Forberedt læring","noen frykter læres lettere enn andre"],
+    ["Røykvarslerprinsippet","mange falske alarmer er billigere enn én oversett fare"],
+    ["Naturalistisk feilslutning","å slutte fra at noe er naturlig, til at det er riktig"]],
+ q:[["«Det er naturlig for menn å være sjalu, altså er det greit.»",4,"Fra hvordan noe er, kan du ikke slutte hvordan det bør være. Det er den naturalistiske feilslutningen."],
+    ["Aper som så videoer, lærte frykt for lekeslanger, men ikke for blomster (Cook og Mineka 1989).",2,"Frykten ble lettere lært for det som var farlig for forfedrene. Det er forberedt læring."],
+    ["Hamiltons forklaring på hvorfor folk ofrer mer for nære slektninger enn for fremmede.",0,"Å hjelpe dem som deler gener med deg, kan gi genene videre. Det er slektsseleksjon."],
+    ["Strategien tit for tat, som vant Axelrods turneringer, bygger på dette.",1,"Gjengjeld er gjensidig altruisme (Trivers 1971). Tit for tat starter vennlig og gjør så det motparten gjorde sist."],
+    ["Nesses forklaring på at angstsystemet så ofte går av uten grunn.",3,"En falsk alarm koster lite, en oversett fare kan koste livet. Derfor kan det lønne seg med et følsomt system."]]},
+
+{n:31,del:"Nervesystemet og hjernen",tema:"Nervecellen",
+ o:[["Dendritt","mottar signaler fra andre nerveceller"],
+    ["Akson","fører signalet bort fra cellekroppen"],
+    ["Myelin","isolerende lag som gjør signalet raskere"],
+    ["Synapse","koblingen der signalstoffer går fra én celle til den neste"],
+    ["Aksjonspotensial","det elektriske signalet som går gjennom aksonet"]],
+ q:[["Nedbrytningen av dette laget gir symptomene ved multippel sklerose.",2,"MS er demyelinisering. Uten isolasjon går signalene langsommere og dårligere."],
+    ["Signalet fyrer helt eller ikke i det hele tatt når terskelen er nådd.",4,"Aksjonspotensialet er alt eller ingenting. Styrken ligger i hvor ofte og hvor mange celler som fyrer."],
+    ["De forgreinede utløperne som tar imot signaler fra andre celler.",0,"Dendrittene mottar. Aksonet sender."],
+    ["Stedet der rusmidler og mange medisiner griper inn, blant annet ved å hindre at signalstoffet ryddes bort.",3,"I synapsen overføres signalet kjemisk. Kokain virker for eksempel ved å blokkere reopptaket av dopamin."],
+    ["Den lange utløperen som leder signalet ut mot neste celle.",1,"Aksonet leder signalet bort fra cellekroppen."]]},
+
+{n:32,del:"Nervesystemet og hjernen",tema:"Kartet og hjernen",
+ o:[["Sympatisk nervesystem","gjør kroppen klar til innsats"],
+    ["Parasympatisk nervesystem","roer kroppen ned"],
+    ["Hippocampus","involvert i å danne nye eksplisitte minner"],
+    ["Amygdala","involvert i å oppdage trusler og i lært frykt"],
+    ["Frontallappen","involvert i planlegging og impulskontroll"]],
+ q:[["Etter at store deler av den ble fjernet på begge sider, klarte H.M. ikke å danne nye minner om hendelser og fakta.",2,"H.M. viste at hippocampus er nødvendig for nye eksplisitte minner, men ikke for å lære ferdigheter."],
+    ["Pulsen stiger, pusten går fortere og fordøyelsen stopper opp når du blir skremt.",0,"Mobiliseringen er det sympatiske systemet."],
+    ["Phineas Gage endret oppførsel etter skaden her, men gjenvant ifølge nyere gjennomganger mye av funksjonen.",4,"Frontallappen er involvert i planlegging og impulskontroll. Macmillan og Lena (2010) viser at Gage kjørte postvogn i Chile i flere år."],
+    ["Etter middagen senkes pulsen, og fordøyelsen tar over.",1,"Hvile og fordøyelse er det parasympatiske systemet. De to virker som en vektskål, ikke som en bryter."],
+    ["Pasienten S.M. manglet denne på begge sider, viste ingen frykt for slanger, men fikk panikk av å puste inn CO2.",3,"Amygdala er involvert i frykt for ytre trusler, men er ikke hjernens eneste fryktsenter (Feinstein mfl. 2011, 2013)."]]},
+
+{n:33,del:"Hormoner, sanser og hele mennesket",tema:"Hormonsystemet",
+ o:[["Homeostase","kroppens tendens til å holde indre forhold stabile"],
+    ["Hypothalamus","hjernestruktur som kobler nervesystemet og hormonsystemet"],
+    ["Hypofysen","kjertel som styrer mange av de andre hormonkjertlene"],
+    ["Adrenalin","virker raskt og øker puls og blodtrykk"],
+    ["Kortisol","holder stressresponsen gående over tid"]],
+ q:[["Sluttproduktet i HPA-aksen, som frigjøres fra binyrebarken og holder kroppen i beredskap i minutter til timer.",4,"Kortisol virker saktere og lenger enn adrenalin. Ved langvarig stress kan nivået forbli høyt."],
+    ["Strukturen i hjernen som styrer sult, tørst og temperatur, og som setter i gang stressresponsen.",1,"Hypothalamus er der nervesystemet og hormonsystemet møtes."],
+    ["Kroppstemperaturen holdes rundt 37 grader celsius ved hjelp av svette og skjelving.",0,"Likevekten som holdes ved negativ tilbakekobling, er homeostase. Termostaten er den vanlige analogien."],
+    ["Kjertelen under hjernen som ofte kalles hovedkjertelen.",2,"Hypofysen styrer mange andre kjertler, men styres selv av hypothalamus."],
+    ["Hormonet fra binyremargen som gjør at hjertet hamrer sekunder etter at du blir skremt.",3,"Adrenalin virker raskt. Kortisol kommer som en senere bølge."]]},
+
+{n:34,del:"Hormoner, sanser og hele mennesket",tema:"Sansene og helheten",
+ o:[["Transduksjon","omdanning av fysisk energi til nervesignaler"],
+    ["Staver","synsreseptorer som fungerer i svakt lys"],
+    ["Tapper","synsreseptorer for farger og skarpt syn"],
+    ["Blindflekken","stedet uten reseptorer der synsnerven går ut"],
+    ["Den biopsykososiale modellen","biologiske, psykologiske og sosiale forklaringer samtidig"]],
+ q:[["Du ser ikke hull i synsfeltet, selv om det finnes et sted på netthinnen uten reseptorer.",3,"Hjernen fyller inn blindflekken. Det er et eksempel på at persepsjon er tolkning, ikke en kopi."],
+    ["Lydbølger beveger hårceller i øret, som sender elektriske signaler videre.",0,"Omdanningen fra mekanisk energi til nervesignaler er transduksjon. Det skjer i alle sansene."],
+    ["Du ser lite farger når du går ut i mørket.",1,"I svakt lys er det stavene som virker, og de skiller ikke farger."],
+    ["En forklaring på hvorfor du blir redd for en bjørn som tar med både amygdala, tidligere erfaringer og hvem du er sammen med.",4,"Flere nivåer samtidig er den biopsykososiale modellen. En biologisk og en psykologisk forklaring kan begge være riktige."],
+    ["Reseptorene som er tettest midt på netthinnen og gir skarpt fargesyn.",2,"Tappene står for farger og detaljer."]]},
+
+{n:35,del:"Stress og psykisk helse",tema:"Stress i kroppen",
+ o:[["Stressor","hendelsen eller kravet som utløser stress"],
+    ["Allostatisk belastning","slitasjen på kroppen av langvarig aktivering"],
+    ["Eustress","stress som oppleves positivt og kan skjerpe prestasjonen"],
+    ["Alarmfasen","kroppen mobiliserer mot belastningen"],
+    ["Utmattelsesfasen","ressursene tømmes etter lang belastning"]],
+ q:[["I Selyes modell: den første reaksjonen der kroppen mobiliserer energi.",3,"Alarmfasen kommer først, deretter motstandsfasen og eventuelt utmattelsesfasen."],
+    ["Den kommende muntlige eksamenen.",0,"Eksamen er det som utløser stresset, altså stressoren. Stressresponsen er det som skjer i deg."],
+    ["Pulsen stiger før en konkurranse, og du yter bedre enn på trening.",2,"Stress som oppleves som positivt og skjerpende, kalles eustress."],
+    ["Summen av slitasje når stressresponsen står på i lang tid.",1,"Den langvarige belastningen på kroppen er allostatisk belastning."],
+    ["I Selyes modell: kroppen klarer ikke lenger å holde motstanden oppe, og risikoen for sykdom øker.",4,"Utmattelsesfasen er siste fase. Kritikken av modellen er at den ser bort fra hvordan vi tolker situasjonen."]]},
+
+{n:36,del:"Stress og psykisk helse",tema:"Vurdering og mestring",
+ o:[["Primærvurdering","er dette en trussel for meg?"],
+    ["Sekundærvurdering","har jeg det som trengs for å takle det?"],
+    ["Problemfokusert mestring","å gjøre noe med selve problemet"],
+    ["Emosjonsfokusert mestring","å regulere følelsene problemet gir"],
+    ["Resiliens","å fungere godt til tross for belastning"]],
+ q:[["Etter en belastende hendelse har de fleste lite plager hele veien (Galatzer-Levy mfl. 2018).",4,"Det vanligste forløpet er resiliens. Det betyr ikke at resiliens er en egenskap du enten har eller ikke har."],
+    ["Du lager en leseplan for å ta igjen pensum du har falt bak på.",2,"Du endrer selve problemet. Det er problemfokusert mestring."],
+    ["Du vurderer om eksamen er noe som truer deg, eller bare er en vanlig oppgave.",0,"Vurderingen av om situasjonen er truende, er primærvurderingen i Lazarus sin modell."],
+    ["Du ringer en venn for å roe deg ned etter et avslag du ikke kan endre.",3,"Når utfallet ikke kan endres, er det å regulere følelsene ofte det mest hensiktsmessige. Emosjonsfokusert mestring er ikke svak mestring."],
+    ["Du lurer på om du har lest nok og har noen å spørre hvis du står fast.",1,"Vurderingen av egne ressurser er sekundærvurderingen."]]},
+
+{n:37,del:"Kriser",tema:"Cullbergs faser",
+ o:[["Sjokkfasen","virkeligheten holdes på avstand"],
+    ["Reaksjonsfasen","sterke følelser bryter fram"],
+    ["Bearbeidingsfasen","gradvis tilpasning, blikket vender seg framover"],
+    ["Nyorienteringsfasen","hendelsen blir en del av livshistorien"],
+    ["Traumatisk krise","utløst av en brå og uventet ytre hendelse"]],
+ q:[["En krise utløst av en trafikkulykke uten forvarsel.",4,"Brå og uventet utenfra er kjennetegnet på en traumatisk krise. En livskrise er en ventet overgang."],
+    ["Uker etter tapet kommer sinne, skyld og gråt.",1,"De sterke følelsene er reaksjonsfasen. Varighetene er grove anslag."],
+    ["Hen kan virke rolig utad og fungere praktisk, men opplever det som skjedde, som uvirkelig.",0,"Det typiske ved sjokkfasen er at virkeligheten holdes på avstand. Fasene er et kart, ikke en trapp."],
+    ["Hendelsen er ikke glemt, men har fått sin plass i livet, og hen har funnet nye mål.",3,"Nyorienteringsfasen varer resten av livet. Arret er der, men hindrer ikke å leve."],
+    ["Hen begynner å planlegge framover og gjenopptar gradvis hverdagen sin.",2,"Gradvis tilpasning er bearbeidingsfasen, som kan vare i måneder."]]},
+
+{n:38,del:"Kriser",tema:"Utfall og hjelp",
+ o:[["Livskrise","utløst av en ventet overgang i livet"],
+    ["Posttraumatisk stresslidelse","gjenopplevelse, unngåelse og høy vaktsomhet lenge etter et traume"],
+    ["Forlenget sorglidelse","sterk lengsel og plager som varer uvanlig lenge etter et dødsfall"],
+    ["Posttraumatisk vekst","opplevd positiv endring etter en krise"],
+    ["Psykososial førstehjelp","trygghet, ro, mestring, samhørighet og håp"]],
+ q:[["Et mindretall utvikler dette etter et traume, med mareritt, flashbacks og unngåelse av alt som minner om det.",1,"PTSD rammer et mindretall av dem som opplever traumer. At alle som opplever noe forferdelig, får PTSD, er en vanlig feil."],
+    ["Mange rapporterer at de vokste på krisen, men Frazier mfl. (2009) fant at slike rapporter ikke hang sammen med målt endring.",3,"Posttraumatisk vekst er omstridt som målt fenomen. Ingen skylder noen å vokse."],
+    ["De fem prinsippene til Hobfoll mfl. (2007) for å hjelpe folk den første tiden etter en katastrofe.",4,"Trygghet, ro, mestring, samhørighet og håp er grunnlaget. Tvungen debriefing frarådes (Rose mfl. 2002)."],
+    ["Å flytte hjemmefra eller bli forelder kan utløse dette.",0,"En ventet overgang som likevel blir for stor, er en livskrise, også kalt utviklingskrise."],
+    ["En ny diagnose i ICD-11 for sorg som varer uvanlig lenge og hindrer hverdagen.",2,"Forlenget sorglidelse rammer ifølge en metaanalyse rundt én av ti etterlatte (Lundorff mfl. 2017)."]]},
+
+{n:39,del:"Rus",tema:"Rus i hjernen",
+ o:[["Belønningssystemet","dopaminbaner som driver oss til å gjenta det som lønte seg"],
+    ["Toleranse","du trenger mer for samme virkning"],
+    ["Abstinens","ubehag når stoffet går ut av kroppen"],
+    ["Reopptak","signalstoffet ryddes tilbake fra synapsen"],
+    ["Selvmedisinering","rus brukt for å dempe vonde følelser"]],
+ q:[["Kokain virker blant annet ved å blokkere denne prosessen for dopamin.",3,"Når reopptaket hindres, blir dopaminet liggende lenger i synapsen."],
+    ["Etter noen måneder trenger hen dobbelt så mye for å kjenne samme rus.",1,"Behovet for mer av stoffet er toleranse."],
+    ["Hen drikker for å dempe angst og tristhet.",4,"Rus som mestring av vonde følelser er selvmedisinering. Det motivet henger oftere sammen med problemer enn sosial drikking (Kuntsche mfl. 2005)."],
+    ["Systemet som ifølge Berridge og Robinson handler mer om å ville ha enn om å like.",0,"Belønningssystemet koder ønsket om å gjenta, ikke nytelsen. Dopamin er ikke et lykkestoff."],
+    ["Uro, svette og søvnproblemer når hen prøver å slutte.",2,"Ubehaget når stoffet går ut, er abstinens. Lettelsen når ubehaget gir seg, er negativ forsterkning."]]},
+
+{n:40,del:"Rus",tema:"Rus, psykisk helse og livskvalitet",
+ o:[["Komorbiditet","to lidelser opptrer samtidig hos samme person"],
+    ["Insentiv-sensitisering","suget vokser mens nytelsen står stille"],
+    ["Situasjonsbetinget toleranse","kroppen forbereder seg når de vante signalene er der"],
+    ["Tosystemmodellen","belønningssystemet modnes før kontrollen i pannelappen"],
+    ["Stigma","merkelappen som fører til skyld og avvisning"]],
+ q:[["Rotter med toleranse fikk en stor dose heroin. Flere døde i et nytt rom enn i rommet der de pleide å få stoffet (Siegel mfl. 1982).",2,"Kroppen hadde lært å forberede seg når de vante signalene kom. Det er klassisk betinging av toleransen."],
+    ["Ruslidelse og depresjon hos samme person, uten at det er klart hva som kom først.",0,"Samtidige lidelser er komorbiditet. Pila kan gå begge veier, eller en tredje faktor kan gi begge."],
+    ["Klinikere som leste om en «rusmisbruker», mente oftere at personen burde straffes, enn de som leste om en person med ruslidelse.",4,"Ordvalget utløste skyld. Det er stigma (Kelly og Westerhoff 2010)."],
+    ["Ungdommer tar ifølge en studie mer risiko når venner ser på, mens voksne ikke gjør det (Gardner og Steinberg 2005).",3,"Funnet blir ofte forklart med tosystemmodellen. Modellen er en teori, og hjernen er ikke ferdig ved en bestemt alder."],
+    ["Robinson og Berridges forklaring på at avhengige kan ha sterkt sug etter et stoff de ikke lenger nyter.",1,"Å ville ha og å like er ulike systemer. Ved gjentatt bruk kan suget vokse alene."]]}
 ];
+
+B.forEach(b=>{ if(!b.del) b.del="Vitenskap og metode"; });
 
 /* ---------------- STATE ---------------- */
 const LS="psy1-vitenskap-fremdrift", LSB="psy1-vitenskap-bolker";
+const DELER=[...new Set(B.map(b=>b.del))];
 const FLAT=[]; B.forEach((b,bi)=>b.q.forEach((q,qi)=>FLAT.push({b:bi,q:qi,i:FLAT.length})));
 let S=null;
 const $=id=>document.getElementById(id);
@@ -332,6 +681,12 @@ function makeSet(set){
   let ids;
   if(set==="all") ids=FLAT.map(f=>f.i);
   else if(set==="random") ids=shuffle(FLAT.map(f=>f.i)).slice(0,20);
+  else if(set==="weak"){ const best=bestOf();
+    let pool=FLAT.filter(f=>!(f.b in best)||best[f.b]<80);
+    if(!pool.length) pool=FLAT;
+    ids=shuffle(pool.map(f=>f.i)).slice(0,20); }
+  else if(String(set).startsWith("t:")){ const d=set.slice(2);
+    ids=FLAT.filter(f=>B[f.b].del===d).map(f=>f.i); }
   else ids=FLAT.filter(f=>f.b===+set).map(f=>f.i);
   return {set:set, queue:ids.slice(), total:ids.length, ids:ids,
           first:{}, done:0, cur:null, answered:false};
@@ -339,14 +694,24 @@ function makeSet(set){
 
 /* ---------------- FORSIDE ---------------- */
 function renderHome(){
-  const g=$("bolkGrid"); g.innerHTML=""; const best=bestOf();
-  B.forEach((b,i)=>{
-    const btn=el("button","bolk"); btn.dataset.set=i;
-    btn.appendChild(el("b","", "Bolk "+b.n+": "+b.tema));
-    const sp=el("span","", b.o.map(o=>o[0]).join(" · "));
-    btn.appendChild(sp);
-    if(best[i]!=null){ const d=el("span","done","Beste: "+best[i]+" %"); btn.appendChild(d); }
-    g.appendChild(btn);
+  const root=$("bolkGrid"); root.innerHTML=""; const best=bestOf();
+  DELER.forEach((d,di)=>{
+    const sec=el("div","tema");
+    const hr=el("div","row between");
+    const bs=B.map((b,i)=>i).filter(i=>B[i].del===d);
+    hr.appendChild(el("h3","",(di+1)+". "+d));
+    const all=el("button","btn ghost small","Hele temaet ("+bs.length*5+")");
+    all.style.padding="6px 12px"; all.dataset.set="t:"+d; hr.appendChild(all);
+    sec.appendChild(hr);
+    const g=el("div","grid");
+    bs.forEach(i=>{ const b=B[i];
+      const btn=el("button","bolk"); btn.dataset.set=i;
+      btn.appendChild(el("b","", "Bolk "+b.n+": "+b.tema));
+      btn.appendChild(el("span","", b.o.map(o=>o[0]).join(" · ")));
+      if(best[i]!=null) btn.appendChild(el("span","done","Beste: "+best[i]+" %"));
+      g.appendChild(btn);
+    });
+    sec.appendChild(g); root.appendChild(sec);
   });
   let saved=null; try{saved=JSON.parse(localStorage.getItem(LS))}catch(e){}
   if(saved&&saved.queue&&saved.queue.length){
@@ -356,8 +721,10 @@ function renderHome(){
   show("home");
 }
 function labelOf(set){
-  if(set==="all") return "alle 60";
+  if(set==="all") return "alle 200";
   if(set==="random") return "20 tilfeldige";
+  if(set==="weak") return "det du kan dårligst";
+  if(String(set).startsWith("t:")) return "temaet "+set.slice(2);
   return "bolk "+B[+set].n+", "+B[+set].tema;
 }
 function show(id){ ["home","quiz","result"].forEach(x=>$(x).classList.toggle("hide",x!==id)); window.scrollTo(0,0); }
@@ -370,7 +737,7 @@ function next(){
   S.cur=S.queue[0]; S.answered=false;
   const f=FLAT[S.cur], b=B[f.b], q=b.q[f.q];
   $("qPill").textContent="Bolk "+b.n;
-  $("qTema").textContent=b.tema;
+  $("qTema").textContent=b.del+" · "+b.tema;
   $("qText").textContent=q[0];
   $("pTxt").textContent=S.done+" av "+S.total+" sitter";
   $("pbar").style.width=(100*S.done/S.total)+"%";
@@ -429,7 +796,10 @@ function finish(){
   $("rScore").textContent=ok+" av "+n+" på første forsøk";
   $("rSub").textContent=labelOf(S.set).charAt(0).toUpperCase()+labelOf(S.set).slice(1)+". "+pct+" prosent.";
   $("rBar").style.width=pct+"%";
-  if(S.set!=="all"&&S.set!=="random") saveBest(+S.set,pct);
+  if(/^\d+$/.test(String(S.set))) saveBest(+S.set,pct);
+  else { const byB={}; ids.forEach(i=>{const f=FLAT[i];(byB[f.b]=byB[f.b]||[]).push(i);});
+    Object.keys(byB).forEach(bi=>{ if(byB[bi].length===B[bi].q.length){
+      saveBest(+bi,Math.round(100*byB[bi].filter(i=>S.first[i]).length/byB[bi].length)); } }); }
 
   const weak=ids.filter(i=>!S.first[i]);
   const w=$("rWeak"); w.innerHTML="";
