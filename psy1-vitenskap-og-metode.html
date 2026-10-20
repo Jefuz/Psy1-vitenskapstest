@@ -92,6 +92,7 @@
 
   <!-- ============ FORSIDE ============ -->
   <section id="home">
+    <p class="small" style="margin:0 0 6px;text-align:right"><a href="sensorkort.html" style="color:var(--accent)">Sensorkort til muntlig øving →</a></p>
     <h1>Psykologi 1: hele faget</h1>
     <p class="sub">200 flervalgsoppgaver i 40 bolker på fem, fordelt på 15 temaer.
       Alle fem spørsmålene i en bolk deler de samme fem alternativene.</p>
@@ -1022,6 +1023,8 @@ document.addEventListener("keydown",e=>{
 });
 
 renderHome();
+(function(){ const m=location.hash.match(/^#tema=(.+)$/); if(!m) return;
+  const d=decodeURIComponent(m[1]); if(DELER.includes(d)){ history.replaceState(null,"",location.pathname); start("t:"+d); } })();
 </script>
 </body>
 </html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Psykologi 1: Sensorkort</title>
+<meta name="description" content="15 sensorkort til muntlig eksamensøving i Psykologi 1, med trekning og tidtaker.">
+<style>
+  :root{
+    --bg:#f6f7fb; --card:#ffffff; --ink:#1c2333; --muted:#5b6478;
+    --line:#e4e7ef; --accent:#3f51b5;
+    --ok:#15803d; --okbg:#eefaf1; --okline:#a7e0ba;
+    --err:#b91c1c; --errbg:#fef2f2; --errline:#f3c2c2;
+    --shadow:0 1px 3px rgba(20,30,60,.08),0 8px 24px rgba(20,30,60,.06);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:28px 18px 80px}
+  h1{font-size:1.7rem;margin:.2em 0 .1em;letter-spacing:-.01em}
+  h2{font-size:1.15rem;margin:0}
+  h3{font-size:1rem;margin:0 0 8px}
+  .sub{color:var(--muted);font-size:.98rem;margin:.2em 0 0}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+    box-shadow:var(--shadow);padding:22px}
+  .card + .card{margin-top:16px}
+  .pill{display:inline-block;font-size:.74rem;font-weight:600;letter-spacing:.03em;
+    text-transform:uppercase;padding:4px 10px;border-radius:999px;background:#eef0f7;color:var(--muted)}
+  .btn{appearance:none;border:0;border-radius:12px;background:var(--accent);color:#fff;
+    font-size:1rem;font-weight:600;padding:12px 20px;cursor:pointer;transition:.15s}
+  .btn:hover{filter:brightness(1.06)}
+  .btn.ghost{background:#eef0f7;color:var(--ink)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+  .between{justify-content:space-between}
+  .muted{color:var(--muted)}
+  .small{font-size:.88rem}
+  .disc{background:#fff8e9;border:1px solid #f3e2b8;border-radius:12px;padding:12px 14px;
+    font-size:.9rem;color:#6b5a23}
+  .tema{margin-top:20px}
+  .tema .row{margin-bottom:-4px}
+  .tema h3{margin:0}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;margin-top:14px}
+  .bolk{text-align:left;border:1px solid var(--line);background:#fff;border-radius:12px;
+    padding:12px 14px;cursor:pointer;transition:.12s;font:inherit;color:inherit}
+  .bolk:hover{border-color:#c7ccdc;background:#fafbff}
+  .bolk b{display:block;font-size:.98rem}
+  .bolk span{display:block;color:var(--muted);font-size:.84rem;margin-top:2px}
+  .bolk .done{color:var(--ok);font-weight:600}
+  .opts{display:grid;gap:8px;margin-top:14px}
+  .opt{display:flex;align-items:flex-start;gap:11px;border:1px solid var(--line);border-radius:11px;
+    padding:11px 13px;cursor:pointer;transition:.12s;font-size:.96rem;background:#fff;
+    text-align:left;font-family:inherit;color:inherit;width:100%}
+  .opt:hover{border-color:#c7ccdc;background:#fafbff}
+  .opt .key{flex:none;width:22px;height:22px;border-radius:6px;background:#eef0f7;color:var(--muted);
+    font-size:.78rem;font-weight:700;display:grid;place-items:center;margin-top:1px}
+  .opt.sel{border-color:var(--accent);background:#f1f3ff}
+  .opt.correct{border-color:var(--okline);background:var(--okbg)}
+  .opt.correct .key{background:var(--ok);color:#fff}
+  .opt.wrong{border-color:var(--errline);background:var(--errbg)}
+  .opt.wrong .key{background:var(--err);color:#fff}
+  .opt:disabled{cursor:default}
+  .pbar{height:8px;background:#e9ecf5;border-radius:99px;overflow:hidden;margin:14px 0 4px}
+  .pbar>i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
+  .fb{margin-top:14px;border-radius:12px;padding:13px 15px;font-size:.94rem;border:1px solid}
+  .fb.ok{background:var(--okbg);border-color:var(--okline)}
+  .fb.no{background:var(--errbg);border-color:var(--errline)}
+  .fb b{display:block;margin-bottom:3px}
+  .nav{display:flex;justify-content:space-between;margin-top:20px;gap:12px}
+  .qt{font-weight:600;margin:10px 0 0;font-size:1.06rem}
+  .scorebig{font-size:2.4rem;font-weight:700;letter-spacing:-.02em;margin:6px 0 0}
+  table{border-collapse:collapse;width:100%;font-size:.9rem;margin-top:10px}
+  th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+  th{color:var(--muted);font-weight:600;font-size:.82rem;text-transform:uppercase;letter-spacing:.03em}
+  .hide{display:none}
+  .seg{display:inline-flex;background:#eef0f7;border-radius:12px;padding:4px;gap:4px;margin-top:12px}
+  .seg button{appearance:none;border:0;background:transparent;border-radius:9px;padding:9px 16px;
+    font:inherit;font-weight:600;font-size:.94rem;color:var(--muted);cursor:pointer}
+  .seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(20,30,60,.12)}
+  .typein{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .typein input{flex:1 1 220px;min-width:0;font:inherit;font-size:1rem;padding:11px 13px;
+    border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink)}
+  .typein input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+  .hint{margin-top:10px;font-size:.92rem;color:var(--muted)}
+  .hint code{font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.12em;color:var(--ink)}
+  footer{margin-top:26px;text-align:center}
+
+  .bignr{font-size:3rem;font-weight:700;letter-spacing:-.03em;line-height:1;color:var(--accent)}
+  .oppg{font-size:1.15rem;font-weight:600;margin:12px 0 0}
+  .lbl{font-size:.74rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin:16px 0 4px}
+  ol.st,ul.kj{margin:0;padding-left:1.3em} ol.st li,ul.kj li{margin:3px 0}
+  .joker{background:#f1f3ff;border:1px solid #d5dafc;border-radius:12px;padding:11px 13px;margin-top:14px}
+  .timer{font-variant-numeric:tabular-nums;font-size:1.6rem;font-weight:700}
+  .timer.low{color:var(--err)}
+  select{font:inherit;padding:10px 12px;border:1px solid var(--line);border-radius:11px;background:#fff;color:var(--ink);max-width:100%}
+  details{border:1px solid var(--line);border-radius:12px;padding:10px 14px;background:#fff}
+  details+details{margin-top:8px}
+  summary{cursor:pointer;font-weight:600}
+  a{color:var(--accent)}
+  .drawn{color:var(--muted);font-size:.86rem;margin-top:8px}
+  @media print{
+    body{background:#fff} .noprint{display:none!important}
+    .card{box-shadow:none} details{break-inside:avoid;border:0;padding:0 0 14px;border-bottom:1px solid var(--line);border-radius:0}
+    summary{list-style:none;font-size:1.05rem}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="small noprint" style="margin:0 0 6px"><a href="psy1-vitenskap-og-metode.html">← Øvingstesten</a></p>
+  <h1>Sensorkort</h1>
+  <p class="sub">Psykologi 1. Øving på muntlig eksamen: én er eksaminand, én er sensor, resten observerer.
+    Eksaminanden ser bare oppgaven. Sensor åpner kortet.</p>
+
+  <div class="card noprint" style="margin-top:18px">
+    <div class="row between">
+      <h2>Trekk et kort</h2>
+      <span class="pill" id="drawPill"></span>
+    </div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn" id="drawBtn">Trekk tilfeldig</button>
+      <select id="pick" aria-label="Velg kort"><option value="">Eller velg kort</option></select>
+    </div>
+    <div class="drawn" id="drawnTxt"></div>
+  </div>
+
+  <div class="card hide" id="cardView">
+    <div class="row between">
+      <div class="row" style="gap:14px"><span class="bignr" id="cNr"></span><h2 id="cTema"></h2></div>
+    </div>
+    <p class="oppg" id="cOppg"></p>
+
+    <div class="row between noprint" style="margin-top:16px">
+      <div class="row">
+        <button class="btn ghost small" data-min="7" style="padding:8px 13px">Presentasjon 7 min</button>
+        <button class="btn ghost small" data-min="4" style="padding:8px 13px">Tilbakemelding 4 min</button>
+        <button class="btn ghost small hide" id="stopBtn" style="padding:8px 13px">Stopp</button>
+      </div>
+      <span class="timer" id="timer"></span>
+    </div>
+
+    <div class="row noprint" style="margin-top:16px">
+      <button class="btn" id="sensorBtn">Vis sensorkortet</button>
+      <a class="small" id="quizLink" href="#">Øv på temaet i testen →</a>
+    </div>
+
+    <div id="sensor" class="hide">
+      <div class="lbl">Spørsmålsstige</div><ol class="st" id="cStige"></ol>
+      <div class="lbl">Kjernepunkter som bør komme</div><ul class="kj" id="cKjerne"></ul>
+      <div class="lbl">Typiske feil</div><ul class="kj" id="cFeil"></ul>
+      <button class="btn ghost small" id="jokerBtn" style="margin-top:14px;padding:8px 13px">Vis lærerens joker</button>
+      <div class="joker hide" id="cJoker"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Slik brukes kortene</h2>
+    <ol class="st small" style="margin-top:10px">
+      <li>Eksaminanden trekker et kort og forbereder seg i den tiden eksamen gir.</li>
+      <li>Eksaminanden presenterer i 6 til 7 minutter uten notater.</li>
+      <li>Sensor følger stigen og avbryter minst én gang med «kan du gi et eksempel?».</li>
+      <li>Læreren stiller jokerspørsmålet til slutt.</li>
+      <li>Tilbakemelding i fast rekkefølge: observatørene (ett kjernepunkt som manglet, én styrke), sensor (feil fra lista og et karakterforslag med begrunnelse), læreren sist.</li>
+    </ol>
+    <p class="small muted" style="margin:.6em 0 0">På nett: del skjermen bare med oppgaven synlig, og la sensor åpne kortet på sin egen skjerm.</p>
+  </div>
+
+  <div class="card">
+    <div class="row between">
+      <h2>Alle kort</h2>
+      <button class="btn ghost small noprint" id="printBtn" style="padding:7px 13px">Skriv ut</button>
+    </div>
+    <p class="small muted" style="margin:.4em 0 12px">Til forberedelse og repetisjon. Hele kortet er synlig.</p>
+    <div id="allCards"></div>
+  </div>
+
+  <footer class="small muted">Psykologi 1, Sonans. Laget som øving til muntlig eksamen.</footer>
+</div>
+
+<script>
+const K=[
+{nr:1,tema:"Metode og kritisk tenkning",del:"Vitenskap og metode",
+ oppg:"Gjør rede for hvordan psykologer kan finne ut om noe er årsak til noe annet, og drøft styrker og svakheter ved ulike metoder.",
+ stige:["Hva er forskjellen på et eksperiment og en korrelasjonsstudie?","Gi et eksempel på en tredjevariabel.","Case: En venn opererte kneet og ble mye bedre. Viser det at operasjonen virket?","Drøft: Er eksperimentet alltid den beste metoden?","Koble: Nevn et funn fra et annet tema som bare er korrelasjonelt."],
+ kjerne:["Hypotese og operasjonalisering.","Eksperiment: manipulasjon, randomisering, kontrollgruppe, blinding.","Korrelasjon er ikke årsak: tredjevariabel og omvendt årsaksretning.","Bedring uten virkning: naturlig forløp, regresjon mot gjennomsnittet, placebo.","Reliabilitet og validitet, kvalitativ og kvantitativ metode.","Etikk (informert samtykke) og replikasjon, gjerne med WEIRD-utvalg som eksempel."],
+ feil:["«Studien beviser».","Reliabilitet og validitet byttes om.","Stort utvalg brukt som eneste kvalitetsmål.","Kvalitativ metode avfeid som uvitenskapelig."],
+ joker:"Er det etisk å gjøre narreoperasjoner (Moseley mfl. 2002)? Hvorfor kan ikke kirurgen blindes?"},
+{nr:2,tema:"Perspektiver og faghistorie",del:"Perspektiver og faghistorie",
+ oppg:"Gjør rede for to perspektiver i psykologien, og bruk dem til å forklare den samme atferden.",
+ stige:["Hva kjennetegner behaviorismen?","Hvorfor kom den kognitive vendingen?","Case: Forklar eksamensangst fra tre perspektiver.","Drøft: Trenger vi flere perspektiver, eller er ett av dem riktigere?","Koble: Hvilket perspektiv ligger under nevrologiøktene?"],
+ kjerne:["Wundt og laboratoriet i Leipzig (1879), introspeksjon.","Biologisk perspektiv, med evolusjonspsykologi som gren.","Psykodynamisk (Freud), behavioristisk (Watson, Skinner), kognitivt, humanistisk (Maslow, Rogers), sosiokulturelt.","Hvert perspektiv har sitt syn på hva som forklarer atferd, og sine typiske metoder.","Perspektivene utfyller hverandre oftere enn de utelukker hverandre."],
+ feil:["Perspektivene brukt som konkurrerende fasiter.","Freud presentert som moderne psykologi uten forbehold om testbarhet.","Behaviorismen redusert til «mennesket er et dyr», uten metodepoenget om observerbar atferd.","Evolusjonær som eget perspektiv. Serien bruker gren av det biologiske; noen lærebøker skiller dem."],
+ joker:"Kan en biologisk og en psykologisk forklaring begge være riktige? Hva er reduksjonisme?"},
+{nr:3,tema:"Persepsjon og kognisjon",del:"Persepsjon og kognisjon",
+ oppg:"Forklar hvordan forventninger og skjema påvirker det vi oppfatter, og drøft konsekvensene.",
+ stige:["Hva er forskjellen på sansing og persepsjon?","Hva er et skjema? Gi et eksempel.","Case: En lærer forventer lite av en elev. Hva kan skje?","Drøft: Er skjema mest nyttige eller mest skadelige?","Koble: Hva har øyevitner og blindflekken med persepsjon å gjøre?"],
+ kjerne:["Nedenfra og opp mot ovenfra og ned.","Skjema, selektiv oppmerksomhet og persepsjon.","Stereotypier og bekreftelsesfeil.","Forventningseffekter: de finnes, men er ofte små ifølge Jussim og Harber (2005).","Hjernen fyller inn, for eksempel blindflekken."],
+ feil:["Persepsjon som en kopi av virkeligheten.","Stereotypier bare som bevisste og negative.","Pygmalion-effekten som en stor og sikker effekt."],
+ joker:"Kan det være rasjonelt å bruke stereotypier? Hva er basisrater?"},
+{nr:4,tema:"Hukommelse",del:"Hukommelse",
+ oppg:"Gjør rede for hvordan hukommelsen virker, og drøft hvor pålitelige minnene våre er.",
+ stige:["Beskriv flerlagermodellen.","Forklar episodisk, semantisk og prosedural hukommelse med egne eksempler.","Case: Et øyevitne er helt sikker på hva hen så. Hva bør retten tenke?","Drøft: Hvor mye kan vi stole på minnene våre?","Koble: Hva viser pasienten H.M. om hukommelsen?"],
+ kjerne:["Koding, lagring og gjenhenting.","Sensorisk minne, korttidsminne og langtidsminne (Atkinson og Shiffrin), arbeidsminnet (Baddeley).","Kapasitet og chunking: Miller (1956) sa sju pluss minus to, senere anslag er nærmere fire.","Deklarativ (episodisk, semantisk) mot prosedural hukommelse.","Glemsel: Ebbinghaus, interferens, kontekstavhengig gjenhenting.","Rekonstruksjon: Bartlett, og Loftus og Palmer (1974) om ordvalg som endrer minnet."],
+ feil:["Hukommelsen som et videoopptak.","Modellen presentert som en fasit og ikke som en modell.","Sikkerhet hos øyevitnet tatt som tegn på riktig minne.","Rekonstruksjon bare framstilt som en svakhet."],
+ joker:"Hvorfor gir det å teste seg selv bedre læring enn å lese på nytt?"},
+{nr:5,tema:"Læring",del:"Læring",
+ oppg:"Forklar klassisk betinging, operant betinging og modellæring, og bruk dem på et eksempel fra hverdagen.",
+ stige:["Hva er forskjellen på klassisk og operant betinging?","Hva er forskjellen på negativ forsterkning og straff?","Case: Hvorfor sjekker vi mobilen hele tiden?","Drøft: Kan betinging alene forklare menneskelig læring?","Koble: Hvordan kan betinging forklare toleranse ved rus (Siegel)?"],
+ kjerne:["Pavlov: ubetinget og betinget stimulus og respons.","Ekstinksjon, spontan gjenoppretting, generalisering, diskriminering.","Lille Albert (Watson og Rayner 1920), med kritikken: ett barn, mangelfull dokumentasjon.","Thorndike og Skinner: de fire konsekvensene, og forsterkningsplaner (variabel ratio).","Modellæring (Bandura): oppmerksomhet, hukommelse, gjengivelse, motivasjon.","Kognitive innvendinger, for eksempel Tolmans kognitive kart."],
+ feil:["Negativ forsterkning forvekslet med straff.","Ekstinksjon framstilt som sletting.","Lille Albert brukt som solid evidens.","Bobo-dukken tatt som bevis for at vold på skjerm gir vold i samfunnet."],
+ joker:"Hvorfor lærte aper lettere frykt for slanger enn for blomster (Cook og Mineka 1989)?"},
+{nr:6,tema:"Motivasjon, mestring og læringsstrategier",del:"Motivasjon, mestring og læringsstrategier",
+ oppg:"Gjør rede for hva som påvirker motivasjon og mestringstro, og drøft hvilke læringsstrategier som virker.",
+ stige:["Hva er forskjellen på indre og ytre motivasjon?","Hva bygger mestringstro?","Case: En elev stryker og sier «jeg er bare dum i psykologi». Hva kan du si om forklaringen?","Drøft: Virker tankesettintervensjoner?","Koble: Hvordan avgjør forklaringsstil om et glipp blir et tilbakefall ved rus?"],
+ kjerne:["Selvbestemmelsesteorien (Deci og Ryan): autonomi, kompetanse, tilhørighet.","Mestringstro (Bandura) og de fire kildene: egne erfaringer, modeller, overtalelse, kroppslig tilstand.","Attribusjon (Weiner): indre eller ytre, stabil eller ustabil, kontrollerbar eller ikke.","Lært hjelpeløshet (Seligman) og revisjonen fra Maier og Seligman (2016): passivitet er utgangspunktet, kontroll læres.","Tankesett (Dweck), med Sisk mfl. (2018): små gjennomsnittlige effekter.","Strategier med best støtte: gjenhenting og spredt øving. Omlesing og markering har svak støtte (Dunlosky mfl. 2013)."],
+ feil:["Ytre motivasjon framstilt som alltid dårlig.","Mestringstro forvekslet med generell selvtillit.","Lært hjelpeløshet uten revisjonen.","Tankesett framstilt som en stor og sikker effekt."],
+ joker:"Ødelegger belønning indre motivasjon? Hva skiller Deci, Koestner og Ryan (1999) fra Cameron og Pierce (1994)?"},
+{nr:7,tema:"Personlighet",del:"Personlighet",
+ oppg:"Gjør rede for to måter å forstå personlighet på, og drøft hvordan personlighet kan måles.",
+ stige:["Hva er femfaktormodellen?","Hvordan måles personlighet, og hva gjør en test god?","Case: En arbeidsgiver vil bruke Myers-Briggs ved ansettelser. Hva sier du?","Drøft: Freud mot trekkteori. Hva er vitenskapelig, og hva er det ikke?","Koble: Hva viser tvillingstudier om personlighet?"],
+ kjerne:["De fire temperamentene som historisk bakgrunn.","Femfaktormodellen med fasetter, målt med selvrapport.","Psykodynamisk: id, ego og superego, forsvarsmekanismer, psykoseksuelle faser.","Humanistisk (Rogers) og sosialkognitiv (Bandura, gjensidig påvirkning).","Reliabilitet, validitet og Barnum-effekten.","Personlighet er relativt stabil, men endrer seg gjennom livet."],
+ feil:["Myers-Briggs framstilt som en gyldig typetest.","Freud uten kritikken om testbarhet.","Personlighet framstilt som helt fast.","Trekket brukt som forklaring på seg selv: «hen er utadvendt fordi hen er sosial»."],
+ joker:"Hvorfor finnes det ikke et gen for utadvendthet?"},
+{nr:8,tema:"Arv og miljø",del:"Arv og miljø",
+ oppg:"Drøft hvordan arv og miljø sammen former hvem vi blir.",
+ stige:["Hva betyr det at arvbarheten er 50 prosent?","Hvordan fungerer en tvillingstudie?","Case: «Jeg er sjenert fordi foreldrene mine er det.» Hva er de mulige forklaringene?","Drøft: Kan arvbarheten endre seg når miljøet endrer seg?","Koble: Hva er diatese-stress-modellen, og hvordan bygger den på arv og miljø?"],
+ kjerne:["Arvbarhet er andelen av variasjonen i en gruppe, ikke en andel hos ett menneske.","Eneggede og toeggede tvillinger, adopsjonsstudier.","Snittarvbarhet rundt 49 prosent over 17 804 trekk (Polderman mfl. 2015).","Delt og ikke-delt miljø.","Samspill og korrelasjon mellom gener og miljø.","Differensiell mottakelighet (Belsky og Pluess): orkidé og løvetann."],
+ feil:["«Halve personligheten min er arvet.»","Høy arvbarhet tolket som uforanderlig.","Ett gen for ett trekk.","Arv og miljø lagt sammen som to atskilte deler."],
+ joker:"Hvorfor kan arvbarheten øke når miljøet blir likere for alle?"},
+{nr:9,tema:"Utvikling og identitet",del:"Utvikling og identitet",
+ oppg:"Gjør rede for to utviklingsteorier, og drøft hva de forklarer og ikke forklarer.",
+ stige:["Beskriv Piagets stadier.","Hva skiller Piaget og Vygotskij i synet på språk og læring?","Case: En 19-åring vet ikke hva hen vil studere. Bruk Erikson og Marcia.","Drøft: Stemmer stadiemodellene?","Koble: Hvorfor hentet Bowlby forklaringen sin fra etologien?"],
+ kjerne:["Piaget: skjema, assimilasjon, akkommodasjon, fire stadier, og kritikken om at barn kan mer tidligere enn han trodde.","Vygotskij: den nærmeste utviklingssonen, stillas og språk.","Mead: jeget og meget, signifikante og generaliserte andre.","Erikson: åtte faser, identitet mot rolleforvirring.","Marcia: fire identitetsstatuser ut fra utforskning og forpliktelse.","Bowlby og Ainsworth: tilknytning og fremmedsituasjonen."],
+ feil:["Stadiene framstilt som skarpe og universelle.","Piaget og Vygotskij framstilt som motsetninger i alt.","Tilknytningsmønster framstilt som skjebne.","Marcias statuser brukt som stadier i fast rekkefølge."],
+ joker:"Hva er det empiriske grunnlaget for Eriksons faser?"},
+{nr:10,tema:"Evolusjonspsykologi",del:"Evolusjonspsykologi",
+ oppg:"Gjør rede for hvordan evolusjonspsykologien forklarer tanker, følelser og atferd, og drøft hvordan påstandene kan testes.",
+ stige:["Hva er de tre vilkårene for naturlig seleksjon?","Forklar foreldreinvestering.","Case: Hvorfor liker vi sukker, og hvorfor er det et problem i dag?","Drøft: Er evolusjonspsykologiske forklaringer bare «just so»-historier?","Koble: Hva er røykvarsleren, og hva har den med stress å gjøre?"],
+ kjerne:["Variasjon, arv og ulik reproduktiv suksess.","Nærliggende årsak mot opphavsårsak (Mayr, Tinbergen).","Tilpasningsmiljø og mismatch.","Seksuell seleksjon og foreldreinvestering (Trivers 1972). Kjønnsforskjellene i partnerpreferanser er små (Walter mfl. 2020, 45 land).","Samarbeid: slektsseleksjon (Hamilton) og gjensidig altruisme (Trivers, tit for tat hos Axelrod).","Testbarhet: Gould og Lewontin (1979), og Westermarck-hypotesen som testet eksempel."],
+ feil:["Evolusjonært tolket som genetisk bestemt og uforanderlig.","«Naturlig betyr riktig», den naturalistiske feilslutningen.","Gjennomsnittsforskjeller brukt som om de gjelder alle.","Tilpasninger framstilt som planlagte.","Den treenige hjernen brukt som evolusjonær forklaring."],
+ joker:"Hvordan testet Lieberman, Tooby og Cosmides (2007) Westermarck-hypotesen?"},
+{nr:11,tema:"Nervesystemet og hjernen",del:"Nervesystemet og hjernen",
+ oppg:"Beskriv nervecellen, nervesystemet og hjernen, og forklar hvordan de er grunnlag for tanker, følelser og atferd.",
+ stige:["Hvordan går et signal fra en nervecelle til en annen?","Hva er forskjellen på det sympatiske og det parasympatiske nervesystemet?","Case: Hva skjer i nervesystemet når du ser en edderkopp?","Drøft: Kan hjerneskanning vise hva vi tenker?","Koble: Hvordan henger Hebbs regel og langtidspotensiering sammen med læring?"],
+ kjerne:["Nervecellen: dendritter, cellekropp, akson, myelin. Rundt 86 milliarder nevroner (Azevedo mfl. 2009).","Aksjonspotensialet er alt eller ingenting. Synapse, nevrotransmittere, reopptak.","Dopamin koder prediksjonsfeil og det å ville ha, ikke lykke.","Sentralt og perifert, somatisk og autonomt, sympatisk og parasympatisk.","De fire lappene, lateralisering, det limbiske systemet, plastisitet (drosjesjåførene i London).","EEG og fMRI viser samvariasjon og grov plassering, ikke tanker."],
+ feil:["Ti prosent-myten.","Venstrehjernede og høyrehjernede mennesker.","Dopamin som lykkestoff.","Amygdala som fryktsenteret.","«Område X styrer Y» i stedet for «er involvert i»."],
+ joker:"Hva viser pasient S.M. om amygdala og frykt?"},
+{nr:12,tema:"Hormoner, sanser og hele mennesket",del:"Hormoner, sanser og hele mennesket",
+ oppg:"Beskriv hormonsystemet og sansesystemet, og forklar hvordan de virker sammen med nervesystemet.",
+ stige:["Hva er forskjellen på nervesystemet og hormonsystemet?","Hva er homeostase?","Case: Du møter en bjørn i skogen. Følg hendelsen fra lyset treffer øyet til du handler.","Drøft: Forklarer testosteron eller oksytocin atferd?","Koble: Hva har blindflekken med skjema å gjøre?"],
+ kjerne:["To systemer: fart, rekkevidde, varighet.","Endokrine kjertler, homeostase og negativ tilbakekobling.","Hypothalamus og hypofysen, adrenalin og HPA-aksen.","Begge kjønn har begge typer kjønnshormoner, i ulike mengder.","Transduksjon og reseptortyper. Vi har flere enn fem sanser.","Den biopsykososiale modellen: én hendelse, flere riktige forklaringsnivåer."],
+ feil:["Følelser eller psykisk helse kalt hormoner.","Testosteron likestilt med aggresjon.","Oksytocin som «kjærlighetshormonet».","«Kjemisk ubalanse» brukt som sikker forklaring på depresjon."],
+ joker:"I Eisenegger mfl. (2010) bød de som trodde de hadde fått testosteron, mer urettferdig. Hva betyr det?"},
+{nr:13,tema:"Stress og psykisk helse",del:"Stress og psykisk helse",
+ oppg:"Gjør rede for hva stress er og hvordan kroppen reagerer, og drøft hva som kan forebygge negative stressreaksjoner.",
+ stige:["Hva skjer i kroppen ved akutt stress?","Forklar Lazarus' primære og sekundære vurdering.","Case: Hvorfor er muntlig eksamen en så sterk stressor?","Drøft: Gjør stress oss syke? Gjør motgang oss sterkere?","Koble: Hva har lært hjelpeløshet med CATS å gjøre?"],
+ kjerne:["Stressor og stressrespons, akutt og kronisk stress, allostatisk belastning.","Kroppen svarer i to hastigheter: sympatisk nervesystem og HPA-aksen med kortisol.","Selyes GAS (alarm, motstand, utmattelse) og kritikken av den.","Lazarus, og CATS (Ursin og Eriksen): forventningen om utfallet avgjør.","Ukontrollerbare oppgaver med sosial vurdering gir størst kortisolrespons (Dickerson og Kemeny 2004).","Diatese-stress, resiliens som det vanligste forløpet (rundt 66 prosent hos Galatzer-Levy mfl. 2018), problem- og emosjonsfokusert mestring, sosial støtte."],
+ feil:["Stress framstilt som alltid skadelig.","«Stress gir sykdom» som enkel årsakspåstand.","Emosjonsfokusert mestring framstilt som svakt.","Poeng på Holmes og Rahe-skalaen tolket som sannsynlighet for sykdom.","Resiliens som en egenskap du har eller ikke har."],
+ joker:"Keller mfl. (2012): Kan troen på at stress er farlig, være en del av problemet?"},
+{nr:14,tema:"Kriser",del:"Kriser",
+ oppg:"Gjør rede for psykiske kriser, og drøft mulige utfall av dem.",
+ stige:["Hva er en psykisk krise, og hvordan skiller den seg fra stress og psykisk lidelse?","Beskriv Cullbergs fire faser.","Case: Sara (19) ble forlatt etter tre år, fester mer og vil ikke snakke med fastlegen. Hva skjer, og hva kan hjelpe?","Drøft: Er det farlig å ikke reagere?","Koble: Hva mente Erikson med krise, og hvordan skiller det seg fra Cullberg?"],
+ kjerne:["En krise er en reaksjon, ikke en diagnose: det vi pleier å gjøre, strekker ikke til.","Traumatisk krise mot livskrise eller utviklingskrise.","Cullbergs faser med grove varigheter, brukt som kart og ikke som trapp.","45,9 prosent av etterlatte hadde lite plager hele veien (Bonanno mfl. 2002).","Utfall: ny normal, forlenget sorglidelse, PTSD hos et mindretall, posttraumatisk vekst (omstridt).","Hjelp: trygghet, ro, mestring, samhørighet og håp (Hobfoll mfl. 2007). Tvungen debriefing frarådes (Rose mfl. 2002)."],
+ feil:["Fasene brukt som en trapp alle må gå.","Diagnose på caset i stedet for «kan tyde på».","At alle som opplever noe forferdelig, får PTSD.","Vekst framstilt som noe alle bør forvente."],
+ joker:"Maciejewski mfl. (2007) fant aksept som vanligste svar fra første stund. Hvorfor leses funnet både som støtte for og motbevis mot stadier?"},
+{nr:15,tema:"Rus",del:"Rus",
+ oppg:"Beskriv hvordan rusmidler påvirker hjernen hos unge, og reflekter over hvordan rus kan påvirke psykisk helse og livskvalitet.",
+ stige:["Hvordan påvirker rusmidler belønningssystemet?","Hva er toleranse, abstinens og avhengighet?","Case: Sara bruker alkohol og cannabis for å komme seg gjennom helgene. Hva kan det gjøre med hjernen, den psykiske helsa og livskvaliteten?","Reflekter: Gir cannabis psykose, eller er sammenhengen en annen?","Koble: Hvordan forklarer betinging at samme dose kan bli dødelig i et nytt rom?"],
+ kjerne:["Å ville ha mot å like: suget kan vokse mens nytelsen står stille (Robinson og Berridge 1993).","Ulike stoffer, ulike innganger: alkohol, cannabis, nikotin, kokain.","Toleranse og motprosess, og negativ forsterkning når abstinensen gir seg.","Den unge hjernen: venner i rommet økte risikotaking mest hos 14-åringer (Gardner og Steinberg 2005).","Cannabis og IQ: Meier mfl. (2012) mot Rogeberg (2013) og Jackson mfl. (2016). Cannabis og psykose: Di Forti mfl. (2019) mot Gage mfl. (2017).","Komorbiditet med tre mulige piler, livskvalitet og stigma. De fleste blir fri fra avhengighet (Lopez-Quintero mfl. 2011)."],
+ feil:["Dopamin som lykkestoff, og reptilhjernen.","«Cannabis gir psykose» og inngangsporten som fakta.","«En gang avhengig, alltid avhengig.»","Korrelasjon tolket som årsak."],
+ joker:"Er avhengighet en hjernesykdom? Volkow mfl. (2016) mot Heyman (2009) og Lewis (2015)."}
+];
+
+const $=id=>document.getElementById(id);
+const el=(t,c,x)=>{const e=document.createElement(t); if(c)e.className=c; if(x!=null)e.textContent=x; return e;};
+const LSD="psy1-sensorkort-trukket";
+function drawn(){ try{return JSON.parse(localStorage.getItem(LSD))||[]}catch(e){return []} }
+function setDrawn(a){ try{localStorage.setItem(LSD,JSON.stringify(a))}catch(e){} renderDrawn(); }
+function renderDrawn(){ const d=drawn();
+  $("drawPill").textContent=d.length+" av "+K.length+" trukket";
+  const t=$("drawnTxt"); t.innerHTML="";
+  if(d.length){ t.appendChild(document.createTextNode("Trukket: "+d.join(", ")+". "));
+    const r=el("a","","Nullstill"); r.href="#"; r.onclick=e=>{e.preventDefault(); setDrawn([]);}; t.appendChild(r); } }
+function fill(ul,arr){ ul.innerHTML=""; arr.forEach(x=>ul.appendChild(el("li","",x))); }
+function quizHref(k){ return "psy1-vitenskap-og-metode.html#tema="+encodeURIComponent(k.del); }
+
+function showCard(nr){
+  const k=K.find(x=>x.nr===nr); if(!k) return;
+  $("cNr").textContent=k.nr; $("cTema").textContent=k.tema; $("cOppg").textContent=k.oppg;
+  fill($("cStige"),k.stige); fill($("cKjerne"),k.kjerne); fill($("cFeil"),k.feil);
+  $("cJoker").textContent=k.joker; $("cJoker").classList.add("hide"); $("jokerBtn").textContent="Vis lærerens joker";
+  $("sensor").classList.add("hide"); $("sensorBtn").textContent="Vis sensorkortet";
+  $("quizLink").href=quizHref(k);
+  $("cardView").classList.remove("hide"); $("pick").value=String(nr);
+  stopTimer(); $("cardView").scrollIntoView({behavior:"smooth",block:"start"});
+  const d=drawn(); if(!d.includes(nr)){ d.push(nr); setDrawn(d); }
+}
+$("drawBtn").onclick=()=>{ const d=drawn(); let pool=K.map(k=>k.nr).filter(n=>!d.includes(n));
+  if(!pool.length){ setDrawn([]); pool=K.map(k=>k.nr); }
+  showCard(pool[Math.floor(Math.random()*pool.length)]); };
+K.forEach(k=>{ const o=el("option","",k.nr+". "+k.tema); o.value=k.nr; $("pick").appendChild(o); });
+$("pick").onchange=e=>{ if(e.target.value) showCard(+e.target.value); };
+$("sensorBtn").onclick=()=>{ const h=$("sensor").classList.toggle("hide");
+  $("sensorBtn").textContent=h?"Vis sensorkortet":"Skjul sensorkortet"; };
+$("jokerBtn").onclick=()=>{ const h=$("cJoker").classList.toggle("hide");
+  $("jokerBtn").textContent=h?"Vis lærerens joker":"Skjul jokeren"; };
+
+/* Tidtaker */
+let T=null,end=0;
+function tick(){ const s=Math.max(0,Math.round((end-Date.now())/1000));
+  $("timer").textContent=Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
+  $("timer").classList.toggle("low",s<=60);
+  if(s===0){ stopTimer(true); } }
+function stopTimer(keep){ clearInterval(T); T=null; $("stopBtn").classList.add("hide"); if(!keep) $("timer").textContent=""; }
+document.querySelectorAll("[data-min]").forEach(b=>b.onclick=()=>{
+  end=Date.now()+(+b.dataset.min)*60000; clearInterval(T); T=setInterval(tick,250); tick(); $("stopBtn").classList.remove("hide"); });
+$("stopBtn").onclick=()=>stopTimer();
+
+/* Alle kort */
+K.forEach(k=>{ const d=el("details");
+  d.appendChild(el("summary","",k.nr+". "+k.tema));
+  const p=el("p","oppg",k.oppg); p.style.fontSize="1rem"; d.appendChild(p);
+  [["Spørsmålsstige","ol","st",k.stige],["Kjernepunkter som bør komme","ul","kj",k.kjerne],["Typiske feil","ul","kj",k.feil]].forEach(([l,t,c,a])=>{
+    d.appendChild(el("div","lbl",l)); const x=el(t,c); fill(x,a); d.appendChild(x); });
+  d.appendChild(el("div","lbl","Lærerens joker")); d.appendChild(el("div","small",k.joker));
+  const a=el("a","small noprint","Øv på temaet i testen →"); a.href=quizHref(k); a.style.display="inline-block"; a.style.marginTop="10px"; d.appendChild(a);
+  $("allCards").appendChild(d); });
+$("printBtn").onclick=()=>window.print();
+window.addEventListener("beforeprint",()=>document.querySelectorAll("#allCards details").forEach(d=>d.open=true));
+const m=location.hash.match(/^#kort=(\d+)/); if(m) showCard(+m[1]);
+renderDrawn();
+</script>
+</body>
+</html>
