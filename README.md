@@ -59,6 +59,13 @@ github.com, og kjør `git push -u origin main`. Slå deretter på Pages fra
 **Legge til en bolk:** legg til et objekt i `B`. Ingenting annet må endres,
 bolkvelgeren, temaknappene og fasittabellen genereres fra `B`.
 
+## Språknivå
+
+Spørsmålene skal kunne besvares uten å kjenne forskernavn, akronymer eller
+fagbegreper utover Psykologi 1. Kildehenvisninger står i forklaringen, ikke i
+spørsmålet. I «Skriv svaret» må eleven skrive alternativet selv, så
+alternativtekstene bør være begreper en elev rimelig kan hente fram.
+
 ## Svarform
 
 Forsiden har en bryter mellom «Skriv svaret» (standard) og «Velg alternativ». Valget
@@ -108,8 +115,8 @@ Riktig alternativ per spørsmål, bolk 1 til 40:
 ```
 CAEBD  ACDEB  ACBDE  ACBDE  CADEB  ADBCE  ABCDE  ABDCE  CABDE  ABCDE
 BACDE  ABCDE  BCDEA  CDEAB  DAEBC  DAEBC  EDACB  EBDCA  CEADB  BDEAC
-BEDAC  EABDC  BECDA  CEDAB  CDAEB  BDECA  DACEB  CBEAD  BDEAC  ECABD
-CEADB  CAEBD  EBACD  DABEC  DACBE  ECADB  EBADC  BDEAC  DBEAC  CAEDB
+BEDAC  EABDC  BECDA  DAEBC  DEABC  BDECA  DACEB  CBEAD  BDEAC  EDABC
+CEADB  CAEBD  EBACD  DABEC  DACBE  ECADB  EBADC  BDEAC  DBEAC  BEADC
 ```
 
 Forms-versjonen «Psy-1 intro quiz» har bare bolk 1 til 12, med samme fasit og
