@@ -33,7 +33,7 @@ github.com, og kjør `git push -u origin main`. Slå deretter på Pages fra
 | Fil | Innhold |
 |---|---|
 | `psy1-vitenskap-og-metode.html` | Hele testen (filnavnet er beholdt så gamle lenker virker): spørsmål, alternativer, forklaringer, øvingslogikk og resultatside |
-| `sensorkort.html` | 15 sensorkort til muntlig øving: trekning uten gjentak, sensorvisning og joker som skjules for eksaminanden, tidtaker (7 og 4 min), utskrift av alle kort, og lenke til samme tema i testen (`#tema=<del>`). Kort kan åpnes direkte med `#kort=<nr>`. Trukne kort lagres i `localStorage` under `psy1-sensorkort-trukket`. |
+| `sensorkort.html` | 18 sensorkort til muntlig øving (ett per tema, pluss tre om personlighetstester, personlighet og psykisk helse, og personlighet på tvers av faget): trekning uten gjentak, sensorvisning og joker som skjules for eksaminanden, tidtaker (7 og 4 min), utskrift av alle kort, og lenke til samme tema i testen (`#tema=<del>`). Kort kan åpnes direkte med `#kort=<nr>`. Trukne kort lagres i `localStorage` under `psy1-sensorkort-trukket`. |
 | `index.html` | Videresending fra rot-URL til testen |
 | `.nojekyll` | Slår av Jekyll-prosessering på GitHub Pages |
 
