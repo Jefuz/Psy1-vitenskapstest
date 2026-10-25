@@ -3,7 +3,9 @@
 Øvingstest til repetisjonen før muntlig eksamen. 200 flervalgsoppgaver i 40 bolker
 på fem, fordelt på 15 temaer, der alle fem spørsmålene i en bolk deler de samme fem
 alternativene. Bolk 1 til 12 er den opprinnelige testen i vitenskap og metode (økt 1A),
-uendret. Bolk 13 til 40 dekker resten av faget, to bolker per tema. Ren statisk HTML/CSS/JS
+uendret. Bolk 13 til 40 dekker resten av faget, to bolker per tema. Bolk 41 til 47 er
+ekstraoppgaver om fasettene i femfaktormodellen (temaet «Personlighet: fasetter»), og de er
+ikke med i de blandede rundene. Ren statisk HTML/CSS/JS
 uten byggverktøy, samme mønster som `Politikk-test`.
 
 Testen er et øvingsverktøy, ikke en vurdering. Ingen data forlater nettleseren.
@@ -39,7 +41,7 @@ github.com, og kjør `git push -u origin main`. Slå deretter på Pages fra
 
 ## Datamodell (alt ligger i `psy1-vitenskap-og-metode.html`)
 
-Én array `B` med 40 bolker:
+Én array `B` med 47 bolker (40 i kjernen og 7 ekstra):
 
 ```js
 {n:5, del:"Vitenskap og metode", tema:"Sammenheng og årsak",
@@ -55,6 +57,10 @@ github.com, og kjør `git push -u origin main`. Slå deretter på Pages fra
 
 - `del` er temaet bolken hører til. Forsiden grupperer bolkene etter `del` i den
   rekkefølgen temaene først dukker opp. Bolker uten `del` havner under Vitenskap og metode.
+
+- `ekstra:true` holder en bolk utenfor «Alle 200», «20 tilfeldige» og «Det jeg kan dårligst»
+  (konstanten `CORE`). Bolken er fortsatt med i sitt eget tema og kan velges alene. Nye
+  bolker legges bakerst i `B`, fordi lagret fremdrift og beste skår bruker indeksen i arrayen.
 
 **Legge til en bolk:** legg til et objekt i `B`. Ingenting annet må endres,
 bolkvelgeren, temaknappene og fasittabellen genereres fra `B`.
@@ -110,13 +116,14 @@ Knappen «Nullstill fremdrift» sletter begge.
 
 ## Fasit
 
-Riktig alternativ per spørsmål, bolk 1 til 40:
+Riktig alternativ per spørsmål, bolk 1 til 47:
 
 ```
 CAEBD  ACDEB  ACBDE  ACBDE  CADEB  ADBCE  ABCDE  ABDCE  CABDE  ABCDE
 BACDE  ABCDE  BCDEA  CDEAB  DAEBC  DAEBC  EDACB  EBDCA  CEADB  BDEAC
 BEDAC  EABDC  BECDA  DAEBC  DEABC  BDECA  DACEB  CBEAD  BDEAC  EDABC
 CEADB  CAEBD  EBACD  DABEC  DACBE  ECADB  EBADC  BDEAC  DBEAC  BEADC
+ADBEC  BEACD  CABED  EADBC  DAECB  CEADB  CAEBD
 ```
 
 Forms-versjonen «Psy-1 intro quiz» har bare bolk 1 til 12, med samme fasit og

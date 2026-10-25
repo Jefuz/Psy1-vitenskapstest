@@ -95,7 +95,8 @@
     <p class="small" style="margin:0 0 6px;text-align:right"><a href="sensorkort.html" style="color:var(--accent)">Sensorkort til muntlig øving →</a></p>
     <h1>Psykologi 1: hele faget</h1>
     <p class="sub">200 flervalgsoppgaver i 40 bolker på fem, fordelt på 15 temaer.
-      Alle fem spørsmålene i en bolk deler de samme fem alternativene.</p>
+      Alle fem spørsmålene i en bolk deler de samme fem alternativene.
+      I tillegg 35 ekstraoppgaver om fasettene i personlighet, som ikke er med i de blandede rundene.</p>
 
     <div class="card" style="margin-top:18px">
       <h2>Slik virker øvingen</h2>
@@ -678,7 +679,92 @@ const B=[
     ["Gode relasjoner til foreldre og en skolehverdag som fungerer, gjør det mindre sannsynlig at rusbruk blir et problem.",4,"Forhold som demper risikoen, er beskyttelsesfaktorer."],
     ["Hen har mistet kontrollen over bruken og fortsetter selv om det går ut over skole, venner og helse.",0,"Tap av kontroll og fortsatt bruk tross skade er kjernen i avhengighet. De fleste som blir avhengige, blir fri fra det igjen etter hvert (Lopez-Quintero mfl. 2011)."],
     ["Å begynne å drikke tidlig i tenårene og å ha venner som ruser seg, øker sjansen for problemer senere.",3,"Forhold som øker sjansen for problemer, er risikofaktorer. De forklarer ikke alene hvem som får problemer. Ungdom tar dessuten mer risiko når venner ser på (Gardner og Steinberg 2005)."],
-    ["Etter et halvt år uten rus begynner hen å bruke like mye som før.",2,"Å gå tilbake til det gamle bruksmønsteret er tilbakefall. Det er vanlig, og betyr ikke at behandlingen var forgjeves."]]}
+    ["Etter et halvt år uten rus begynner hen å bruke like mye som før.",2,"Å gå tilbake til det gamle bruksmønsteret er tilbakefall. Det er vanlig, og betyr ikke at behandlingen var forgjeves."]]},
+
+/* Ekstra: fasettene i femfaktormodellen. ekstra:true holder dem utenfor de blandede rundene. */
+{n:41,del:"Personlighet: fasetter",tema:"Nevrotisisme",ekstra:true,
+ o:[["Angst","nervøsitet og bekymring for det som kan gå galt"],
+    ["Fiendtlighet","lett for å bli sint, irritert eller bitter"],
+    ["Depresjon","tristhet, håpløshet og lavt selvverd"],
+    ["Selvbevissthet","sjenanse og ubehag ved å bli sett og vurdert av andre"],
+    ["Impulsivitet","vansker med å stå imot trang og fristelser"]],
+ q:[["Hvilken fasett måler «Jeg bekymrer meg mye for det som kan gå galt»?",0,"Bekymring og nervøsitet er angst, den mest kjente fasetten under nevrotisisme."],
+    ["Hvilken fasett måler «Jeg synes det er ubehagelig å snakke med folk jeg ikke kjenner»?",3,"Ubehag ved å bli vurdert av andre er selvbevissthet. Ordet betyr her sjenanse, ikke selvsikkerhet. Læreboka kan kalle fasetten forlegenhet."],
+    ["Hvilken fasett måler «Jeg blir fort irritert når folk ikke gjør som de skal»?",1,"Lett irritasjon og sinne er fiendtlighet. Fasetten henger også sammen med lav medmenneskelighet."],
+    ["Hvilken fasett måler «Når jeg er lei meg, spiser eller kjøper jeg ting jeg egentlig ikke vil ha»?",4,"Å ikke klare å stå imot en trang er impulsivitet. Ifølge modellen hører den til nevrotisisme fordi trangen ofte kommer når følelsene er sterke."],
+    ["Hvilken fasett måler «Jeg føler meg ofte verdiløs og nedfor»?",2,"Tristhet og lavt selvverd er fasetten depresjon. Det er et trekk, ikke en diagnose."]]},
+
+{n:42,del:"Personlighet: fasetter",tema:"Ekstroversjon",ekstra:true,
+ o:[["Varme","vennlighet og nærhet til enkeltmennesker"],
+    ["Sosiabilitet","lyst til å være sammen med mange"],
+    ["Selvmarkering","tar ordet og styringen i en gruppe"],
+    ["Aktivitet","høyt tempo og mye som skjer"],
+    ["Positive følelser","glede, latter og entusiasme"]],
+ q:[["Hvilken fasett måler «Jeg trives best på store fester med mange folk»?",1,"Lysten på selskap og mange folk er sosiabilitet. Læreboka kan kalle den selskapelighet."],
+    ["Hvilken fasett måler «Jeg ler lett og kjenner ofte på glede»?",4,"Glede og latter er fasetten positive følelser."],
+    ["Hvilken fasett måler «Jeg er varm og vennlig mot folk jeg møter»?",0,"Vennlighet og nærhet til andre er varme. Fasetten overlapper med medmenneskelighet."],
+    ["Hvilken fasett måler «I en gruppe er det ofte jeg som tar styringen»?",2,"Å ta ordet og lede er selvmarkering. Læreboka kan kalle den selvhevdelse."],
+    ["Hvilken fasett måler «Jeg har høyt tempo og fyller dagene med gjøremål»?",3,"Høyt tempo og travelhet er fasetten aktivitet."]]},
+
+{n:43,del:"Personlighet: fasetter",tema:"Åpenhet",ekstra:true,
+ o:[["Fantasi","et rikt indre liv med dagdrømmer"],
+    ["Følelser","legger merke til og verdsetter egne følelser"],
+    ["Handlinger","lyst til å prøve nye aktiviteter, steder og mat"],
+    ["Ideer","nysgjerrighet på abstrakte og teoretiske spørsmål"],
+    ["Verdier","vilje til å revurdere normer, moral og politikk"]],
+ q:[["Hvilken fasett måler «Jeg velger helst den samme retten og de samme feriestedene som før»?",2,"Lyst på det nye og ukjente er fasetten handlinger. Utsagnet er reversert: enig gir lav skåre."],
+    ["Hvilken fasett måler «Jeg dagdrømmer mye og forsvinner lett inn i egne tanker»?",0,"Et rikt indre liv med dagdrømmer er fantasi."],
+    ["Hvilken fasett måler «Jeg kjenner følelsene mine sterkt og tar dem på alvor»?",1,"Åpenhet for egne følelser er fasetten følelser. Den handler om å legge merke til følelsene, ikke om negative følelser, som hører til nevrotisisme."],
+    ["Hvilken fasett måler «Jeg liker å utfordre vanlige oppfatninger om moral og politikk»?",4,"Vilje til å revurdere normer og verdier er fasetten verdier."],
+    ["Hvilken fasett måler «Jeg liker å grunne på abstrakte teorier og filosofiske spørsmål»?",3,"Intellektuell nysgjerrighet er fasetten ideer. Den handler om interesse, ikke om hvor flink man er."]]},
+
+{n:44,del:"Personlighet: fasetter",tema:"Medmenneskelighet",ekstra:true,
+ o:[["Tillit","tror at andre vil en vel"],
+    ["Rettfremhet","ærlig og direkte, manipulerer ikke"],
+    ["Altruisme","hjelper andre aktivt"],
+    ["Føyelighet","gir etter heller enn å havne i konflikt"],
+    ["Følsomhet","medfølelse med dem som har det vondt"]],
+ q:[["Hvilken fasett måler «Det gjør vondt i meg å se folk som har det vanskelig»?",4,"Medfølelse er fasetten følsomhet. Altruisme er å hjelpe, følsomhet er å føle med."],
+    ["Hvilken fasett måler «Jeg tror de fleste mennesker vil meg vel»?",0,"Troen på at andre har gode hensikter, er tillit."],
+    ["Hvilken fasett måler «Jeg gir meg heller enn å krangle»?",3,"Å gi etter i en konflikt er føyelighet. Læreboka kan kalle den ettergivenhet."],
+    ["Hvilken fasett måler «Jeg smigrer ikke folk for å få det jeg vil»?",1,"Ærlighet uten manipulasjon er rettfremhet. Læreboka kan kalle den oppriktighet."],
+    ["Hvilken fasett måler «Jeg hjelper gjerne til, selv om det koster meg tid»?",2,"Å hjelpe andre aktivt er altruisme."]]},
+
+{n:45,del:"Personlighet: fasetter",tema:"Planmessighet",ekstra:true,
+ o:[["Orden","ryddig og organisert"],
+    ["Plikttroskap","holder løfter og følger regler"],
+    ["Prestasjonsstreben","høye mål og hard innsats"],
+    ["Selvdisiplin","gjennomfører også når det er kjedelig"],
+    ["Betenksomhet","tenker seg om før man handler"]],
+ q:[["Hvilken fasett måler «Jeg utsetter ofte det jeg burde gjøre, til siste liten»?",3,"Å komme i gang og gjennomføre er selvdisiplin. Utsagnet er reversert: enig gir lav skåre."],
+    ["Hvilken fasett måler «Jeg har fast plass til tingene mine og rydder etter meg»?",0,"Ryddighet og system er orden."],
+    ["Hvilken fasett måler «Jeg tenker meg grundig om før jeg bestemmer meg»?",4,"Å tenke før man handler er betenksomhet. Læreboka kan kalle den overveielse. Den ligner det motsatte av impulsivitet under nevrotisisme."],
+    ["Hvilken fasett måler «Jeg setter meg høye mål og jobber hardt for å nå dem»?",2,"Høye mål og hard innsats er prestasjonsstreben."],
+    ["Hvilken fasett måler «Jeg holder det jeg lover, også når det er tungvint»?",1,"Å holde løfter og følge regler er plikttroskap."]]},
+
+{n:46,del:"Personlighet: fasetter",tema:"Én fasett fra hver dimensjon",ekstra:true,
+ o:[["Sårbarhet","takler stress og press dårlig"],
+    ["Spenningssøking","søker spenning og sterke inntrykk"],
+    ["Estetikk","blir grepet av kunst, musikk og natur"],
+    ["Beskjedenhet","skryter ikke og setter seg ikke over andre"],
+    ["Kompetanse","føler seg dyktig og forberedt"]],
+ q:[["Hvilken fasett måler «Musikk og kunst kan gripe meg sterkt»?",2,"Sans for kunst og skjønnhet er estetikk, under åpenhet."],
+    ["Hvilken fasett måler «Jeg føler meg godt forberedt og dyktig i det jeg gjør»?",4,"Opplevelsen av å være dyktig og forberedt er kompetanse, under planmessighet. Den ligner mestringstro."],
+    ["Hvilken fasett måler «Når presset blir stort, får jeg lett panikk»?",0,"Å takle press dårlig er sårbarhet, under nevrotisisme."],
+    ["Hvilken fasett måler «Jeg snakker ikke gjerne om hvor flink jeg er»?",3,"Å ikke skryte er beskjedenhet, under medmenneskelighet."],
+    ["Hvilken fasett måler «Jeg har lyst til å prøve fallskjermhopp»?",1,"Lyst på spenning og sterke inntrykk er spenningssøking, under ekstroversjon."]]},
+
+{n:47,del:"Personlighet: fasetter",tema:"Dimensjon, fasett og ledd",ekstra:true,
+ o:[["Dimensjon","et av de fem brede hovedtrekkene"],
+    ["Fasett","et smalere deltrekk under et hovedtrekk"],
+    ["Ledd","ett enkelt utsagn i testen"],
+    ["Reversert ledd","et utsagn der enig gir lav skåre"],
+    ["Ja-siging","å si seg enig nesten uansett innhold"]],
+ q:[["Ett enkelt utsagn i en personlighetstest, som «Jeg holder ting ryddig».",2,"Et ledd er ett utsagn. Flere ledd summeres til en fasett."],
+    ["Et av de fem brede hovedtrekkene, som planmessighet.",0,"De fem hovedtrekkene kalles dimensjoner. Hver dimensjon er summen av fasettene under den."],
+    ["Noen svarer «enig» nesten uansett hva utsagnet handler om.",4,"Dette kalles ja-siging. Tester jevner det ut med like mange vanlige og reverserte ledd."],
+    ["Et smalere deltrekk. I den vanlige fasettmodellen er det seks av dem under hvert hovedtrekk.",1,"Deltrekkene kalles fasetter. Costa og McCraes modell har 30 i alt."],
+    ["«Jeg roter hjemme» gir lav skåre på orden hvis du er enig.",3,"Et utsagn der enig gir lav skåre, er et reversert ledd."]]}
 ];
 
 B.forEach(b=>{ if(!b.del) b.del="Vitenskap og metode"; });
@@ -690,6 +776,8 @@ function setMode(m){ try{localStorage.setItem(LSM,m)}catch(e){} renderMode(); }
 function renderMode(){ const m=getMode(); [...$("modeSeg").children].forEach(b=>b.classList.toggle("on",b.dataset.mode===m)); }
 const DELER=[...new Set(B.map(b=>b.del))];
 const FLAT=[]; B.forEach((b,bi)=>b.q.forEach((q,qi)=>FLAT.push({b:bi,q:qi,i:FLAT.length})));
+/* Blandede runder (alle, tilfeldige, det du kan dårligst) bruker bare kjernen, ikke ekstrabolkene */
+const CORE=FLAT.filter(f=>!B[f.b].ekstra);
 let S=null;
 const $=id=>document.getElementById(id);
 const el=(t,c,x)=>{const e=document.createElement(t); if(c)e.className=c; if(x!=null)e.textContent=x; return e;};
@@ -703,11 +791,11 @@ function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.rando
 
 function makeSet(set){
   let ids;
-  if(set==="all") ids=FLAT.map(f=>f.i);
-  else if(set==="random") ids=shuffle(FLAT.map(f=>f.i)).slice(0,20);
+  if(set==="all") ids=CORE.map(f=>f.i);
+  else if(set==="random") ids=shuffle(CORE.map(f=>f.i)).slice(0,20);
   else if(set==="weak"){ const best=bestOf();
-    let pool=FLAT.filter(f=>!(f.b in best)||best[f.b]<80);
-    if(!pool.length) pool=FLAT;
+    let pool=CORE.filter(f=>!(f.b in best)||best[f.b]<80);
+    if(!pool.length) pool=CORE;
     ids=shuffle(pool.map(f=>f.i)).slice(0,20); }
   else if(String(set).startsWith("t:")){ const d=set.slice(2);
     ids=FLAT.filter(f=>B[f.b].del===d).map(f=>f.i); }
@@ -886,7 +974,14 @@ const ALIAS={
  "Kronisk stress":["kronisk","langvarig stress","allostatisk belastning"],"Positivt stress":["eustress"],
  "Avhengighet":["rusavhengighet","ruslidelse"],"Sug":["craving","rustrang"],"Tilbakefall":["sprekk"],
  "Risikofaktor":["risikofaktorer"],"Beskyttelsesfaktor":["beskyttelsesfaktorer","beskyttende faktor"],
- "Reseptor":["reseptorer","sansecelle","sanseceller","sansereseptor"]
+ "Reseptor":["reseptorer","sansecelle","sanseceller","sansereseptor"],
+ "Selvbevissthet":["sjenanse","forlegenhet"],"Sosiabilitet":["selskapelighet"],"Selvmarkering":["selvhevdelse","dominans"],
+ "Positive følelser":["glede"],"Spenningssøking":["spenningssøken","sensasjonssøking"],"Estetikk":["estetisk sans","skjønnhetssans"],
+ "Ideer":["intellektuell nysgjerrighet"],"Rettfremhet":["oppriktighet","ærlighet"],"Føyelighet":["ettergivenhet","medgjørlighet"],
+ "Følsomhet":["ømhjertethet","ømhet","medfølelse"],"Plikttroskap":["pliktoppfyllelse","pliktfølelse"],"Betenksomhet":["overveielse"],
+ "Prestasjonsstreben":["prestasjonsorientering","ambisjon"],
+ "Dimensjon":["dimensjoner","hovedtrekk","domene"],"Fasett":["fasetter","deltrekk"],"Ledd":["utsagn","item"],
+ "Reversert ledd":["reversert","omvendt ledd","speilvendt ledd"],"Ja-siging":["samtykketendens","ja tendens"]
 };
 /* ---------- Skriv svaret ---------- */
 const STOP=new Set(["den","det","de","en","et","ei","the","a"]);
