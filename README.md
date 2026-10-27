@@ -165,12 +165,27 @@ Ved endring av alternativer eller `ALIAS`: kjør selvsjekken før publisering.
 
 ## Runder
 
-- Én bolk, én koble- eller rekkefølgeoppgave, et helt tema (spørsmål først, så temaets
+- Dagens repetisjon, én bolk, én koble- eller rekkefølgeoppgave, et helt tema (spørsmål først, så temaets
   oppgaver), 20 tilfeldige fra hele faget, alle i kjernen, eller alle koble- og
   rekkefølgeoppgavene.
 - «Det jeg kan dårligst» trekker 20 fra bolker og oppgaver eleven ikke har tatt eller
   har under 80 prosent på, med opptil tre koble- eller rekkefølgeoppgaver. Beste skår
   lagres også når en hel bolk inngår i en temarunde.
+
+## Dagens repetisjon, sikkerhet og forvekslinger
+
+- Hvert spørsmål og hver oppgave eleven har svart på, får en boks fra 1 til 5. Riktig på
+  første forsøk flytter én boks opp, feil sender tilbake til boks 1. Boksen bestemmer når
+  elementet kommer igjen: om 1, 3, 7, 14 eller 30 dager. «Jeg mente det samme» teller som
+  riktig også her.
+- Forsiden viser hvor mange som venter i dag. En runde tar høyst 25, i denne rekkefølgen:
+  feil eleven var sikker på, elementer eleven har forvekslet med et annet alternativ, så de
+  som har ventet lengst.
+- Før svaret kan eleven velge «Sikker», «Tror det» eller «Gjetter» (kan slås av under
+  Svarform). Resultatsiden viser andel riktige per nivå.
+- Når eleven svarer et galt alternativ, eller skriver noe som treffer et galt alternativ,
+  logges paret. Forsiden viser de tre parene eleven forveksler oftest, og resultatsiden
+  parene fra runden.
 
 ## Øvingslogikk
 
@@ -190,8 +205,12 @@ Ved endring av alternativer eller `ALIAS`: kjør selvsjekken før publisering.
 |---|---|
 | `psy1-vitenskap-fremdrift` | Påbegynt runde, tilbys som «Fortsett» på forsiden. Slettes når resultatet vises. |
 | `psy1-vitenskap-bolker` | Beste prosentskår per bolk (nøkkel: indeksen i `B`) og per koble- eller rekkefølgeoppgave (nøkkel: `x` + indeksen i `X`). |
+| `psy1-repetisjon` | Per spørsmål (indeksen i `FLAT`) og oppgave (`x` + indeks): boks, neste dag, antall svar, antall forvekslinger og om siste feil var gjort med «sikker». |
+| `psy1-forvekslinger` | Antall ganger hvert par av alternativer er forvekslet. |
+| `psy1-sikkerhet` | Om eleven blir spurt om sikkerhet (`1` eller `0`). |
 
-Knappen «Nullstill fremdrift» sletter begge.
+Knappen «Nullstill fremdrift» sletter fremdrift, beste skår, repetisjon og forvekslinger.
+Alt ligger i nettleseren, så mobil og datamaskin har hver sin repetisjon.
 
 ## Fasit
 

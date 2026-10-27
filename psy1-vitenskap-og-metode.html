@@ -108,6 +108,11 @@
     width:38px;height:36px;font-size:1rem;cursor:pointer;color:var(--ink)}
   .ritem .mv button:disabled{opacity:.35;cursor:default}
   .chk{margin:0 0 16px}
+  .conf{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:10px;font-size:.86rem;color:var(--muted)}
+  .conf button{appearance:none;border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px 11px;
+    font:inherit;font-size:.84rem;color:var(--ink);cursor:pointer}
+  .conf button.on{border-color:var(--accent);background:#f1f3ff;color:var(--accent);font-weight:600}
+  .conf button:disabled{cursor:default;opacity:.6}
   @media (max-width:520px){ .mrow{grid-template-columns:1fr} }
 </style>
 </head>
@@ -137,6 +142,18 @@
       </div>
     </div>
 
+    <div class="card" id="repCard">
+      <h2>Dagens repetisjon</h2>
+      <p class="small muted" style="margin:.4em 0 0">Spørsmål og oppgaver du har svart på, kommer igjen etter 1, 3, 7, 14 og 30 dager.
+        Riktig på første forsøk gir lengre tid til neste gang, feil gir en ny sjanse i morgen.
+        Feil du var sikker på, og begreper du forveksler, kommer først.</p>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" id="repBtn" data-set="rep">Dagens repetisjon</button>
+        <span class="small muted" id="repTxt"></span>
+      </div>
+      <div id="forvBox" class="small" style="margin-top:10px"></div>
+    </div>
+
     <div class="card">
       <h2>Svarform</h2>
       <p class="small muted" style="margin:.4em 0 0">«Skriv svaret» er tyngre, men det er der gjenhentingen skjer:
@@ -144,6 +161,12 @@
       <div class="seg" id="modeSeg">
         <button type="button" data-mode="skriv">Skriv svaret</button>
         <button type="button" data-mode="velg">Velg alternativ</button>
+      </div>
+      <p class="small muted" style="margin:.9em 0 0">Hvor sikker er du? Hvis du svarer på det før du svarer, viser resultatsiden
+        hvor godt sikkerheten din treffer.</p>
+      <div class="seg" id="confSeg">
+        <button type="button" data-conf="1">Spør om sikkerhet</button>
+        <button type="button" data-conf="0">Ikke spør</button>
       </div>
     </div>
 
@@ -185,6 +208,7 @@
 
     <div class="card" style="margin-top:14px">
       <p class="qt" id="qText"></p>
+      <div class="conf" id="confRow"></div>
       <div class="opts" id="qOpts"></div>
       <div id="fb"></div>
     </div>
@@ -204,6 +228,10 @@
       <p class="scorebig" id="rScore"></p>
       <p class="sub" id="rSub"></p>
       <div class="pbar"><i id="rBar"></i></div>
+    </div>
+    <div class="card hide" id="rCalCard">
+      <h3>Sikkerhet og treff</h3>
+      <div id="rCal"></div>
     </div>
     <div class="card" id="rWeakCard">
       <h3>Verdt å repetere</h3>
@@ -1086,6 +1114,69 @@ function saveBest(k,pct){ const o=bestOf(); if(!(k in o)||pct>o[k]){o[k]=pct; tr
 function save(){ try{localStorage.setItem(LS,JSON.stringify(S))}catch(e){} }
 function clearSave(){ try{localStorage.removeItem(LS)}catch(e){} }
 
+/* ---------------- REPETISJON OVER DAGER ----------------
+   Hvert spørsmål og hver oppgave eleven har svart på, får en boks fra 1 til 5. Riktig på første forsøk
+   flytter én boks opp, feil sender tilbake til boks 1. Boksen bestemmer når elementet kommer igjen:
+   om 1, 3, 7, 14 eller 30 dager. Feil gjort med sikkerheten «sikker» og alternativer eleven forveksler,
+   kommer først. Alt ligger i localStorage under psy1-repetisjon og psy1-forvekslinger. */
+const LSR="psy1-repetisjon", LSF="psy1-forvekslinger", LSK="psy1-sikkerhet", INTERVALL=[0,1,3,7,14,30], REP_MAKS=25;
+function dag(){ const d=new Date(); return Math.round(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5); }
+function repOf(){ try{return JSON.parse(localStorage.getItem(LSR))||{}}catch(e){return {}} }
+function repSave(r){ try{localStorage.setItem(LSR,JSON.stringify(r))}catch(e){} }
+function finnes(k){ return k.charAt(0)==="x" ? !!xOf(k) : !!FLAT[+k]; }
+function repRecord(id,ok){
+  const r=repOf(), k=String(id), old=r[k]||{b:0,n:0,f:0};
+  S.repPrev=S.repPrev||{}; if(!(k in S.repPrev)) S.repPrev[k]=r[k]||null;
+  const b=ok?Math.min(5,(old.b||0)+1):1, sikker=(S.conf||{})[k]==="sikker";
+  r[k]={b:b, due:dag()+INTERVALL[b], n:(old.n||0)+1, f:old.f||0, hc:(!ok&&sikker)?1:0};
+  repSave(r);
+}
+function repUndo(id){ const r=repOf(), k=String(id);
+  if(S.repPrev&&k in S.repPrev){ if(S.repPrev[k]) r[k]=S.repPrev[k]; else delete r[k]; repSave(r); } }
+function repDue(){
+  const r=repOf(), t=dag();
+  return Object.keys(r).filter(k=>r[k].due<=t&&finnes(k))
+    .sort((a,b)=>(r[b].hc||0)-(r[a].hc||0)||(r[b].f||0)-(r[a].f||0)||r[a].due-r[b].due||r[a].b-r[b].b)
+    .map(k=>k.charAt(0)==="x"?k:+k);
+}
+function forvOf(){ try{return JSON.parse(localStorage.getItem(LSF))||{}}catch(e){return {}} }
+/* Logger at eleven svarte alternativ «valgt» der «riktig» var riktig, og øker prioriteten i repetisjonen */
+function forveksling(id,valgt){
+  const f=FLAT[id], b=B[f.b], riktig=b.q[f.q][1]; if(valgt<0||valgt===riktig) return;
+  const key=[b.o[riktig][0],b.o[valgt][0]].sort().join(" | "), m=forvOf();
+  m[key]=(m[key]||0)+1; try{localStorage.setItem(LSF,JSON.stringify(m))}catch(e){}
+  const r=repOf(), k=String(id); if(r[k]){ r[k].f=(r[k].f||0)+1; repSave(r); }
+  (S.forv=S.forv||[]).push(key);
+}
+function getConf(){ try{return localStorage.getItem(LSK)!=="0"}catch(e){return true} }
+function setConf(on){ try{localStorage.setItem(LSK,on?"1":"0")}catch(e){} renderConfSeg(); }
+function renderConfSeg(){ const on=getConf(); [...$("confSeg").children].forEach(b=>b.classList.toggle("on",(b.dataset.conf==="1")===on)); }
+function renderConfRow(){
+  const row=$("confRow"); row.innerHTML="";
+  if(!getConf()){ row.classList.add("hide"); return; }
+  row.classList.remove("hide"); row.appendChild(el("span","","Hvor sikker er du?"));
+  const k=String(S.cur); S.conf=S.conf||{};
+  [["sikker","Sikker"],["tror","Tror det"],["gjetter","Gjetter"]].forEach(([v,t])=>{
+    const b=el("button",S.conf[k]===v?"on":"",t); b.type="button"; b.dataset.v=v;
+    b.onclick=()=>{ if(S.answered) return; S.conf[k]=v; [...row.querySelectorAll("button")].forEach(x=>x.classList.toggle("on",x.dataset.v===v)); };
+    row.appendChild(b); });
+}
+function lockConf(){ [...$("confRow").querySelectorAll("button")].forEach(b=>b.disabled=true); }
+function renderRep(){
+  const r=repOf(), keys=Object.keys(r).filter(finnes), due=repDue(), t=dag();
+  const btn=$("repBtn"); btn.disabled=!due.length;
+  btn.textContent=due.length ? "Dagens repetisjon ("+Math.min(due.length,REP_MAKS)+")" : "Dagens repetisjon";
+  let txt;
+  if(due.length) txt=due.length+" venter i dag"+(due.length>REP_MAKS?", "+REP_MAKS+" per runde.":".");
+  else if(keys.length){ const n=Math.min(...keys.map(k=>r[k].due))-t; txt="Ingenting venter i dag. Neste: "+(n<=1?"i morgen":"om "+n+" dager")+"."; }
+  else txt="Svar på noen spørsmål først, så dukker de opp her.";
+  $("repTxt").textContent=txt;
+  const fb=$("forvBox"); fb.innerHTML="";
+  const top=Object.entries(forvOf()).sort((a,b)=>b[1]-a[1]).slice(0,3);
+  if(top.length){ fb.appendChild(el("span","muted","Du forveksler oftest: "));
+    fb.appendChild(document.createTextNode(top.map(([k,n])=>k.replace(" | "," og ")+" ("+n+")").join(", ")+".")); }
+}
+
 function shuffle(a){ for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; }
 
 function makeSet(set){
@@ -1093,6 +1184,7 @@ function makeSet(set){
   if(set==="all") ids=CORE.map(f=>f.i);
   else if(set==="random") ids=shuffle(CORE.map(f=>f.i)).slice(0,20);
   else if(set==="oppg") ids=shuffle(XID.slice());
+  else if(set==="rep") ids=repDue().slice(0,REP_MAKS);
   else if(set==="weak"){ const best=bestOf();
     let pool=CORE.filter(f=>!(f.b in best)||best[f.b]<80);
     if(!pool.length) pool=CORE;
@@ -1103,7 +1195,7 @@ function makeSet(set){
   else if(isX(set)) ids=[set];
   else ids=FLAT.filter(f=>f.b===+set).map(f=>f.i);
   return {set:set, queue:ids.slice(), total:ids.length, ids:ids,
-          first:{}, xpct:{}, done:0, cur:null, answered:false, mode:getMode()};
+          first:{}, xpct:{}, conf:{}, forv:[], repPrev:{}, done:0, cur:null, answered:false, mode:getMode()};
 }
 
 /* ---------------- FORSIDE ---------------- */
@@ -1152,7 +1244,7 @@ function renderHome(){
     S=saved; $("resumeBox").classList.remove("hide");
     $("resumeTxt").textContent="Du har en påbegynt runde: "+labelOf(saved.set)+(saved.mode==="skriv"?" (skriv svaret)":"")+", "+saved.done+" av "+saved.total+" ferdig.";
   } else { $("resumeBox").classList.add("hide"); }
-  renderMode();
+  renderMode(); renderConfSeg(); renderRep();
   show("home");
 }
 function labelOf(set){
@@ -1160,6 +1252,7 @@ function labelOf(set){
   if(set==="random") return "20 tilfeldige";
   if(set==="weak") return "det du kan dårligst";
   if(set==="oppg") return "alle koble- og rekkefølgeoppgaver";
+  if(set==="rep") return "dagens repetisjon";
   if(String(set).startsWith("t:")) return "temaet "+set.slice(2);
   if(isX(set)){ const x=xOf(set); return x ? (x.type==="koble"?"koble":"rekkefølge")+": "+x.tema : "oppgave"; }
   return B[+set] ? "bolk "+B[+set].n+", "+B[+set].tema : "bolk";
@@ -1177,7 +1270,7 @@ function next(){
   $("pTxt").textContent=S.done+" av "+S.total+" sitter";
   $("pbar").style.width=(100*S.done/S.total)+"%";
   $("fb").innerHTML=""; $("nextBtn").classList.add("hide");
-  S.hint=0;
+  S.hint=0; renderConfRow();
   if(isX(S.cur)) return renderTask(xOf(S.cur));
   const f=FLAT[S.cur], b=B[f.b], q=b.q[f.q];
   $("qPill").textContent="Bolk "+b.n;
@@ -1297,7 +1390,8 @@ function checkTask(x){
 }
 function gradeTask(x,c,n){
   const id=S.cur, ok=c===n;
-  if(!(id in S.first)){ S.first[id]=ok; S.xpct=S.xpct||{}; S.xpct[id]=Math.round(100*c/n); }
+  if(!(id in S.first)){ S.first[id]=ok; S.xpct=S.xpct||{}; S.xpct[id]=Math.round(100*c/n); repRecord(id,ok); }
+  lockConf();
   const fb=el("div","fb "+(ok?"ok":"no"));
   fb.appendChild(el("b","", ok ? "Alt riktig" : c+" av "+n+" riktig"));
   if(!ok&&x.type==="rekke") fb.appendChild(el("div","","Riktig rekkefølge: "+fasitX(x)));
@@ -1318,7 +1412,8 @@ function gradeTask(x,c,n){
 /* Felles retting. ok = riktig, note = ekstra linje i tilbakemeldingen */
 function grade(ok,note,keepQueue){
   const f=FLAT[S.cur], b=B[f.b], q=b.q[f.q], right=q[1];
-  if(!(S.cur in S.first)) S.first[S.cur]=ok;
+  if(!(S.cur in S.first)){ S.first[S.cur]=ok; repRecord(S.cur,ok); }
+  lockConf();
   const fb=el("div","fb "+(ok?"ok":"no"));
   fb.appendChild(el("b","", ok ? "Riktig: "+b.o[right][0] : "Ikke helt. Riktig er "+b.o[right][0]));
   fb.appendChild(el("div","",q[2]));
@@ -1344,6 +1439,7 @@ function answer(i){
     if(k===right) o.classList.add("correct");
     else if(k===i) o.classList.add("wrong"); });
   grade(i===right, i===right ? null : "Du valgte "+b.o[i][0]+": "+b.o[i][1]+".");
+  if(i!==right) forveksling(S.cur,i);
   $("nextBtn").focus();
 }
 
@@ -1561,10 +1657,11 @@ function answerText(val){
     const note = m>=0 ? "Du skrev «"+val.trim()+"», som ligner "+b.o[m][0]+": "+b.o[m][1]+"."
                       : "Du skrev «"+val.trim()+"».";
     const fb=grade(false,note,true);
+    if(m>=0) forveksling(S.cur,m);
     const row=el("div","row"); row.style.marginTop="10px";
     const yes=el("button","btn ghost small","Jeg mente det samme"); yes.type="button";
     yes.style.padding="7px 13px";
-    yes.onclick=()=>{ if(firstAttempt) S.first[S.cur]=true; S.pendingRequeue=false; S.queue.shift(); S.done++; row.remove();
+    yes.onclick=()=>{ if(firstAttempt){ S.first[S.cur]=true; repUndo(S.cur); repRecord(S.cur,true); } S.pendingRequeue=false; S.queue.shift(); S.done++; row.remove();
       fb.className="fb ok"; fb.firstChild.textContent="Godtatt: "+b.o[right][0];
       $("pTxt").textContent=S.done+" av "+S.total+" sitter"; $("pbar").style.width=(100*S.done/S.total)+"%";
       $("nextBtn").textContent=S.queue.length?"Neste":"Se resultat"; save(); $("nextBtn").focus(); };
@@ -1594,6 +1691,19 @@ function finish(){
       saveBest(+bi,Math.round(100*byB[bi].filter(i=>S.first[i]).length/byB[bi].length)); } }); }
   /* Koble og rekkefølge: beste skår er andelen riktige ledd på første forsøk */
   xs.forEach(id=>{ const p=S.xpct&&S.xpct[id]; if(p!=null) saveBest(id,p); });
+
+  /* Sikkerhet og treff: andel riktige på første forsøk per sikkerhetsnivå */
+  const cal=$("rCal"); cal.innerHTML=""; const cf=S.conf||{};
+  const niv=[["sikker","Sikker"],["tror","Tror det"],["gjetter","Gjetter"]].map(([v,t])=>{
+    const its=ids.filter(i=>cf[String(i)]===v); return [t,its.length,its.filter(i=>S.first[i]).length]; }).filter(x=>x[1]);
+  if(niv.length){ $("rCalCard").classList.remove("hide");
+    niv.forEach(([t,n2,k])=>cal.appendChild(el("div","small",t+": "+k+" av "+n2+" riktig ("+Math.round(100*k/n2)+" prosent).")));
+    const hc=ids.filter(i=>cf[String(i)]==="sikker"&&!S.first[i]).length;
+    if(hc) cal.appendChild(el("div","small muted",hc+" feil du var sikker på, kommer først i neste repetisjon."));
+  } else $("rCalCard").classList.add("hide");
+  if(S.forv&&S.forv.length){ const u=[...new Set(S.forv)];
+    cal.parentNode.classList.remove("hide");
+    cal.appendChild(el("div","small","Forvekslet i runden: "+u.map(k=>k.replace(" | "," og ")).join(", ")+".")); }
 
   const weak=ids.filter(i=>!S.first[i]);
   const w=$("rWeak"); w.innerHTML="";
@@ -1651,7 +1761,8 @@ $("againBtn").onclick=()=>start(S.set);
 $("homeBtn").onclick=renderHome;
 $("resumeYes").onclick=()=>{ if(S.queue.length) next(); else renderHome(); };
 $("resumeNo").onclick=()=>{ clearSave(); renderHome(); };
-$("resetAll").onclick=()=>{ try{localStorage.removeItem(LS);localStorage.removeItem(LSB)}catch(e){} renderHome(); };
+$("resetAll").onclick=()=>{ try{[LS,LSB,LSR,LSF].forEach(k=>localStorage.removeItem(k))}catch(e){} renderHome(); };
+$("confSeg").addEventListener("click",e=>{ const b=e.target.closest("[data-conf]"); if(b) setConf(b.dataset.conf==="1"); });
 
 document.addEventListener("keydown",e=>{
   if($("quiz").classList.contains("hide")) return;
