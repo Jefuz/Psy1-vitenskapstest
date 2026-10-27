@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Psykologi 1: Repetisjon av hele faget</title>
-<meta name="description" content="Ovingstest med 200 flervalgsoppgaver i 40 bolker, hele Psykologi 1.">
+<meta name="description" content="Øvingstest med 235 flervalgsoppgaver i 47 bolker og 30 koble- og rekkefølgeoppgaver, hele Psykologi 1.">
 <style>
   :root{
     --bg:#f6f7fb; --card:#ffffff; --ink:#1c2333; --muted:#5b6478;
@@ -85,6 +85,30 @@
   .hint{margin-top:10px;font-size:.92rem;color:var(--muted)}
   .hint code{font-family:ui-monospace,Menlo,Consolas,monospace;letter-spacing:.12em;color:var(--ink)}
   footer{margin-top:26px;text-align:center}
+  .bolk .tag,.tag{display:inline-block;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+    color:var(--accent);background:#eef0ff;border-radius:6px;padding:1px 6px;margin:0 6px 0 0;vertical-align:1px}
+  .mlist,.rlist{display:grid;gap:8px;margin-top:14px}
+  .mrow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:6px 10px;align-items:center;
+    border:1px solid var(--line);border-radius:11px;padding:9px 11px;background:#fff}
+  .mrow .ml{font-weight:600;font-size:.95rem}
+  .mrow .ml.lang{font-weight:500}
+  .mrow select{font:inherit;font-size:.93rem;padding:9px 10px;border:1px solid var(--line);border-radius:9px;
+    background:#fff;color:var(--ink);width:100%;min-width:0}
+  .mrow.ok,.ritem.ok{border-color:var(--okline);background:var(--okbg)}
+  .mrow.no,.ritem.no{border-color:var(--errline);background:var(--errbg)}
+  .mrow .fix{grid-column:1/-1;font-size:.86rem;color:var(--err)}
+  .ritem .fix{font-size:.86rem;color:var(--err)}
+  .ritem{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:11px;
+    padding:8px 10px;background:#fff}
+  .ritem .rn{flex:none;width:24px;height:24px;border-radius:6px;background:#eef0f7;color:var(--muted);
+    font-size:.8rem;font-weight:700;display:grid;place-items:center}
+  .ritem .rt{flex:1;min-width:0;font-size:.95rem}
+  .ritem .mv{display:flex;gap:4px;flex:none}
+  .ritem .mv button{appearance:none;border:1px solid var(--line);background:#f6f7fb;border-radius:8px;
+    width:38px;height:36px;font-size:1rem;cursor:pointer;color:var(--ink)}
+  .ritem .mv button:disabled{opacity:.35;cursor:default}
+  .chk{margin:0 0 16px}
+  @media (max-width:520px){ .mrow{grid-template-columns:1fr} }
 </style>
 </head>
 <body>
@@ -94,9 +118,7 @@
   <section id="home">
     <p class="small" style="margin:0 0 6px;text-align:right"><a href="sensorkort.html" style="color:var(--accent)">Sensorkort til muntlig øving →</a></p>
     <h1>Psykologi 1: hele faget</h1>
-    <p class="sub">200 flervalgsoppgaver i 40 bolker på fem, fordelt på 15 temaer.
-      Alle fem spørsmålene i en bolk deler de samme fem alternativene.
-      I tillegg 35 ekstraoppgaver om fasettene i personlighet, som ikke er med i de blandede rundene.</p>
+    <p class="sub" id="homeSub"></p>
 
     <div class="card" style="margin-top:18px">
       <h2>Slik virker øvingen</h2>
@@ -128,18 +150,21 @@
     <div class="card">
       <h2>Bland temaene</h2>
       <p class="small muted" style="margin:.4em 0 0">Blandede spørsmål ligner eksamen mest.
-        «Det jeg kan dårligst» trekker fra bolker du ikke har tatt eller har under 80 prosent på.</p>
+        «Det jeg kan dårligst» trekker fra bolker og oppgaver du ikke har tatt eller har under 80 prosent på.
+        «Koble og rekkefølge» gir alle oppgavene der du kobler par eller setter ledd i riktig rekkefølge.</p>
       <div class="row" style="margin-top:14px">
         <button class="btn" data-set="random">20 tilfeldige</button>
         <button class="btn ghost" data-set="weak">Det jeg kan dårligst</button>
-        <button class="btn ghost" data-set="all">Alle 200</button>
+        <button class="btn ghost" data-set="all" id="allBtn">Alle</button>
+        <button class="btn ghost" data-set="oppg" id="oppgBtn">Koble og rekkefølge</button>
         <button class="btn ghost" id="resetAll">Nullstill fremdrift</button>
       </div>
     </div>
 
     <div class="card">
       <h2>Velg tema eller bolk</h2>
-      <p class="small muted" style="margin:.4em 0 0">Fem spørsmål tar rundt tre minutter.</p>
+      <p class="small muted" style="margin:.4em 0 0">Fem spørsmål tar rundt tre minutter.
+        Oppgavene merket Koble og Rekkefølge ligger sist i hvert tema og er med når du tar hele temaet.</p>
       <div id="bolkGrid"></div>
     </div>
 
@@ -764,20 +789,294 @@ const B=[
     ["Et av de fem brede hovedtrekkene, som planmessighet.",0,"De fem hovedtrekkene kalles dimensjoner. Hver dimensjon er summen av fasettene under den."],
     ["Noen svarer «enig» nesten uansett hva utsagnet handler om.",4,"Dette kalles ja-siging. Tester jevner det ut med like mange vanlige og reverserte ledd."],
     ["Et smalere deltrekk. I den vanlige fasettmodellen er det seks av dem under hvert hovedtrekk.",1,"Deltrekkene kalles fasetter. Costa og McCraes modell har 30 i alt."],
-    ["«Jeg roter hjemme» gir lav skåre på orden hvis du er enig.",3,"Et utsagn der enig gir lav skåre, er et reversert ledd."]]}
+    ["«Jeg roter hjemme» gir lav skåre på orden hvis du er enig.",3,"Et utsagn der enig gir lav skåre, er et reversert ledd."]]},
+
+/* Bolk 48 til 55: anvend psykologi, bærekraft og lærebokstoff som manglet (lagt til 26.10.2026) */
+{n:48,del:"Anvendt psykologi",tema:"Fagfelt",
+ o:[["Klinisk psykologi","utredning og behandling av psykiske vansker"],
+    ["Arbeids- og organisasjonspsykologi","trivsel, ledelse og samarbeid på arbeidsplassen"],
+    ["Idrettspsykologi","prestasjon, motivasjon og press i idrett"],
+    ["Pedagogisk psykologi","læring og tilrettelegging i barnehage og skole"],
+    ["Helsepsykologi","hvordan tanker og vaner påvirker fysisk helse"]],
+ q:[["En psykolog kartlegger hvorfor sykefraværet er høyt på en avdeling, og foreslår endringer i arbeidsfordeling og ledelse. Hvilket fagfelt?",1,"Arbeidsmiljø, ledelse og samarbeid hører til arbeids- og organisasjonspsykologien."],
+    ["En psykolog hjelper en langrennsløper med nervøsitet og fokus foran et mesterskap. Hvilket fagfelt?",2,"Prestasjon under press er idrettspsykologiens felt. Mestringsforventning og målsetting er typiske verktøy."],
+    ["En psykolog utreder en ungdom med langvarig angst og tilbyr samtalebehandling. Hvilket fagfelt?",0,"Utredning og behandling av psykiske vansker er klinisk psykologi. Mange psykologer arbeider her."],
+    ["En psykolog i den pedagogisk-psykologiske tjenesten undersøker hvorfor en elev strever med lesing, og gir lærerne råd om tilrettelegging. Hvilket fagfelt?",3,"Læring og tilrettelegging i skolen er pedagogisk psykologi. Noen lærebøker kaller feltet skole- og opplæringspsykologi."],
+    ["En psykolog hjelper hjertepasienter med å slutte å røyke og holde fast ved treningen. Hvilket fagfelt?",4,"Sammenhengen mellom vaner, tanker og fysisk helse er helsepsykologiens felt."]]},
+{n:49,del:"Anvendt psykologi",tema:"Behandling",ekstra:true,
+ o:[["Kognitiv atferdsterapi","endre tanker og atferd som holder plagene ved like"],
+    ["Fellesfaktorer","det som virker på tvers av terapiformer, som relasjonen og håpet om bedring"],
+    ["Evidensbasert praksis","behandling valgt ut fra forskning, klinisk erfaring og pasientens ønsker"],
+    ["Eklektisk tilnærming","terapeuten kombinerer metoder fra flere retninger"],
+    ["Gruppeterapi","flere klienter får behandling sammen"]],
+ q:[["Ulike terapiformer gir ofte omtrent like gode resultater. Ifølge én forklaring er det fordi relasjonen til terapeuten og håpet om bedring går igjen i alle. Hva kalles slike faktorer?",1,"Dette kalles fellesfaktorer. Menneskesinnet bruker navnet g-faktorer. Hvor mye de forklarer, er omdiskutert."],
+    ["Seks ungdommer med sosial angst møtes hver uke med én terapeut og øver på å holde innlegg for hverandre. Hva slags behandling?",4,"Behandling der flere klienter deltar sammen, er gruppeterapi. Deltakerne kan også lære av hverandre."],
+    ["Terapeuten hjelper klienten å legge merke til tanken «alle synes jeg er kjedelig», og å teste den i virkelige situasjoner. Hvilken terapiform?",0,"Å utfordre tanker og prøve ut ny atferd er kjernen i kognitiv atferdsterapi."],
+    ["Behandlingen velges ut fra hva forskningen viser, hva terapeuten har erfaring med og hva pasienten selv ønsker. Hva kalles prinsippet?",2,"Evidensbasert praksis bygger på de tre kildene sammen, ikke på forskning alene."],
+    ["Terapeuten bruker eksponering fra én retning og samtaler om barndommen fra en annen, alt etter hva klienten trenger. Hva kalles dette?",3,"Å kombinere metoder fra flere retninger kalles en eklektisk tilnærming."]]},
+{n:50,del:"Bærekraft",tema:"Bærekraftige valg",
+ o:[["Kognitiv dissonans","ubehaget når det du gjør, strider mot det du mener"],
+    ["Sosial norm","det vi tror andre gjør, eller forventer av oss"],
+    ["Psykologisk distanse","problemet virker fjernt i tid, sted eller fra egen gruppe"],
+    ["Valgarkitektur","valget utformes så det gunstige alternativet blir lettest"],
+    ["Kunnskapsmangelmodellen","antakelsen om at mer informasjon i seg selv endrer atferd"]],
+ q:[["Kantinen setter vegetarretten først i disken, og flere velger den, uten at noe er forbudt. Hva kalles grepet?",3,"Å utforme valgsituasjonen slik at et valg blir lettere, uten forbud, kalles valgarkitektur eller dytting (Thaler og Sunstein)."],
+    ["Hen mener at flyreiser skader klimaet, men flyr til Thailand og sier til seg selv at én tur ikke betyr noe. Hva er det hen prøver å dempe?",0,"Ubehaget når handling og holdning spriker, kalles kognitiv dissonans. Ifølge Festinger kan vi dempe det ved å bagatellisere handlingen eller endre holdningen."],
+    ["En kampanje bygger på at folk vil endre vaner bare de får nok fakta om klimaet. Hvilken antakelse bygger den på?",4,"Antakelsen om at informasjon alene endrer atferd, kalles kunnskapsmangelmodellen. Kunnskap hjelper, men er sjelden nok alene."],
+    ["Strømregningen viser at du bruker mer strøm enn naboene dine, og forbruket ditt går ned. Hva er det som virker?",1,"Sammenligningen viser hva som er vanlig blant andre, altså en sosial norm. I studier er effekten av slike tilbakemeldinger ofte liten, men målbar."],
+    ["Klimaendringene oppleves som noe som skjer langt unna, langt fram i tid og for andre enn oss. Hva kalles dette?",2,"Når et problem virker fjernt i tid, sted eller fra egen gruppe, kalles det psykologisk distanse. Det kan gjøre problemet lettere å skyve foran seg."]]},
+{n:51,del:"Nervesystemet og hjernen",tema:"Hjernens deler",
+ o:[["Hjernestammen","involvert i pust, puls og våkenhet"],
+    ["Lillehjernen","involvert i balanse og koordinasjon av bevegelser"],
+    ["Bakhodelappen","involvert i å bearbeide synsinntrykk"],
+    ["Tinninglappen","involvert i hørsel, språkforståelse og hukommelse"],
+    ["Isselappen","involvert i berøring og romforståelse"]],
+ q:[["Etter et slag mot bakhodet har hen synsutfall, selv om øynene er uskadde. Hvilket område er trolig rammet?",2,"Bakhodelappen (occipitallappen) er involvert i å bearbeide synsinntrykk."],
+    ["Skader her er ofte livstruende, fordi området er involvert i pust og hjerterytme. Hvilket område?",0,"Hjernestammen er involvert i livsviktige funksjoner som pust, puls og våkenhet."],
+    ["Hen går ustøtt og bommer når hen skal treffe nesetippen med fingeren, selv om musklene er sterke nok. Hvilket område?",1,"Balanse og finjustering av bevegelser er knyttet til lillehjernen. Svendsens begrepsliste legger også kroppens overlevelsesfunksjoner hit, men pust og puls reguleres i hjernestammen."],
+    ["Hen overser venstre side av tallerkenen og barberer bare den høyre halvdelen av ansiktet. Hvilket område er trolig skadet?",4,"Isselappen (parietallappen) er involvert i romforståelse. Skade i høyre isselapp kan gi neglekt, der venstre side av rommet blir oversett."],
+    ["Hen hører ordene tydelig, men forstår ikke hva de betyr. Hvilket område er trolig skadet?",3,"Tinninglappen (temporallappen) er involvert i hørsel og språkforståelse. Skade bakerst i venstre tinninglapp kan gi slike vansker."]]},
+{n:52,del:"Rus",tema:"Rusmiddelgrupper",
+ o:[["Sentralstimulerende stoffer","øker aktiviteten i nervesystemet, som kokain og amfetamin"],
+    ["Sentraldempende stoffer","demper aktiviteten i nervesystemet, som alkohol og beroligende tabletter"],
+    ["Opioider","virker på kroppens eget smertedempende system, som heroin og morfin"],
+    ["Hallusinogener","endrer sanseinntrykk og tidsopplevelse, som LSD og fleinsopp"],
+    ["Cannabis","hasj og marihuana, med virkestoffet THC"]],
+ q:[["Stoffene binder seg til de samme reseptorene som kroppens egne endorfiner, og en overdose kan stanse pusten. Hvilken gruppe?",2,"Opioider, som heroin og morfin, virker på kroppens eget smertedempende system. Menneskesinnet kaller dem opiater."],
+    ["Stoffet øker puls, våkenhet og selvtillit, og kan følges av en kraftig nedtur når virkningen gir seg. Hvilken gruppe?",0,"Økt aktivitet i nervesystemet kjennetegner sentralstimulerende stoffer, som kokain og amfetamin. Menneskesinnet kaller gruppen stimulantia."],
+    ["Det mest brukte illegale rusmiddelet i Norge. Virkestoffet THC binder seg til egne reseptorer i hjernen. Hvilket stoff?",4,"Cannabis, i form av hasj eller marihuana, er ifølge Folkehelseinstituttet det mest brukte illegale rusmiddelet i Norge. Tidlig og hyppig bruk er knyttet til økt risiko for psykose, men hvor mye som er årsak, er omdiskutert."],
+    ["Alkohol og beroligende tabletter hører til denne gruppen. Brukt sammen kan de hemme pusten. Hvilken gruppe?",1,"Sentraldempende stoffer demper aktiviteten i nervesystemet. Menneskesinnet kaller dem sedativer. Blandingsrus øker risikoen for overdose."],
+    ["Stoffet endrer sanseinntrykk og tidsopplevelse og kan gi skremmende opplevelser, men gir lite fysisk avhengighet. Hvilken gruppe?",3,"Hallusinogener, som LSD og fleinsopp, endrer sanseinntrykk. Den akutte risikoen ligger ofte i skremmende opplevelser og farlige handlinger i rus."]]},
+{n:53,del:"Læring",tema:"Andre former for læring",
+ o:[["Habituering","du slutter gradvis å reagere på en stimulus som gjentas"],
+    ["Sensitisering","du reagerer sterkere etter en kraftig eller truende stimulus"],
+    ["Innsiktslæring","løsningen kommer plutselig når du ser problemet på en ny måte"],
+    ["Latent læring","læring som ikke vises før det lønner seg å vise den"],
+    ["Prøving og feiling","du prøver ut handlinger til noe virker"]],
+ q:[["Etter et innbrudd skvetter du av lyder du før ikke la merke til. Hva kalles denne økte følsomheten?",1,"En sterkere reaksjon etter en kraftig eller truende opplevelse kalles sensitisering. Diseth skriver sensitivisering. Det er motsatsen til habituering."],
+    ["Rotter som fikk utforske en labyrint uten belønning, fant raskt fram da det plutselig lå mat ved målet. Hva viser dette?",3,"Tolman kalte dette latent læring: rottene hadde lært veien, men viste det først da det lønte seg."],
+    ["Etter noen dager i den nye leiligheten legger du ikke lenger merke til trafikkduren utenfor. Hva kalles dette?",0,"Å gradvis slutte å reagere på noe som gjentas og er ufarlig, kalles habituering. Det regnes som en av de enkleste formene for læring."],
+    ["En sjimpanse sitter lenge uten å gjøre noe. Så stabler den plutselig kassene oppå hverandre og når bananen. Hva kalles en slik brå løsning?",2,"Köhler tolket brå løsninger som innsiktslæring, i motsetning til gradvis prøving og feiling. Tolkningen er omdiskutert, fordi dyrene kan ha lært delene tidligere."],
+    ["En katt i et bur biter, klorer og skyver, til den tilfeldigvis trykker på spaken som åpner døra. Neste gang går det fortere. Hva kalles læringsformen?",4,"Thorndike kalte dette prøving og feiling. Ifølge effektloven blir handlinger som gir et godt utfall, mer sannsynlige."]]},
+{n:54,del:"Hukommelse",tema:"Minneteknikker",
+ o:[["Loci-metoden","du plasserer det du skal huske langs en kjent rute"],
+    ["Akronym","forbokstavene danner et ord som er lett å huske"],
+    ["Tankekart","begrepene tegnes rundt et midtpunkt, med linjer mellom"],
+    ["Elaborativ gjentakelse","du knytter det nye til det du allerede kan"],
+    ["Opprettholdende gjentakelse","du gjentar stoffet uten å bearbeide det"]],
+ q:[["For å huske handlelista ser du for deg hver vare på et fast sted hjemme: melk på dørmatta, egg i gangen, brød på sofaen. Hvilken teknikk?",0,"Å plassere det du skal huske langs en kjent rute er loci-metoden, også kalt minnepalass. Den virker særlig godt for lister."],
+    ["Du husker de fem dimensjonene i femfaktormodellen med ordet OCEAN. Hvilken teknikk?",1,"Et ord laget av forbokstaver kalles et akronym. OCEAN står for de engelske navnene på de fem dimensjonene."],
+    ["Du gjentar et telefonnummer for deg selv til du har tastet det, og har glemt det rett etterpå. Hva slags gjentakelse?",4,"Ren gjentakelse uten bearbeiding kalles opprettholdende gjentakelse. Ifølge prosesseringsnivåmodellen holder den stoffet i korttidsminnet, men gir svak langtidslagring."],
+    ["Du lærer om amygdala ved å koble det til da du selv ble redd for en hund, og forklarer det for en venn. Hva slags gjentakelse?",3,"Å knytte nytt stoff til det du allerede kan, gir dypere bearbeiding. Det kalles elaborativ gjentakelse og gir som regel bedre hukommelse enn ren pugging."],
+    ["Du skriver «stress» midt på arket og tegner greiner ut til årsaker, kroppsreaksjoner og mestring. Hva lager du?",2,"Dette er et tankekart. Det synliggjør sammenhenger mellom begreper og virker trolig best når du lager det selv og bruker det til å hente fram stoffet."]]},
+{n:55,del:"Perspektiver og faghistorie",tema:"Flere fagpersoner",
+ o:[["Charles Darwin","evolusjon gjennom naturlig seleksjon"],
+    ["Ivan Pavlov","klassisk betinging hos hunder"],
+    ["Wolfgang Köhler","innsiktslæring hos sjimpanser"],
+    ["Noam Chomsky","kritikken av at språk læres ved forsterkning"],
+    ["René Descartes","kropp og sjel som to ulike substanser"]],
+ q:[["Han forsket på fordøyelsen hos hunder og la merke til at de begynte å sikle før maten kom.",1,"Pavlov forsket på fordøyelse da han oppdaget klassisk betinging. Han fikk Nobelprisen i 1904 for fordøyelsesforskningen, ikke for betingingen."],
+    ["Han mente at barn lærer språk for raskt og for regelrett til at det kan forklares med forsterkning alene.",3,"Chomskys kritikk av Skinner fra 1959 regnes som et vendepunkt mot den kognitive psykologien."],
+    ["Han mente at kropp og sjel er to ulike substanser som påvirker hverandre.",4,"Synet kalles dualisme, og Descartes er kjent for det. Monisme er synet at det bare finnes én substans."],
+    ["Sjimpansene hans løste problemer brått, uten gradvis prøving og feiling.",2,"Köhler tolket de brå løsningene som innsiktslæring. Det utfordret behavioristenes vekt på gradvis læring."],
+    ["Teorien hans fra 1859 forklarer hvordan egenskaper som gir flere etterkommere, blir vanligere over generasjoner.",0,"Darwins teori om naturlig seleksjon er grunnlaget for evolusjonspsykologien."]]}
 ];
 
 B.forEach(b=>{ if(!b.del) b.del="Vitenskap og metode"; });
+
+/* ---------------- KOBLE OG REKKEFØLGE ----------------
+   type "koble": par:[[venstre, høyre], ...]. Siden med kortest tekst velges i lister, den andre står fast.
+   type "rekke": rekke:[første, ..., siste]. Leddene stokkes, og eleven flytter dem på plass.
+   forkl vises etter retting. Nye oppgaver legges bakerst: lagret fremdrift bruker id-en "x"+indeks. */
+const X=[
+{type:"rekke",del:"Vitenskap og metode",tema:"Forskningsprosessen",
+ tekst:"Sett trinnene i en typisk kvantitativ undersøkelse i rekkefølge.",
+ rekke:["Formulere en problemstilling","Lage en hypotese","Operasjonalisere begrepene","Samle inn data","Analysere dataene","Konkludere og publisere"],
+ forkl:"Dette er en idealmodell. I praksis går forskere ofte fram og tilbake mellom trinnene, og funnene gir nye problemstillinger."},
+{type:"koble",del:"Vitenskap og metode",tema:"Metode og forskningsspørsmål",
+ tekst:"Koble hvert forskningsspørsmål med metoden som passer best.",
+ par:[["Gir mobilforbud i timen bedre konsentrasjon?","Eksperiment"],
+      ["Henger skjermtid sammen med hvor lenge ungdom sover?","Korrelasjonsstudie"],
+      ["Hvor stor andel av 16-åringer sover under sju timer?","Spørreundersøkelse"],
+      ["Hvordan opplever elever eksamensangst?","Kvalitativt intervju"],
+      ["Hvordan samhandler barn i friminuttet?","Systematisk observasjon"],
+      ["Hva skjedde med hukommelsen til én pasient etter en hjerneskade?","Kasusstudie"]],
+ forkl:"Årsaksspørsmål krever eksperiment. Sammenhenger måles i korrelasjonsstudier, andeler med spørreundersøkelser, opplevelser med intervju, samhandling med observasjon og sjeldne enkelttilfeller med kasusstudier. Flere metoder kan ofte brukes på samme spørsmål; dette er de beste parene."},
+{type:"rekke",del:"Perspektiver og faghistorie",tema:"Fra Darwin til Chomsky",
+ tekst:"Sett hendelsene i rekkefølge, fra eldst til nyest.",
+ rekke:["Darwin gir ut Artenes opprinnelse","Wundt åpner det første psykologiske laboratoriet","Freud gir ut Drømmetydning","Watson lanserer behaviorismen","Chomsky kritiserer Skinners syn på språk"],
+ forkl:"Årstallene er 1859, 1879, 1900, 1913 og 1959. Chomskys kritikk regnes som et vendepunkt mot den kognitive psykologien."},
+{type:"koble",del:"Perspektiver og faghistorie",tema:"Fem perspektiver på eksamensangst",
+ tekst:"Koble hvert perspektiv med forklaringen det ville gitt på eksamensangst.",
+ par:[["Biologisk","Det sympatiske nervesystemet og stresshormoner slår inn"],
+      ["Psykodynamisk","Ubevisste konflikter fra barndommen blir vekket"],
+      ["Behavioristisk","Angsten er lært gjennom tidligere ubehagelige prøvesituasjoner"],
+      ["Kognitivt","Katastrofetanker om å stryke forsterker angsten"],
+      ["Humanistisk","Prestasjonen truer et selvbilde som bygger på betinget aksept"]],
+ forkl:"Perspektivene utfyller hverandre. Den samme angsten kan ha biologiske, lærte og tankemessige sider samtidig."},
+{type:"koble",del:"Perspektiver og faghistorie",tema:"Hvem står bak?",
+ tekst:"Koble hver forsker med det hen er mest kjent for.",
+ par:[["Ivan Pavlov","Klassisk betinging"],["B. F. Skinner","Operant betinging"],["Albert Bandura","Modellæring"],
+      ["Jean Piaget","Kognitive utviklingsstadier"],["Lev Vygotskij","Den nærmeste utviklingssonen"],["John Bowlby","Tilknytningsteori"]],
+ forkl:"Alle seks står i lærebøkene. Til muntlig løfter det svaret å knytte et begrep til personen bak det."},
+{type:"koble",del:"Anvendt psykologi",tema:"Fagfelt og arbeidsoppgaver",
+ tekst:"Koble hvert fagfelt med en typisk arbeidsoppgave.",
+ par:[["Klinisk psykologi","Utrede og behandle angst og depresjon"],
+      ["Arbeids- og organisasjonspsykologi","Forbedre arbeidsmiljø og ledelse"],
+      ["Idrettspsykologi","Trene utøvere i å takle press"],
+      ["Pedagogisk psykologi","Gi råd om tilrettelegging i skolen"],
+      ["Rettspsykologi","Vurdere hvor pålitelige vitneforklaringer er"],
+      ["Samfunnspsykologi","Forebygge problemer i et lokalsamfunn"]],
+ forkl:"Fagfeltene bruker den samme grunnleggende psykologien på ulike områder. Rettspsykologien bygger blant annet på forskningen om at minner rekonstrueres."},
+{type:"koble",del:"Persepsjon og kognisjon",tema:"Persepsjonsbegreper",
+ tekst:"Koble hvert begrep med beskrivelsen som passer.",
+ par:[["Nedenfra og opp","Persepsjonen bygges opp fra sanseinntrykkene"],
+      ["Ovenfra og ned","Forventninger og kunnskap styrer tolkningen"],
+      ["Selektiv oppmerksomhet","Du fanger opp navnet ditt i et støyende rom"],
+      ["Skjema","En mental modell av hvordan noe pleier å være"],
+      ["Bekreftelsestendens","Du legger mest merke til det som støtter det du tror"]],
+ forkl:"Persepsjon er både sansedata og tolkning. Skjemaer gjør tolkningen rask, men kan gi systematiske feil."},
+{type:"rekke",del:"Hukommelse",tema:"Fra inntrykk til langtidsminne",
+ tekst:"Sett stegene i rekkefølge, slik flerlagermodellen beskriver dem.",
+ rekke:["Sansene fanger opp et inntrykk","Sensorisk hukommelse holder det et øyeblikk","Oppmerksomheten velger det ut","Korttidsminnet holder og bearbeider det","Repetisjon og koding lagrer det i langtidsminnet"],
+ forkl:"Ifølge Atkinson og Shiffrin går informasjonen gjennom tre lagre. Modellen er en forenkling: Baddeleys arbeidsminne beskriver korttidsminnet som et aktivt system med flere deler."},
+{type:"rekke",del:"Læring",tema:"Klassisk betinging steg for steg",
+ tekst:"Sett stegene i klassisk betinging i rekkefølge.",
+ rekke:["Maten gir sikling uten læring","Klokka ringer like før maten, gang på gang","Klokka alene gir sikling","Klokka ringer mange ganger uten mat","Siklingen avtar"],
+ forkl:"Maten er ubetinget stimulus, klokka blir betinget stimulus, og siklingen til klokka er betinget respons. Når klokka gjentatte ganger kommer uten mat, avtar responsen: ekstinksjon. Etter en pause kan den komme tilbake (spontan gjenoppretting)."},
+{type:"rekke",del:"Læring",tema:"Modellæring",
+ tekst:"Sett de fire prosessene i modellæring i rekkefølge.",
+ rekke:["Oppmerksomhet","Hukommelse","Gjengivelse","Motivasjon"],
+ forkl:"Ifølge Bandura må du legge merke til modellen, huske det du så, kunne utføre det og ha grunn til å gjøre det. Mangler ett ledd, blir atferden ikke vist."},
+{type:"koble",del:"Læring",tema:"Forsterkning og straff",
+ tekst:"Koble hver konsekvens med eksempelet som passer.",
+ par:[["Positiv forsterkning","Du får skryt når du rydder, og rydder oftere"],
+      ["Negativ forsterkning","Hodepinen gir seg når du tar en tablett, så du tar tablett oftere"],
+      ["Positiv straff","Du får parkeringsbot og parkerer lovlig neste gang"],
+      ["Negativ straff","Du mister mobilen en kveld etter å ha kommet for sent hjem, og kommer tidsnok neste gang"],
+      ["Ekstinksjon","Du slutter å rekke opp hånda fordi læreren aldri spør deg"]],
+ forkl:"Positiv betyr at noe legges til, negativ at noe fjernes. Forsterkning øker atferden, straff reduserer den. Ekstinksjon er at atferden dør ut når konsekvensen uteblir."},
+{type:"koble",del:"Motivasjon, mestring og læringsstrategier",tema:"Kilder til mestringsforventning",
+ tekst:"Koble hver kilde til mestringsforventning med et eksempel.",
+ par:[["Egne erfaringer","Du har klart en lignende oppgave før"],
+      ["Modeller","Du ser en medelev på ditt nivå klare oppgaven"],
+      ["Overtalelse","Læreren sier hun er sikker på at du får det til"],
+      ["Kroppslig tilstand","Du tolker hjertebanken som at du er klar, ikke redd"]],
+ forkl:"Ifølge Bandura er egne mestringserfaringer den sterkeste kilden. Lærebøkene kaller begrepet mestringsforventning; testen bruker også mestringstro."},
+{type:"rekke",del:"Motivasjon, mestring og læringsstrategier",tema:"Maslows behovshierarki",
+ tekst:"Sett behovene i rekkefølge, fra det mest grunnleggende til det øverste.",
+ rekke:["Fysiologiske behov","Trygghet","Kjærlighet og tilhørighet","Anerkjennelse","Selvrealisering"],
+ forkl:"Ifølge Maslow må lavere behov i stor grad være dekket før høyere blir viktige. Pyramideformen er ikke Maslows egen, og forskning gir svak støtte for en streng rekkefølge."},
+{type:"koble",del:"Personlighet",tema:"Forsvarsmekanismer",
+ tekst:"Koble hver forsvarsmekanisme med et eksempel.",
+ par:[["Fortrengning","Hen kan ikke huske en vond opplevelse fra barndommen"],
+      ["Projeksjon","Hen er sint selv, men mener at alle andre er sinte på hen"],
+      ["Rasjonalisering","Hen stryker og sier at faget uansett var unyttig"],
+      ["Forskyvning","Hen blir kjeftet på av sjefen og kjefter på hunden hjemme"],
+      ["Sublimering","Hen kanaliserer aggresjonen inn i boksetrening"],
+      ["Regresjon","Et barn som får et nytt søsken, begynner å suge på tommelen igjen"]],
+ forkl:"Ifølge Freud beskytter forsvarsmekanismene jeget mot angst. De er vanskelige å teste, men begrepene brukes fortsatt om hverdagslige mønstre."},
+{type:"rekke",del:"Personlighet",tema:"Freuds psykoseksuelle faser",
+ tekst:"Sett fasene i rekkefølge, fra spedbarn til ungdom.",
+ rekke:["Oral fase","Anal fase","Fallisk fase","Latensfase","Genital fase"],
+ forkl:"Ifølge Freud går barnet gjennom fasene i denne rekkefølgen. Teorien har svakt empirisk grunnlag, men er et sentralt eksempel på det psykodynamiske perspektivet."},
+{type:"koble",del:"Arv og miljø",tema:"Begreper i tvillingforskning",
+ tekst:"Koble hvert begrep med beskrivelsen som passer.",
+ par:[["Tvillingstudie","Sammenligner eneggede og toeggede tvillinger"],
+      ["Adopsjonsstudie","Sammenligner barn med biologiske foreldre og adoptivforeldre"],
+      ["Delt miljø","Det som gjør søsken like, som et felles hjem"],
+      ["Ikke-delt miljø","Det som gjør søsken ulike, som egne venner"],
+      ["Arvbarhet","Andelen av variasjonen i en gruppe som kan knyttes til gener"]],
+ forkl:"Arvbarhet gjelder variasjon i en gruppe, ikke hvor mye av ett menneske som er arvet. Menneskesinnet kaller ikke-delt miljø for udelt miljø."},
+{type:"rekke",del:"Utvikling og identitet",tema:"Piagets stadier",
+ tekst:"Sett Piagets stadier i rekkefølge.",
+ rekke:["Sensomotorisk stadium","Preoperasjonelt stadium","Konkret operasjonelt stadium","Formelt operasjonelt stadium"],
+ forkl:"Omtrentlige aldre er 0 til 2, 2 til 7, 7 til 11 og fra rundt 11 år. Senere forskning tyder på at barn kan mer, tidligere, enn Piaget trodde."},
+{type:"rekke",del:"Utvikling og identitet",tema:"Eriksons åtte faser",
+ tekst:"Sett Eriksons faser i rekkefølge, fra spedbarn til alderdom.",
+ rekke:["Tillit mot mistillit","Autonomi mot skam og tvil","Initiativ mot skyld","Arbeidsomhet mot underlegenhet","Identitet mot rolleforvirring","Intimitet mot isolasjon","Generativitet mot stagnasjon","Integritet mot fortvilelse"],
+ forkl:"Ifølge Erikson har hver livsfase sin typiske konflikt. Svendsen kaller den femte identitet mot identitetsforvirring. Fasene er mer beskrivende enn testet."},
+{type:"koble",del:"Utvikling og identitet",tema:"Marcias identitetsstatuser",
+ tekst:"Koble hver identitetsstatus med beskrivelsen som passer.",
+ par:[["Oppnådd identitet","Har utforsket alternativer og forpliktet seg"],
+      ["Moratorium","Utforsker, men har ikke forpliktet seg ennå"],
+      ["Overtatt identitet","Har forpliktet seg uten å utforske"],
+      ["Identitetsdiffusjon","Har verken utforsket eller forpliktet seg"]],
+ forkl:"Marcia bygger statusene på to spørsmål: har personen utforsket, og har hen forpliktet seg? Menneskesinnet kaller overtatt identitet for forlukking. Statusene er ikke stadier i fast rekkefølge."},
+{type:"koble",del:"Utvikling og identitet",tema:"Tilknytning i fremmedsituasjonen",
+ tekst:"Koble hvert tilknytningsmønster med atferden barnet typisk viser.",
+ par:[["Trygg tilknytning","Protesterer når mor går, søker trøst og roer seg når hun kommer tilbake"],
+      ["Unnvikende tilknytning","Viser lite protest og unngår mor når hun kommer tilbake"],
+      ["Ambivalent tilknytning","Er svært urolig, og både søker og avviser trøst"],
+      ["Desorganisert tilknytning","Viser motstridende og forvirret atferd uten fast mønster"]],
+ forkl:"Ainsworth beskrev de tre første mønstrene. Det desorganiserte ble lagt til senere av Main og Solomon. Mønsteret i fremmedsituasjonen er ingen skjebne."},
+{type:"rekke",del:"Evolusjonspsykologi",tema:"Naturlig seleksjon steg for steg",
+ tekst:"Sett leddene i Darwins argument i rekkefølge.",
+ rekke:["Individene i en art er ulike","Noe av ulikheten er arvelig","Det fødes flere enn miljøet kan bære","Noen varianter får flere etterkommere enn andre","Disse variantene blir vanligere over generasjoner"],
+ forkl:"Dette er kjernen i naturlig seleksjon. Det handler om antall etterkommere, ikke om å være sterkest. «De sterkeste overlever» er en vanlig misforståelse."},
+{type:"koble",del:"Nervesystemet og hjernen",tema:"Hjerneområder",
+ tekst:"Koble hvert hjerneområde med noe det er involvert i.",
+ par:[["Frontallappen","Planlegging og impulskontroll"],["Bakhodelappen","Syn"],["Tinninglappen","Hørsel og språkforståelse"],
+      ["Isselappen","Berøring og romforståelse"],["Hippocampus","Å danne nye eksplisitte minner"],["Amygdala","Å oppdage trusler og lære frykt"]],
+ forkl:"«Involvert i» er mer presist enn «styrer», fordi de fleste funksjoner bygger på nettverk av flere områder."},
+{type:"rekke",del:"Nervesystemet og hjernen",tema:"Signalet gjennom nervecellen",
+ tekst:"Sett stegene i rekkefølge, fra signalet kommer inn til det går videre.",
+ rekke:["Dendrittene tar imot signaler","Cellekroppen summerer signalene","Et aksjonspotensial går langs aksonet","Signalstoffer slippes ut i synapsen","Signalstoffene binder seg til reseptorer på neste celle"],
+ forkl:"Aksjonspotensialet er alt eller ingenting. Etterpå blir signalstoffene brutt ned eller tatt opp igjen, det som kalles reopptak."},
+{type:"rekke",del:"Hormoner, sanser og hele mennesket",tema:"Stressaksen",
+ tekst:"Sett stegene i stressaksen i rekkefølge.",
+ rekke:["Hypothalamus reagerer på en trussel","Hypothalamus sender signal til hypofysen","Hypofysen sender et hormon til binyrene","Binyrene skiller ut kortisol","Kortisol demper hypothalamus og hypofysen"],
+ forkl:"Det siste steget er negativ tilbakekobling, kroppens egen brems. Ved langvarig stress kan bremsen bli svekket."},
+{type:"koble",del:"Hormoner, sanser og hele mennesket",tema:"Hormoner",
+ tekst:"Koble hvert hormon med noe det er involvert i.",
+ par:[["Adrenalin","Rask mobilisering: pulsen og pusten øker"],["Kortisol","Holder energien oppe ved langvarig belastning"],
+      ["Melatonin","Døgnrytme og søvn"],["Oksytocin","Fødsel, amming og sosial tilknytning"],["Testosteron","Kjønnsutvikling og muskelvekst"]],
+ forkl:"Hormoner påvirker sannsynligheter, ikke enkelthandlinger. Kallenavn som «kjærlighetshormonet» om oksytocin forenkler mer enn de forklarer."},
+{type:"rekke",del:"Stress og psykisk helse",tema:"Stress ifølge Lazarus",
+ tekst:"Sett stegene i Lazarus' stressmodell i rekkefølge.",
+ rekke:["En hendelse inntreffer","Primærvurdering: er dette en trussel?","Sekundærvurdering: har jeg det som skal til?","Mestring, problemfokusert eller emosjonsfokusert","Ny vurdering ut fra hvordan det gikk"],
+ forkl:"Ifølge Lazarus er det vurderingen som avgjør om noe blir stressende. I praksis kan de to vurderingene skje nesten samtidig; rekkefølgen er modellens. Menneskesinnet kaller dem primær og sekundær fortolkning."},
+{type:"rekke",del:"Kriser",tema:"Cullbergs faser",
+ tekst:"Sett Cullbergs krisefaser i rekkefølge.",
+ rekke:["Sjokkfasen","Reaksjonsfasen","Bearbeidingsfasen","Nyorienteringsfasen"],
+ forkl:"Fasene brukes som kart, ikke som trapp: mange går fram og tilbake, og fasene overlapper. Studier av sorg tyder på at mange er robuste fra starten (Bonanno mfl. 2002)."},
+{type:"koble",del:"Rus",tema:"Stoff og gruppe",
+ tekst:"Koble hvert stoff med gruppen det hører til.",
+ par:[["Alkohol","Sentraldempende"],["Kokain","Sentralstimulerende"],["Heroin","Opioid"],["LSD","Hallusinogen"],["Hasj","Cannabis"]],
+ forkl:"Gruppene sier noe om hvordan stoffet virker på nervesystemet. Blandingsrus med flere sentraldempende stoffer og opioider gir særlig høy risiko for overdose."},
+{type:"koble",del:"Bærekraft",tema:"Når kunnskap ikke blir handling",
+ tekst:"Koble hvert begrep med eksempelet som passer.",
+ par:[["Kognitiv dissonans","Hen flyr ofte, men sier at én tur ikke betyr noe"],
+      ["Psykologisk distanse","Klimaendringer oppleves som noe som angår andre, langt fram i tid"],
+      ["Løsningsaversjon","Hen avviser at problemet er alvorlig, fordi hen misliker tiltakene"],
+      ["Psykologisk reaktans","Hen spiser mer kjøtt i protest når skolen innfører kjøttfri dag"],
+      ["Sosial norm","Hen kildesorterer fordi alle naboene gjør det"]],
+ forkl:"Begrepene forklarer hvorfor kunnskap ikke alltid blir handling, og de peker mot tiltak: å gjøre bærekraftige valg nære, vanlige og frivillige."},
+{type:"rekke",del:"Bærekraft",tema:"Endring i trinn",
+ tekst:"Sett trinnene i den transteoretiske modellen i rekkefølge.",
+ rekke:["Føroverveielse","Overveielse","Forberedelse","Handling","Vedlikehold"],
+ forkl:"Ifølge modellen går vi fra å ikke se noe behov for endring, via å vurdere og planlegge, til å handle og holde fast ved den nye vanen. Tilbakefall er vanlig, og støtten for skarpt atskilte trinn er blandet."}
+];
+
+/* Rekkefølgen temaene vises i på forsiden. Temaer som ikke står her, havner sist. */
+const DEL_ORDER=["Vitenskap og metode","Perspektiver og faghistorie","Anvendt psykologi","Persepsjon og kognisjon","Hukommelse","Læring",
+  "Motivasjon, mestring og læringsstrategier","Personlighet","Arv og miljø","Utvikling og identitet","Evolusjonspsykologi",
+  "Nervesystemet og hjernen","Hormoner, sanser og hele mennesket","Stress og psykisk helse","Kriser","Rus","Bærekraft","Personlighet: fasetter"];
 
 /* ---------------- STATE ---------------- */
 const LS="psy1-vitenskap-fremdrift", LSB="psy1-vitenskap-bolker", LSM="psy1-svarform";
 function getMode(){ try{return localStorage.getItem(LSM)||"skriv"}catch(e){return "skriv"} }
 function setMode(m){ try{localStorage.setItem(LSM,m)}catch(e){} renderMode(); }
 function renderMode(){ const m=getMode(); [...$("modeSeg").children].forEach(b=>b.classList.toggle("on",b.dataset.mode===m)); }
-const DELER=[...new Set(B.map(b=>b.del))];
+const DELER=(()=>{ const ds=[...new Set(B.map(b=>b.del).concat(X.map(x=>x.del)))];
+  return DEL_ORDER.filter(d=>ds.includes(d)).concat(ds.filter(d=>!DEL_ORDER.includes(d))); })();
 const FLAT=[]; B.forEach((b,bi)=>b.q.forEach((q,qi)=>FLAT.push({b:bi,q:qi,i:FLAT.length})));
 /* Blandede runder (alle, tilfeldige, det du kan dårligst) bruker bare kjernen, ikke ekstrabolkene */
 const CORE=FLAT.filter(f=>!B[f.b].ekstra);
+/* Koble- og rekkefølgeoppgaver har id-en "x"+indeks i køen, ved siden av tallene for spørsmålene */
+const XID=X.map((x,i)=>"x"+i);
+const isX=id=>typeof id==="string"&&id.charAt(0)==="x";
+const xOf=id=>X[+String(id).slice(1)];
 let S=null;
 const $=id=>document.getElementById(id);
 const el=(t,c,x)=>{const e=document.createElement(t); if(c)e.className=c; if(x!=null)e.textContent=x; return e;};
@@ -793,26 +1092,41 @@ function makeSet(set){
   let ids;
   if(set==="all") ids=CORE.map(f=>f.i);
   else if(set==="random") ids=shuffle(CORE.map(f=>f.i)).slice(0,20);
+  else if(set==="oppg") ids=shuffle(XID.slice());
   else if(set==="weak"){ const best=bestOf();
     let pool=CORE.filter(f=>!(f.b in best)||best[f.b]<80);
     if(!pool.length) pool=CORE;
-    ids=shuffle(pool.map(f=>f.i)).slice(0,20); }
+    const xs=shuffle(XID.filter(id=>!(id in best)||best[id]<80)).slice(0,3);
+    ids=shuffle(pool.map(f=>f.i)).slice(0,20-xs.length).concat(xs); }
   else if(String(set).startsWith("t:")){ const d=set.slice(2);
-    ids=FLAT.filter(f=>B[f.b].del===d).map(f=>f.i); }
+    ids=FLAT.filter(f=>B[f.b].del===d).map(f=>f.i).concat(XID.filter(id=>xOf(id).del===d)); }
+  else if(isX(set)) ids=[set];
   else ids=FLAT.filter(f=>f.b===+set).map(f=>f.i);
   return {set:set, queue:ids.slice(), total:ids.length, ids:ids,
-          first:{}, done:0, cur:null, answered:false, mode:getMode()};
+          first:{}, xpct:{}, done:0, cur:null, answered:false, mode:getMode()};
 }
 
 /* ---------------- FORSIDE ---------------- */
+function renderIntro(){
+  const core=B.filter(b=>!b.ekstra), ekstraQ=B.filter(b=>b.ekstra).reduce((a,b)=>a+b.q.length,0);
+  const temaer=[...new Set(core.map(b=>b.del))].length;
+  $("homeSub").textContent=CORE.length+" flervalgsoppgaver i "+core.length+" bolker på fem, fordelt på "+temaer+" temaer. "+
+    "Alle fem spørsmålene i en bolk deler de samme fem alternativene. I tillegg "+X.length+" oppgaver der du kobler par "+
+    "eller setter ledd i riktig rekkefølge, og "+ekstraQ+" ekstraspørsmål som bare ligger i sine egne temaer.";
+  $("allBtn").textContent="Alle "+CORE.length;
+  $("oppgBtn").textContent="Koble og rekkefølge ("+X.length+")";
+}
 function renderHome(){
+  renderIntro();
   const root=$("bolkGrid"); root.innerHTML=""; const best=bestOf();
   DELER.forEach((d,di)=>{
     const sec=el("div","tema");
     const hr=el("div","row between");
     const bs=B.map((b,i)=>i).filter(i=>B[i].del===d);
+    const xs=XID.filter(id=>xOf(id).del===d);
     hr.appendChild(el("h3","",(di+1)+". "+d));
-    const all=el("button","btn ghost small","Hele temaet ("+bs.length*5+")");
+    const n=bs.reduce((a,i)=>a+B[i].q.length,0)+xs.length;
+    const all=el("button","btn ghost small","Hele temaet ("+n+")");
     all.style.padding="6px 12px"; all.dataset.set="t:"+d; hr.appendChild(all);
     sec.appendChild(hr);
     const g=el("div","grid");
@@ -821,6 +1135,14 @@ function renderHome(){
       btn.appendChild(el("b","", "Bolk "+b.n+": "+b.tema));
       btn.appendChild(el("span","", b.o.map(o=>o[0]).join(" · ")));
       if(best[i]!=null) btn.appendChild(el("span","done","Beste: "+best[i]+" %"));
+      g.appendChild(btn);
+    });
+    xs.forEach(id=>{ const x=xOf(id);
+      const btn=el("button","bolk"); btn.dataset.set=id;
+      const t=el("b"); t.appendChild(el("span","tag",x.type==="koble"?"Koble":"Rekkefølge"));
+      t.appendChild(document.createTextNode(x.tema)); btn.appendChild(t);
+      btn.appendChild(el("span","", x.type==="koble" ? "Koble "+x.par.length+" par" : "Sett "+x.rekke.length+" ledd i rekkefølge"));
+      if(best[id]!=null) btn.appendChild(el("span","done","Beste: "+best[id]+" %"));
       g.appendChild(btn);
     });
     sec.appendChild(g); root.appendChild(sec);
@@ -834,11 +1156,13 @@ function renderHome(){
   show("home");
 }
 function labelOf(set){
-  if(set==="all") return "alle 200";
+  if(set==="all") return "alle "+CORE.length;
   if(set==="random") return "20 tilfeldige";
   if(set==="weak") return "det du kan dårligst";
+  if(set==="oppg") return "alle koble- og rekkefølgeoppgaver";
   if(String(set).startsWith("t:")) return "temaet "+set.slice(2);
-  return "bolk "+B[+set].n+", "+B[+set].tema;
+  if(isX(set)){ const x=xOf(set); return x ? (x.type==="koble"?"koble":"rekkefølge")+": "+x.tema : "oppgave"; }
+  return B[+set] ? "bolk "+B[+set].n+", "+B[+set].tema : "bolk";
 }
 function show(id){ ["home","quiz","result"].forEach(x=>$(x).classList.toggle("hide",x!==id)); window.scrollTo(0,0); }
 
@@ -848,15 +1172,18 @@ function start(set){ S=makeSet(set); save(); next(); }
 function next(){
   if(!S.queue.length){ return finish(); }
   S.cur=S.queue[0]; S.answered=false;
+  /* Hopp over id-er som ikke finnes lenger (fremdrift lagret med en eldre versjon) */
+  if(isX(S.cur)?!xOf(S.cur):!FLAT[S.cur]){ S.queue.shift(); return next(); }
+  $("pTxt").textContent=S.done+" av "+S.total+" sitter";
+  $("pbar").style.width=(100*S.done/S.total)+"%";
+  $("fb").innerHTML=""; $("nextBtn").classList.add("hide");
+  S.hint=0;
+  if(isX(S.cur)) return renderTask(xOf(S.cur));
   const f=FLAT[S.cur], b=B[f.b], q=b.q[f.q];
   $("qPill").textContent="Bolk "+b.n;
   $("qTema").textContent=b.del+" · "+b.tema;
   $("qText").textContent=q[0];
-  $("pTxt").textContent=S.done+" av "+S.total+" sitter";
-  $("pbar").style.width=(100*S.done/S.total)+"%";
   const box=$("qOpts"); box.innerHTML="";
-  $("fb").innerHTML=""; $("nextBtn").classList.add("hide");
-  S.hint=0;
   if(S.mode==="skriv"){
     $("kbTxt").textContent="Enter for å svare og for neste.";
     const w=el("div","typein");
@@ -884,6 +1211,108 @@ function renderOpts(b,locked){
     if(locked) btn.disabled=true; else btn.onclick=()=>answer(i);
     box.appendChild(btn);
   });
+}
+
+/* ---------------- KOBLE OG REKKEFØLGE ---------------- */
+function renderTask(x){
+  const koble=x.type==="koble";
+  $("qPill").textContent=koble?"Koble sammen":"Rekkefølge";
+  $("qTema").textContent=x.del+" · "+x.tema;
+  $("qText").textContent=x.tekst;
+  $("kbTxt").textContent=koble?"Velg i hver liste, og trykk Sjekk.":"Flytt med pilene, og trykk Sjekk.";
+  const box=$("qOpts"); box.innerHTML="";
+  if(koble){
+    /* Den korteste siden havner i listene, så det valgte svaret er lesbart også på mobil.
+       Når de lange tekstene står fast, stokkes radene, så rekkefølgen ikke røper svaret. */
+    const snitt=a=>a.reduce((s,t)=>s+t.length,0)/a.length;
+    const snu=snitt(x.par.map(p=>p[1]))>snitt(x.par.map(p=>p[0]));
+    const rows=x.par.map(p=>({fast:snu?p[1]:p[0], svar:snu?p[0]:p[1]}));
+    if(snu) shuffle(rows);
+    const valg=shuffle(rows.map(r=>r.svar)), list=el("div","mlist");
+    rows.forEach((rw,i)=>{
+      const r=el("div","mrow"); r.dataset.svar=rw.svar;
+      const l=el("span","ml"+(snu?" lang":""),rw.fast); l.id="ml"+i; r.appendChild(l);
+      const s=el("select"); s.setAttribute("aria-labelledby","ml"+i);
+      s.appendChild(new Option("Velg …",""));
+      valg.forEach(t=>s.appendChild(new Option(t,t)));
+      r.appendChild(s); list.appendChild(r); });
+    box.appendChild(list);
+  } else {
+    const ord=x.rekke.map((t,i)=>i);
+    do{ shuffle(ord); } while(ord.length>1&&ord.every((v,i)=>v===i));
+    const list=el("div","rlist"); list.id="rlist";
+    ord.forEach(k=>list.appendChild(rItem(x.rekke[k],k)));
+    box.appendChild(list); numberItems();
+  }
+  const row=el("div","row"); row.style.marginTop="14px";
+  const go=el("button","btn","Sjekk"); go.type="button"; go.id="checkBtn"; go.onclick=()=>checkTask(x);
+  const msg=el("span","small muted"); msg.id="checkMsg";
+  row.appendChild(go); row.appendChild(msg); box.appendChild(row);
+  show("quiz");
+}
+function rItem(text,k){
+  const r=el("div","ritem"); r.dataset.k=k;
+  r.appendChild(el("span","rn",""));
+  r.appendChild(el("span","rt",text));
+  const mv=el("span","mv");
+  [["↑","Flytt opp: ",-1],["↓","Flytt ned: ",1]].forEach(([s,lab,dir])=>{
+    const b=el("button","",s); b.type="button"; b.setAttribute("aria-label",lab+text);
+    b.onclick=()=>moveItem(r,dir); mv.appendChild(b); });
+  r.appendChild(mv);
+  return r;
+}
+function moveItem(r,dir){
+  const list=r.parentNode;
+  if(dir<0&&r.previousElementSibling) list.insertBefore(r,r.previousElementSibling);
+  else if(dir>0&&r.nextElementSibling) list.insertBefore(r.nextElementSibling,r);
+  numberItems();
+  const [up,dn]=r.querySelectorAll(".mv button"); let f=dir<0?up:dn; if(f.disabled) f=dir<0?dn:up; f.focus();
+}
+function numberItems(){
+  const items=[...$("rlist").children];
+  items.forEach((r,i)=>{ r.querySelector(".rn").textContent=i+1;
+    const [up,dn]=r.querySelectorAll(".mv button"); up.disabled=i===0; dn.disabled=i===items.length-1; });
+}
+function fasitX(x){
+  return x.type==="koble" ? x.par.map(p=>p[0]+" → "+p[1]).join("; ") : x.rekke.map((t,i)=>(i+1)+". "+t).join(", ");
+}
+function checkTask(x){
+  if(S.answered) return;
+  let c=0, n;
+  if(x.type==="koble"){
+    const rows=[...$("qOpts").querySelectorAll(".mrow")]; n=rows.length;
+    if(rows.some(r=>!r.querySelector("select").value)){ $("checkMsg").textContent="Velg et svar i alle listene først."; return; }
+    rows.forEach(r=>{ const s=r.querySelector("select"), ok=s.value===r.dataset.svar;
+      s.disabled=true; r.classList.add(ok?"ok":"no");
+      if(ok) c++; else r.appendChild(el("span","fix","Riktig: "+r.dataset.svar)); });
+  } else {
+    const items=[...$("rlist").children]; n=items.length;
+    items.forEach((r,i)=>{ const k=+r.dataset.k, ok=k===i;
+      r.querySelectorAll("button").forEach(b=>b.disabled=true);
+      r.classList.add(ok?"ok":"no");
+      if(ok) c++; else r.querySelector(".rt").appendChild(el("span","fix"," (riktig plass: "+(k+1)+")")); });
+  }
+  S.answered=true; $("checkBtn").disabled=true; $("checkMsg").textContent="";
+  gradeTask(x,c,n);
+}
+function gradeTask(x,c,n){
+  const id=S.cur, ok=c===n;
+  if(!(id in S.first)){ S.first[id]=ok; S.xpct=S.xpct||{}; S.xpct[id]=Math.round(100*c/n); }
+  const fb=el("div","fb "+(ok?"ok":"no"));
+  fb.appendChild(el("b","", ok ? "Alt riktig" : c+" av "+n+" riktig"));
+  if(!ok&&x.type==="rekke") fb.appendChild(el("div","","Riktig rekkefølge: "+fasitX(x)));
+  const d=el("div","",x.forkl); d.style.marginTop="6px"; fb.appendChild(d);
+  S.queue.shift();
+  if(ok) S.done++;
+  else { S.queue.push(id);
+    const d2=el("div","small muted"); d2.style.marginTop="6px";
+    d2.textContent="Oppgaven kommer igjen senere i runden."; fb.appendChild(d2); }
+  $("fb").innerHTML=""; $("fb").appendChild(fb);
+  $("pTxt").textContent=S.done+" av "+S.total+" sitter";
+  $("pbar").style.width=(100*S.done/S.total)+"%";
+  const nb=$("nextBtn"); nb.classList.remove("hide");
+  nb.textContent=S.queue.length?"Neste":"Se resultat";
+  save(); nb.focus();
 }
 
 /* Felles retting. ok = riktig, note = ekstra linje i tilbakemeldingen */
@@ -937,36 +1366,37 @@ const ALIAS={
  "Observatøreffekt":["hawthorne effekten","hawthorneeffekt"],"Etterpåklokskapsskjevhet":["etterpåklokskap","hindsight bias"],
  "Forskerforventningseffekt":["forventningseffekt","rosenthal effekten"],"Fagfellevurdering":["peer review","fagfelle"],
  "William James":["james"],"Sigmund Freud":["freud"],"John B. Watson":["watson"],"Carl Rogers":["rogers"],"Lev Vygotskij":["vygotskij","vygotsky"],
- "Ovenfra og ned":["top down","ovenfra ned"],"Nedenfra og opp":["bottom up","nedenfra opp"],"Selektiv oppmerksomhet":["oppmerksomhet","selektiv persepsjon"],
- "Perseptuell beredskap":["perseptuelt sett","persepsjonsberedskap","perceptual set"],"Selvoppfyllende profeti":["pygmalioneffekten","pygmalion"],
+ "Ovenfra og ned":["top down","ovenfra ned","top down prosessering","topdown prosessering","top down prosess"],
+ "Nedenfra og opp":["bottom up","nedenfra opp","bottom up prosessering","bottomup prosessering","bottom up prosess"],"Selektiv oppmerksomhet":["oppmerksomhet","selektiv persepsjon"],
+ "Perseptuell beredskap":["perseptuelt sett","persepsjonsberedskap","perceptual set"],"Selvoppfyllende profeti":["pygmalioneffekten","pygmalion","rosenthaleffekten","rosenthal effekten"],
  "Stereotypi":["stereotyp","stereotypier"],"Fordom":["fordommer"],
- "Sensorisk register":["sensorisk minne","sensorisk hukommelse"],"Korttidsminne":["korttidshukommelse"],"Arbeidsminne":["arbeidshukommelse"],"Langtidsminne":["langtidshukommelse"],
+ "Sensorisk register":["sensorisk minne","sensorisk hukommelse"],"Korttidsminne":["korttidshukommelse"],"Arbeidsminne":["arbeidshukommelse","arbeidsminnemodellen"],"Langtidsminne":["langtidshukommelse"],
  "Episodisk hukommelse":["episodisk minne"],"Semantisk hukommelse":["semantisk minne"],"Prosedural hukommelse":["prosedyrehukommelse","prosedurelt minne","implisitt hukommelse"],
  "Rekonstruksjon":["rekonstruktiv hukommelse","rekonstruering"],
  "Ubetinget stimulus":["ubs","us","ubetinget stimuli"],"Betinget stimulus":["bs","cs","betinget stimuli"],"Betinget respons":["br","cr"],
- "Ekstinksjon":["utslukking"],"Modellæring":["observasjonslæring","sosial læring"],
- "Lært hjelpeløshet":["hjelpeløshet"],"Mestringstro":["mestringsforventning","self efficacy"],"Flyt":["flow"],
- "Attribusjon":["attribusjonsteori"],"Selvbestemmelsesteori":["sdt","self determination theory"],"Vekstorientert tankesett":["growth mindset","vekst tankesett","tankesett"],
+ "Ekstinksjon":["utslukking"],"Modellæring":["observasjonslæring","sosial læring","imitasjon"],
+ "Lært hjelpeløshet":["hjelpeløshet"],"Mestringstro":["mestringsforventning","self efficacy","positiv mestringsforventning"],"Flyt":["flow","flytopplevelse","flytsonen"],
+ "Attribusjon":["attribusjonsteori","attribuering"],"Selvbestemmelsesteori":["sdt","self determination theory"],"Vekstorientert tankesett":["growth mindset","vekst tankesett","tankesett"],
  "Gjenhenting":["testing","gjenhentingspraksis","aktiv gjenhenting","uthenting"],"Spredt øving":["spredt repetisjon","distribuert øving","spaced repetition"],
  "Åpenhet for erfaring":["åpenhet"],"Planmessighet":["samvittighetsfullhet"],"Medmenneskelighet":["omgjengelighet","vennlighet"],"Nevrotisisme":["emosjonell ustabilitet"],"Ekstroversjon":["utadvendthet"],
- "Selvbilde og idealselv":["selvbilde","idealselv","selvkongruens"],"Gjensidig determinisme":["resiprok determinisme"],"Superego":["overjeg"],"Id":["det"],
- "Polygent trekk":["polygen","polygenisitet"],"Eneggede tvillinger":["eneggede","eneggede tvillingene","monozygote"],"Ikke-delt miljø":["ikke delt miljø","unikt miljø"],
- "Samspill mellom gener og miljø":["gen miljø samspill","samspill"],"Korrelasjon mellom gener og miljø":["gen miljø korrelasjon"],
- "Diatese-stress-modellen":["diatese stress","sårbarhet stress modellen","sårbarhetsmodellen"],"Differensiell mottakelighet":["orkidé og løvetann"],
+ "Selvbilde og idealselv":["selvbilde","idealselv","selvkongruens"],"Superego":["overjeg"],"Id":["det"],
+ "Eneggede tvillinger":["eneggede","eneggede tvillingene","monozygote"],"Ikke-delt miljø":["ikke delt miljø","unikt miljø","udelt miljø"],
+ "Samspill mellom gener og miljø":["gen miljø samspill","samspill"],
+ "Diatese-stress-modellen":["diatese stress","sårbarhet stress modellen","sårbarhetsmodellen","stress sårbarhetsmodellen","stress sårbarhetsmodell"],
  "Den nærmeste utviklingssonen":["nærmeste utviklingssone","nus","proksimal utviklingssone"],"Fremmedsituasjonen":["strange situation","fremmedsituasjon"],
- "Moratorium":["identitetsmoratorium"],"Overtatt identitet":["overtatt","foreclosure","lånt identitet"],"Den generaliserte andre":["generaliserte andre","generalisert andre"],
- "Opphavsårsak":["ultimat årsak","ultimat forklaring"],"Røykvarslerprinsippet":["røykvarsler"],"Naturalistisk feilslutning":["naturalistisk feilslutning"],
- "Gjensidig altruisme":["resiprok altruisme","gjengjeld"],"Forberedt læring":["preparedness","biologisk beredskap"],
+ "Moratorium":["identitetsmoratorium","moratoriumfasen"],"Overtatt identitet":["overtatt","foreclosure","lånt identitet","forlukking","forlukket identitet"],"Den generaliserte andre":["generaliserte andre","generalisert andre"],
+ "Naturalistisk feilslutning":["naturalistisk feilslutning"],
+ "Forberedt læring":["preparedness","biologisk beredskap"],
  "Myelin":["myelinskjede","myelinskjeden"],"Aksjonspotensial":["nerveimpuls"],"Synapse":["synapsen","synapsespalten"],
  "Sympatisk nervesystem":["sympatikus"],"Parasympatisk nervesystem":["parasympatikus"],"Frontallappen":["pannelappen"],
- "Hypofysen":["hypofyse"],"Biopsykososial modell":["biopsykososial"],"Den biopsykososiale modellen":["biopsykososial modell","biopsykososial"],
- "Alarmfasen":["alarm","alarmreaksjon"],"Utmattelsesfasen":["utmattelse"],"Primærvurdering":["primær vurdering"],"Sekundærvurdering":["sekundær vurdering"],
- "Problemfokusert mestring":["problemfokusert"],"Emosjonsfokusert mestring":["emosjonsfokusert"],"Resiliens":["motstandskraft"],
+ "Hypofysen":["hypofyse"],"Den biopsykososiale modellen":["biopsykososial modell","biopsykososial"],
+ "Alarmfasen":["alarm","alarmreaksjon","alarmstadiet"],"Utmattelsesfasen":["utmattelse","utmattelsesstadiet"],
+ "Primærvurdering":["primær vurdering","primær fortolkning","primærfortolkning"],"Sekundærvurdering":["sekundær vurdering","sekundær fortolkning","sekundærfortolkning"],
+ "Problemfokusert mestring":["problemfokusert"],"Emosjonsfokusert mestring":["emosjonsfokusert","følelsesfokusert mestring","følelsesfokusert"],"Resiliens":["motstandskraft","motstandsdyktighet"],
  "Livskrise":["utviklingskrise","livsfasekrise"],"Posttraumatisk stresslidelse":["ptsd","posttraumatisk stress"],"Forlenget sorglidelse":["komplisert sorg"],
  "Psykososial førstehjelp":["psykologisk førstehjelp"],"Posttraumatisk vekst":["vekst"],
  "Belønningssystemet":["belønningssenteret","belønningsbanen"],"Reopptak":["reopptaket","gjenopptak"],
- "Insentiv-sensitisering":["incentive sensitization","sensitisering"],"Situasjonsbetinget toleranse":["betinget toleranse"],"Tosystemmodellen":["to system modellen","dobbeltsystemmodellen"]
- ,"Ego":["jeg"],"Toeggede tvillinger":["toeggede","dizygote"],
+ "Ego":["jeg"],"Toeggede tvillinger":["toeggede","dizygote"],
  "Gener velger miljø":["korrelasjon mellom gener og miljø","gen miljø korrelasjon"],
  "Orkidé og løvetann":["differensiell mottakelighet","orkidebarn","orkidébarn"],
  "Tilpasning":["adaptasjon"],"Altruisme":["uselviskhet"],"Universelle trekk":["universelle","universell"],
@@ -981,11 +1411,39 @@ const ALIAS={
  "Følsomhet":["ømhjertethet","ømhet","medfølelse"],"Plikttroskap":["pliktoppfyllelse","pliktfølelse"],"Betenksomhet":["overveielse"],
  "Prestasjonsstreben":["prestasjonsorientering","ambisjon"],
  "Dimensjon":["dimensjoner","hovedtrekk","domene"],"Fasett":["fasetter","deltrekk"],"Ledd":["utsagn","item"],
- "Reversert ledd":["reversert","omvendt ledd","speilvendt ledd"],"Ja-siging":["samtykketendens","ja tendens"]
+ "Reversert ledd":["reversert","omvendt ledd","speilvendt ledd"],"Ja-siging":["samtykketendens","ja tendens"],
+ /* Lærebokord fra Diseth, Menneskesinnet og Svendsen (samsvarsregisteret, 26.10.2026) */
+ "Eksperiment":["eksperimentell metode","eksperimentelle metoder"],
+ "Biologisk perspektiv":["biologisk psykologi"],"Psykodynamisk perspektiv":["psykoanalyse","psykoanalytisk perspektiv","psykoanalytisk","psykodynamikk"],
+ "Behavioristisk perspektiv":["behaviorisme","atferdsperspektiv"],"Kognitivt perspektiv":["kognitiv psykologi"],"Humanistisk perspektiv":["humanistisk psykologi","humanisme"],
+ "Skjema":["kognitivt skjema","mentale skjemaer"],"Chunking":["gruppering","gruppering av informasjon","klumping"],"Interferens":["interferensteorien"],
+ "Objektpermanens":["objektkonstans"],"Trygg tilknytning":["trygt tilknyttet","sikker tilknytning"],
+ "Arvbarhet":["arvelighet","arvelighetsgrad"],"Naturlig seleksjon":["naturlig utvalg"],"Seksuell seleksjon":["seksuelt utvalg","seksuell utvelgelse"],
+ "Amygdala":["mandelkjernen"],"Adrenalin":["epinefrin"],"Blindflekken":["blind flekk","den blinde flekken"],
+ "Stressor":["stressfaktor"],"Traumatisk krise":["akutt traumatisk krise"],
+ /* Bolk 48 til 55 */
+ "Klinisk psykologi":["klinisk"],"Arbeids- og organisasjonspsykologi":["arbeidspsykologi","organisasjonspsykologi","arbeids og organisasjonspsykologi"],
+ "Idrettspsykologi":["idrett","prestasjonspsykologi"],"Pedagogisk psykologi":["pedagogisk","skolepsykologi","opplæringspsykologi","skole og opplæringspsykologi"],
+ "Helsepsykologi":["helse"],
+ "Kognitiv atferdsterapi":["kat","kognitiv terapi","cbt"],"Fellesfaktorer":["g faktorer","fellesfaktorer i psykoterapi","felles faktorer"],
+ "Evidensbasert praksis":["kunnskapsbasert praksis","evidensbasert behandling"],"Eklektisk tilnærming":["eklektisk","eklektisisme"],"Gruppeterapi":["gruppebehandling"],
+ "Kognitiv dissonans":["dissonans"],"Sosial norm":["sosiale normer","norm","normer","sosial sammenligning"],
+ "Psykologisk distanse":["distanse","psykologisk avstand"],"Valgarkitektur":["dytting","nudging","nudge","dulting"],"Kunnskapsmangelmodellen":["kunnskapsmangel"],
+ "Hjernestammen":["hjernestamme"],"Lillehjernen":["lillehjerne","cerebellum"],"Bakhodelappen":["occipitallappen","oksipitallappen"],
+ "Tinninglappen":["temporallappen"],"Isselappen":["parietallappen"],
+ "Sentralstimulerende stoffer":["sentralstimulerende","stimulantia","stimulerende stoffer","stimulerende","stimulanter"],
+ "Sentraldempende stoffer":["sentraldempende","sedativer","dempende stoffer","dempende"],"Opioider":["opiater","opiat","opioid"],
+ "Hallusinogener":["hallusinogen","psykedelika","psykedeliske stoffer"],"Cannabis":["hasj","marihuana","thc"],
+ "Habituering":["tilvenning","habituasjon"],"Sensitisering":["sensitivisering","sensibilisering"],"Innsiktslæring":["innsikt","aha opplevelse"],
+ "Latent læring":["latent","skjult læring"],"Prøving og feiling":["prøve og feile","trial and error"],
+ "Loci-metoden":["loci","minnepalass","minnepalasset","stedsmetoden"],"Akronym":["akronymer","forbokstavord"],"Tankekart":["mind map","mindmap","begrepskart"],
+ "Elaborativ gjentakelse":["elaborering","elaborativ repetisjon","dyp bearbeiding","elaborativ bearbeiding"],
+ "Opprettholdende gjentakelse":["vedlikeholdende gjentakelse","vedlikeholdsrepetisjon","opprettholdende repetisjon","pugging","ren repetisjon"],
+ "Charles Darwin":["darwin"],"Ivan Pavlov":["pavlov"],"Wolfgang Köhler":["köhler","kohler","koehler"],"Noam Chomsky":["chomsky"],"René Descartes":["descartes"]
 };
 /* ---------- Skriv svaret ---------- */
 const STOP=new Set(["den","det","de","en","et","ei","the","a"]);
-function norm(t){ return t.toLowerCase().normalize("NFC").replace(/[«»"'’().,;:!?]/g," ").replace(/-/g," ").replace(/\s+/g," ").trim(); }
+function norm(t){ return t.toLowerCase().normalize("NFC").replace(/[«»"'’().,;:!?\/]/g," ").replace(/-/g," ").replace(/\s+/g," ").trim(); }
 function lev(a,b){ const m=a.length,n=b.length; if(!m) return n; if(!n) return m;
   let p=Array.from({length:n+1},(_,j)=>j);
   for(let i=1;i<=m;i++){ const c=[i]; for(let j=1;j<=n;j++)
@@ -995,23 +1453,88 @@ function tol(t){ const L=t.replace(/ /g,"").length; return L<=3?0:L<=7?1:2; }
 function commonTok(b){ const c={}; b.o.forEach(o=>new Set(norm(o[0]).split(" ")).forEach(w=>c[w]=(c[w]||0)+1));
   return Object.keys(c).filter(w=>c[w]>=3&&w.length>=4); }
 function strip(t,common){ return norm(t).split(" ").filter(w=>w&&!STOP.has(w)&&!common.some(c=>w.startsWith(c.slice(0,Math.max(4,c.length-1))))).join(" "); }
-function variants(label,common){
-  const v=new Set(), n=norm(label);
-  v.add(n.replace(/ /g,""));
-  const noPar=label.replace(/\(.*?\)/g,""); v.add(norm(noPar).replace(/ /g,""));
-  const par=(label.match(/\((.*?)\)/)||[])[1]; if(par) v.add(norm(par).replace(/ /g,""));
-  const st=strip(noPar,common); if(st) v.add(st.replace(/ /g,""));
-  if(/ og /.test(noPar)) noPar.split(/ og /).forEach(x=>{ const y=strip(x,common); if(y.length>=5) v.add(y.replace(/ /g,"")); });
-  (ALIAS[label]||[]).forEach(a=>v.add(norm(a).replace(/ /g,"")));
-  v.delete(""); return [...v];
+/* Bøyinger og bok-ulikheter. Hvert ord gjøres om i tre trinn før sammenligning:
+   1) aksenter foldes (é, ö, ü), 2) ordledd som betyr det samme i ulike lærebøker gjøres like
+   (hukommelse = minne, følelse = emosjon, -asjon = -ering, -istisk = -isme, -stadiet = -fase),
+   3) bøyingsendelser fjernes med en norsk stemmer etter Snowball-reglene (synapsene = synapse).
+   Generiske etterledd som -teorien, -modellen og -fasen kan i tillegg utelates. Svaret
+   sammenlignes både i gammel form (ordene satt sammen) og i stammeform, med samme toleranse. */
+const FOLD={"é":"e","è":"e","ê":"e","ë":"e","á":"a","à":"a","â":"a","ü":"u","ö":"ø","ä":"æ","ó":"o","ò":"o","ô":"o","í":"i"};
+const LIK=[[/hukommelse/g,"minne"],[/følelses/g,"emosjons"],[/følelse/g,"emosjon"],[/asjon(en|ene|er)?$/,"ering"],
+  [/(istiske|istisk|istene|isten|ister|ist)$/,"isme"],[/(stadiene|stadier|stadiet|stadium)$/,"fase"]];
+const VOK="aeiouyæøå";
+const END1=["hetenes","hetene","hetens","heten","heter","endes","edes","enes","ende","ande","ene","ane","ede","ens","ers","ets",
+  "het","ast","en","ar","er","as","es","et","a","e"];
+const END3=["hetslov","eleg","elig","elov","slov","leg","eig","lig","els","lov","ig"];
+function stem(w){
+  if(w.length<4) return w;
+  let r=w.length;
+  for(let i=1;i<w.length;i++) if(!VOK.includes(w[i])&&VOK.includes(w[i-1])){ r=i+1; break; }
+  r=Math.max(r,3);
+  const s1=END1.find(s=>w.endsWith(s)&&w.length-s.length>=r);
+  if(s1) w=w.slice(0,-s1.length);
+  else if(/erte?$/.test(w)&&w.length-(w.endsWith("erte")?4:3)>=r) w=w.replace(/erte?$/,"er");
+  else if(w.endsWith("s")&&w.length-1>=r){ const p=w[w.length-2], q=w[w.length-3]||"";
+    if("bcdfghjlmnoprtvyz".includes(p)||(p==="k"&&!VOK.includes(q))) w=w.slice(0,-1); }
+  if(/[dv]t$/.test(w)&&w.length-1>=r) w=w.slice(0,-1);
+  const s3=END3.find(s=>w.endsWith(s)&&w.length-s.length>=r);
+  if(s3) w=w.slice(0,-s3.length);
+  return w;
+}
+function canonWord(w){
+  w=w.replace(/[éèêëáàâüöäóòôí]/g,c=>FOLD[c]);
+  if(w.length>5) LIK.forEach(([re,to])=>{ w=w.replace(re,to); });
+  return stem(w);
+}
+const HALE=/(teoriene|teorien|teorier|teori|modellene|modellen|modeller|modell|metodene|metoden|metoder|metode|effekten|effekt|prosesseringen|prosessering|prosessen|prosess|fasene|fasen|faser|fase|stadiet|stadium)$/;
+function utenHale(words){
+  if(!words.length) return null;
+  const last=words[words.length-1], m=last.match(HALE); if(!m) return null;
+  const rest=last.slice(0,last.length-m[0].length), out=words.slice(0,-1); if(rest) out.push(rest);
+  return out.join("").length>=5 ? out : null;
+}
+/* Nøkler for én tekst: [0, ordene satt sammen] som før, og [1, stammene satt sammen] */
+function keysOf(s){
+  const out=[];
+  const add=w=>{ if(!w.length) return; out.push([0,w.join("")]);
+    const ws=w.filter(x=>!STOP.has(x)); if(ws.length) out.push([1,ws.map(canonWord).join("")]); };
+  const words=s.split(" ").filter(Boolean); add(words);
+  const t=utenHale(words); if(t) add(t);
+  return out;
+}
+function forms(label,common){
+  const f=new Set(), noPar=label.replace(/\(.*?\)/g,"");
+  f.add(norm(label)); f.add(norm(noPar));
+  const par=(label.match(/\((.*?)\)/)||[])[1]; if(par) f.add(norm(par));
+  const st=strip(noPar,common); if(st) f.add(st);
+  if(/ og /.test(noPar)) noPar.split(/ og /).forEach(x=>{ const y=strip(x,common); if(y.length>=5) f.add(y); });
+  /* Personnavn: etternavnet alene godtas */
+  const ws=noPar.trim().split(/\s+/);
+  if(ws.length>=2&&ws.length<=3&&ws.every(w=>/^[A-ZÆØÅÉÖÜ]/.test(w))){ const sn=norm(ws[ws.length-1]); if(sn.length>=4) f.add(sn); }
+  (ALIAS[label]||[]).forEach(a=>f.add(norm(a)));
+  f.delete(""); return [...f];
+}
+/* Nøklene for alternativene i en bolk regnes ut én gang */
+function blockKeys(b){
+  if(b._k) return b._k;
+  const common=commonTok(b);
+  b._k={common:common, opts:b.o.map(o=>{ const seen=new Set(), out=[];
+    forms(o[0],common).forEach(f=>keysOf(f).forEach(([k,v])=>{ const id=k+"|"+v; if(v&&!seen.has(id)){ seen.add(id); out.push([k,v]); } }));
+    return out; })};
+  return b._k;
 }
 function matchIdx(typed,b){
-  const common=commonTok(b), raw=norm(typed).replace(/ /g,""), st=strip(typed,common).replace(/ /g,"");
-  if(!raw) return -1;
-  let best=-1, bd=1e9;
-  b.o.forEach((o,i)=>variants(o[0],common).forEach(v=>{
-    [raw,st].forEach(t=>{ if(!t) return; const d=lev(t,v); if(d>0&&t[0]!==v[0]) return; if(d<=tol(v)&&d<bd){bd=d;best=i;} }); }));
-  return best;
+  const bk=blockKeys(b), tk=[];
+  const tf=new Set([norm(typed)]); const st=strip(typed,bk.common); if(st) tf.add(st);
+  tf.forEach(f=>keysOf(f).forEach(k=>tk.push(k)));
+  if(!tk.length) return -1;
+  const per=bk.opts.map(keys=>{ let best=1e9;
+    keys.forEach(([kind,v])=>tk.forEach(([kt,t])=>{ if(kt!==kind||best===0) return; const d=lev(t,v);
+      if(d>0&&t[0]!==v[0]) return; if(d<=tol(v)&&d<best) best=d; }));
+    return best; });
+  const m=Math.min(...per); if(m>=1e9) return -1;
+  const hits=per.map((d,i)=>d===m?i:-1).filter(i=>i>=0);
+  return (hits.length===1||m===0) ? hits[0] : -1;
 }
 function showHint(){
   if(S.answered) return;
@@ -1058,24 +1581,31 @@ function goNext(){
 
 /* ---------------- RESULTAT ---------------- */
 function finish(){
-  const ids=S.ids, n=ids.length;
+  const ids=S.ids.filter(i=>isX(i)?!!xOf(i):!!FLAT[i]), n=ids.length;
   const ok=ids.filter(i=>S.first[i]).length;
-  const pct=Math.round(100*ok/n);
+  const pct=n?Math.round(100*ok/n):0;
   $("rScore").textContent=ok+" av "+n+" på første forsøk";
   $("rSub").textContent=labelOf(S.set).charAt(0).toUpperCase()+labelOf(S.set).slice(1)+". "+pct+" prosent.";
   $("rBar").style.width=pct+"%";
+  const qs=ids.filter(i=>!isX(i)), xs=ids.filter(isX);
   if(/^\d+$/.test(String(S.set))) saveBest(+S.set,pct);
-  else { const byB={}; ids.forEach(i=>{const f=FLAT[i];(byB[f.b]=byB[f.b]||[]).push(i);});
+  else { const byB={}; qs.forEach(i=>{const f=FLAT[i];(byB[f.b]=byB[f.b]||[]).push(i);});
     Object.keys(byB).forEach(bi=>{ if(byB[bi].length===B[bi].q.length){
       saveBest(+bi,Math.round(100*byB[bi].filter(i=>S.first[i]).length/byB[bi].length)); } }); }
+  /* Koble og rekkefølge: beste skår er andelen riktige ledd på første forsøk */
+  xs.forEach(id=>{ const p=S.xpct&&S.xpct[id]; if(p!=null) saveBest(id,p); });
 
   const weak=ids.filter(i=>!S.first[i]);
   const w=$("rWeak"); w.innerHTML="";
   if(!weak.length){ $("rWeakCard").classList.add("hide"); }
   else{
     $("rWeakCard").classList.remove("hide");
+    weak.filter(isX).forEach(id=>{ const x=xOf(id);
+      const p=el("p","small"); p.style.margin=".4em 0";
+      p.appendChild(el("b","",(x.type==="koble"?"Koble":"Rekkefølge")+": "+x.tema)); w.appendChild(p);
+      const li=el("div","small muted"); li.style.margin="0 0 4px 0"; li.textContent="→ "+fasitX(x); w.appendChild(li); });
     const byB={};
-    weak.forEach(i=>{const f=FLAT[i]; (byB[f.b]=byB[f.b]||[]).push(f);});
+    weak.filter(i=>!isX(i)).forEach(i=>{const f=FLAT[i]; (byB[f.b]=byB[f.b]||[]).push(f);});
     Object.keys(byB).forEach(bi=>{
       const b=B[bi];
       const p=el("p","small"); p.style.margin=".4em 0";
@@ -1091,6 +1621,11 @@ function finish(){
   const t=$("rTable"); t.innerHTML="";
   const hr=el("tr"); ["Bolk","Spørsmål","Riktig svar"].forEach(h=>hr.appendChild(el("th","",h))); t.appendChild(hr);
   ids.forEach(i=>{
+    if(isX(i)){ const x=xOf(i), tr=el("tr");
+      tr.appendChild(el("td","",x.type==="koble"?"Koble":"Rekke"));
+      const td=el("td","",x.tekst); if(!S.first[i]) td.style.color="var(--err)"; tr.appendChild(td);
+      const ta=el("td","",fasitX(x)); ta.style.fontSize=".82rem"; tr.appendChild(ta);
+      t.appendChild(tr); return; }
     const f=FLAT[i], b=B[f.b], q=b.q[f.q];
     const tr=el("tr");
     tr.appendChild(el("td","",String(b.n)));
@@ -1126,7 +1661,51 @@ document.addEventListener("keydown",e=>{
   else if(e.key==="Enter"||(e.key===" "&&!typing)){ if(S.answered&&!(document.activeElement&&document.activeElement.tagName==="BUTTON"&&document.activeElement.id!=="nextBtn")){ e.preventDefault(); goNext(); } }
 });
 
+/* ---------------- SELVSJEKK ----------------
+   Åpne siden med ?sjekk etter redigering. Sjekker at hvert alternativ er riktig nøyaktig én gang,
+   at alternativet og hvert synonym bare godtas for sitt eget alternativ, at vanlige bøyinger ikke
+   treffer et annet alternativ, at hver ALIAS-nøkkel finnes, og at koble- og rekkefølgeoppgavene er gyldige. */
+function selvsjekk(){
+  const feil=[], labels=new Set(), nr=new Set();
+  B.forEach(b=>{
+    const navn="Bolk "+b.n;
+    if(nr.has(b.n)) feil.push(navn+": nummeret er brukt før"); nr.add(b.n);
+    if(b.o.length!==5||b.q.length!==5) feil.push(navn+": skal ha fem alternativer og fem spørsmål");
+    if(b.q.map(q=>q[1]).sort().join("")!=="01234") feil.push(navn+": hvert alternativ skal være riktig nøyaktig én gang");
+    if(new Set(b.o.map(o=>o[0])).size!==b.o.length) feil.push(navn+": to alternativer har samme tekst");
+    b.q.forEach((q,k)=>{ if(!q[0]||!q[2]) feil.push(navn+", spørsmål "+(k+1)+": mangler tekst eller begrunnelse"); });
+    b.o.forEach((o,i)=>{ labels.add(o[0]);
+      [o[0]].concat(ALIAS[o[0]]||[]).forEach(p=>{ const m=matchIdx(p,b);
+        if(m!==i) feil.push(navn+": «"+p+"» gir "+(m<0?"ingen treff":"«"+b.o[m][0]+"»")+", skulle gitt «"+o[0]+"»"); });
+      const ord=norm(o[0].replace(/\(.*?\)/g,"")).split(" "), sist=ord.pop();
+      ["en","et","er","ene","e","s"].forEach(s=>{ const p=ord.concat(sist+s).join(" "), m=matchIdx(p,b);
+        if(m>=0&&m!==i) feil.push(navn+": bøyingen «"+p+"» gir «"+b.o[m][0]+"»"); });
+    });
+  });
+  Object.keys(ALIAS).forEach(k=>{ if(!labels.has(k)) feil.push("ALIAS-nøkkelen «"+k+"» finnes ikke som alternativ"); });
+  X.forEach((x,i)=>{ const navn="Oppgave x"+i+" ("+x.tema+")";
+    if(!x.del||!x.tema||!x.tekst||!x.forkl) feil.push(navn+": mangler tema, tekst eller forklaring");
+    if(x.type==="koble"){
+      if(!x.par||x.par.length<3) feil.push(navn+": trenger minst tre par");
+      else if(new Set(x.par.map(p=>p[0])).size!==x.par.length||new Set(x.par.map(p=>p[1])).size!==x.par.length) feil.push(navn+": to par har samme tekst"); }
+    else if(x.type==="rekke"){
+      if(!x.rekke||x.rekke.length<3) feil.push(navn+": trenger minst tre ledd");
+      else if(new Set(x.rekke).size!==x.rekke.length) feil.push(navn+": to ledd har samme tekst"); }
+    else feil.push(navn+": ukjent type «"+x.type+"»");
+  });
+  return feil;
+}
+
 renderHome();
+if(/[?&]sjekk/.test(location.search)){
+  const t0=performance.now(), feil=selvsjekk(), ms=Math.round(performance.now()-t0);
+  const box=el("div","fb chk "+(feil.length?"no":"ok"));
+  box.appendChild(el("b","",feil.length ? "Selvsjekk: "+feil.length+" avvik" :
+    "Selvsjekk: alt i orden ("+B.length+" bolker, "+Object.keys(ALIAS).length+" synonymlister, "+X.length+" koble- og rekkefølgeoppgaver, "+ms+" ms)"));
+  feil.forEach(f=>box.appendChild(el("div","small",f)));
+  $("home").insertBefore(box,$("home").firstChild);
+  console.log("Selvsjekk:", feil.length ? feil : "alt i orden");
+}
 (function(){ const m=location.hash.match(/^#tema=(.+)$/); if(!m) return;
   const d=decodeURIComponent(m[1]); if(DELER.includes(d)){ history.replaceState(null,"",location.pathname); start("t:"+d); } })();
 </script>
