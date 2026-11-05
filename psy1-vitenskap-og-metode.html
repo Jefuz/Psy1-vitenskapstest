@@ -1021,8 +1021,10 @@ function showHint(){
   if(S.hint===1){ ht.innerHTML=""; ht.appendChild(document.createTextNode("Begynner på "));
     const c=el("code","",lab.split(" ").map(w=>w[0]+"_".repeat(w.length-1)).join("  ")); ht.appendChild(c); }
   else { if(!(S.cur in S.first)) S.first[S.cur]=false;
-    ht.textContent="Alternativene er vist. Velg ett. Spørsmålet teller ikke som riktig på første forsøk.";
-    renderOpts(b); $("hintBtn").disabled=true; }
+    /* renderOpts tømmer qOpts, også skrivefeltet og hintlinja, så beskjeden legges inn etter alternativene */
+    renderOpts(b);
+    const ht2=el("div","hint","Alternativene er vist. Velg ett. Spørsmålet teller ikke som riktig på første forsøk.");
+    ht2.id="hintTxt"; $("qOpts").appendChild(ht2); }
 }
 function answerText(val){
   if(S.answered) return;
