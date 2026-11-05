@@ -36,6 +36,7 @@ github.com, og kjør `git push -u origin main`. Slå deretter på Pages fra
 |---|---|
 | `psy1-vitenskap-og-metode.html` | Hele testen (filnavnet er beholdt så gamle lenker virker): spørsmål, alternativer, forklaringer, øvingslogikk og resultatside |
 | `sensorkort.html` | 18 sensorkort til muntlig øving (ett per tema, pluss tre om personlighetstester, personlighet og psykisk helse, og personlighet på tvers av faget): trekning uten gjentak, sensorvisning og joker som skjules for eksaminanden, tidtaker (7 og 4 min), utskrift av alle kort, og lenke til samme tema i testen (`#tema=<del>`). Kort kan åpnes direkte med `#kort=<nr>`. Trukne kort lagres i `localStorage` under `psy1-sensorkort-trukket`. |
+| `tester/` | `sjekk.js` (statisk sjekk av data, stil og tellinger) og `spor.js` (atferdsspor i nettleser mot forrige commit), se Tester |
 | `index.html` | Videresending fra rot-URL til testen |
 | `.nojekyll` | Slår av Jekyll-prosessering på GitHub Pages |
 
@@ -52,8 +53,8 @@ github.com, og kjør `git push -u origin main`. Slå deretter på Pages fra
 - `o[i][0]` er alternativteksten, `o[i][1]` er kortforklaringen som vises hvis
   eleven velger dette alternativet feil.
 - `q[i][1]` er indeksen til riktig alternativ (0 til 4, altså A til E).
-- Hver bolk bruker hvert alternativ som riktig svar nøyaktig én gang. Testen i
-  `/tmp`-skriptet sjekker denne invarianten; behold den ved redigering.
+- Hver bolk bruker hvert alternativ som riktig svar nøyaktig én gang. `tester/sjekk.js`
+  sjekker denne invarianten; behold den ved redigering.
 
 - `del` er temaet bolken hører til. Forsiden grupperer bolkene etter `del` i den
   rekkefølgen temaene først dukker opp. Bolker uten `del` havner under Vitenskap og metode.
@@ -128,6 +129,24 @@ ADBEC  BEACD  CABED  EADBC  DAECB  CEADB  CAEBD
 
 Forms-versjonen «Psy-1 intro quiz» har bare bolk 1 til 12, med samme fasit og
 rekkefølge som her.
+
+## Tester
+
+Kjøres fra repo-rota før hver push:
+
+- `node tester/sjekk.js` sjekker dataene uten nettleser: fem alternativer og fem spørsmål per
+  bolk, at hvert alternativ er riktig nøyaktig én gang, stilreglene (ingen asterisk, tankestrek
+  eller markdown-overskrift), at hvert alternativ og hvert synonym i `ALIAS` bare godtas for sitt
+  eget alternativ, at tallene på forsiden og fasiten her stemmer med testen, og at sensorkortene
+  lenker til temaer som finnes. Den varsler om synonymer uten alternativ og om kortforklaringer
+  som gjentar ord fra begrepet. Feil gir exit-kode 1.
+- `node tester/spor.js` kjører hele testen i hodeløs Chromium (Playwright) og sammenligner med
+  forrige commit: hver bolk i begge svarformer, hvert tema, de blandede rundene, fortsett senere,
+  tastatur, `#tema=`-lenke og nullstilling. Svarene er faste (noen feil, noen med hint, noen med
+  «Jeg mente det samme»), og `Math.random` er låst, så alt som finnes i begge versjoner skal gi
+  identisk spor med mindre endringen er tilsiktet. Sidefeil i nettleseren gir alltid feil.
+  `--mot <ref>` sammenligner mot en annen commit, `--tillat <scenario,...>` godtar kjente
+  endringer, `--lagre <fil>` skriver hele sporet.
 
 ## Lokal utvikling
 
