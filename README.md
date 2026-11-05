@@ -4,8 +4,9 @@
 på fem, fordelt på 15 temaer, der alle fem spørsmålene i en bolk deler de samme fem
 alternativene. Bolk 1 til 12 er den opprinnelige testen i vitenskap og metode (økt 1A),
 uendret. Bolk 13 til 40 dekker resten av faget, to bolker per tema. Bolk 41 til 47 er
-ekstraoppgaver om fasettene i femfaktormodellen (temaet «Personlighet: fasetter»), og de er
-ikke med i de blandede rundene. Ren statisk HTML/CSS/JS
+ekstraoppgaver om fasettene i femfaktormodellen (temaet «Personlighet: fasetter»), og bolk
+48 til 54 er en fordypning i evolusjonspsykologi (temaet «Evolusjonspsykologi: fordypning»).
+Ekstrabolkene er ikke med i de blandede rundene. Ren statisk HTML/CSS/JS
 uten byggverktøy, samme mønster som `Politikk-test`.
 
 Testen er et øvingsverktøy, ikke en vurdering. Ingen data forlater nettleseren.
@@ -42,7 +43,7 @@ github.com, og kjør `git push -u origin main`. Slå deretter på Pages fra
 
 ## Datamodell (alt ligger i `psy1-vitenskap-og-metode.html`)
 
-Én array `B` med 47 bolker (40 i kjernen og 7 ekstra):
+Én array `B` med 54 bolker (40 i kjernen og 14 ekstra):
 
 ```js
 {n:5, del:"Vitenskap og metode", tema:"Sammenheng og årsak",
@@ -117,14 +118,15 @@ Knappen «Nullstill fremdrift» sletter begge.
 
 ## Fasit
 
-Riktig alternativ per spørsmål, bolk 1 til 47:
+Riktig alternativ per spørsmål, bolk 1 til 54:
 
 ```
 CAEBD  ACDEB  ACBDE  ACBDE  CADEB  ADBCE  ABCDE  ABDCE  CABDE  ABCDE
 BACDE  ABCDE  BCDEA  CDEAB  DAEBC  DAEBC  EDACB  EBDCA  CEADB  BDEAC
 BEDAC  EABDC  BECDA  DAEBC  DEABC  BDECA  DACEB  CBEAD  BDEAC  EDABC
 CEADB  CAEBD  EBACD  DABEC  DACBE  ECADB  EBADC  BDEAC  DBEAC  BEADC
-ADBEC  BEACD  CABED  EADBC  DAECB  CEADB  CAEBD
+ADBEC  BEACD  CABED  EADBC  DAECB  CEADB  CAEBD  CEADB  BEADC  CAEBD
+BDAEC  DAECB  BECAD  ECADB
 ```
 
 Forms-versjonen «Psy-1 intro quiz» har bare bolk 1 til 12, med samme fasit og
