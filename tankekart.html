@@ -49,8 +49,7 @@
   .edge circle:not(.treff){fill:#fff;stroke:#8a93a8;stroke-width:1.5}
   .edge text{font-size:11px;font-weight:700;fill:var(--ink);text-anchor:middle;pointer-events:none}
   .edge{cursor:pointer}
-  .edge.koble path{stroke:#c2410c;stroke-dasharray:7 4}
-  .edge.koble circle:not(.treff){stroke:#c2410c}
+  .edge.on.inn path{stroke-dasharray:7 4}
   .edge.skjult{display:none}
   .edge.skjult.vis{display:inline}
   .edge.on path,.edge.on circle:not(.treff){stroke:var(--accent)}
@@ -66,8 +65,7 @@
   ol.alle{padding-left:1.6em;margin:8px 0 0}
   ol.alle li{margin:0 0 10px}
   ol.alle q{quotes:"«" "»"}
-  .merke{font-size:.8rem;color:#c2410c;font-weight:600;margin-left:6px}
-  .key .strek::before{width:22px;height:0;border-radius:0;border:0;border-top:2px dashed #c2410c;vertical-align:4px}
+  .key .strek::before{width:22px;height:0;border-radius:0;border:0;border-top:2px dashed var(--accent);vertical-align:4px}
   .key .skjul::before{display:none}
   .hide{display:none}
   .disc{background:#fff8e9;border:1px solid #f3e2b8;border-radius:12px;padding:12px 14px;
@@ -106,16 +104,12 @@
       <span style="--c:var(--per);--l:var(--perl)">Person, utvikling og helse</span>
       <span style="--c:var(--kog);--l:var(--kogl)">Tanke og læring</span>
       <span style="--c:var(--gru);--l:var(--grul)">Grunnlaget for faget</span>
-      <span class="strek">Stiplet: sensorkortet spør om denne koblingen</span>
-      <span class="skjul">Trykk på et tema for å se flere koblinger</span>
+      <span class="strek">Trykk på et tema for å se alle koblingene: heltrukne piler går derfra, stiplede går dit</span>
     </div>
     <svg id="kart" viewBox="0 0 1140 650" role="group" aria-label="Tankekart over temaene i Psykologi 1">
       <defs>
         <marker id="pil" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="#8a93a8"/>
-        </marker>
-        <marker id="pilK" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="#c2410c"/>
         </marker>
         <marker id="pilOn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="#3f51b5"/>
@@ -156,7 +150,6 @@
       <button id="popLukk" aria-label="Lukk">×</button>
       <div id="popTittel"></div>
       <q id="popTekst" style="display:block"></q>
-      <p id="popKoble" class="small hide" style="margin:-6px 0 16px"></p>
       <div class="row between">
         <button class="btn ghost small" id="popForrige">← Forrige</button>
         <span class="muted small hint">Piltastene blar, Esc lukker</span>
@@ -281,23 +274,23 @@ const E=[
    s:"Ifølge Lazarus avgjør vurderingen om noe blir stress: hvor truende det er, og om vi har ressurser til å mestre det. Her kommer mestringstro inn."},
   {f:"met",t:"arv",
    s:"Tvilling- og adopsjonsstudier er metodene som skiller arv fra miljø, og de bygger på antakelser som kan kritiseres, for eksempel at tvillingpar vokser opp i like miljøer."},
-  {f:"ner",t:"lae",k:11,via:[[685,520],[685,320]],
+  {f:"ner",t:"lae",via:[[685,520],[685,320]],
    s:"Hebbs regel sier at celler som fyrer sammen, kobles sammen, og langtidspotensiering er den biologiske siden av at vi lærer."},
-  {f:"mot",t:"rus",k:6,via:[[670,150],[670,325]],
+  {f:"mot",t:"rus",via:[[670,150],[670,325]],
    s:"Forklaringsstil kan avgjøre om et glipp blir et tilbakefall: den som tenker «jeg klarer det aldri», gir lettere opp."},
-  {f:"arv",t:"str",k:8,
+  {f:"arv",t:"str",
    s:"Diatese-stress-modellen sier at lidelse oppstår når en medfødt sårbarhet møter belastninger, og den kobler arv og miljø."},
-  {f:"per",t:"str",k:17,
+  {f:"per",t:"str",
    s:"Høy nevrotisisme kan ses som en sårbarhet i diatese-stress-modellen, fordi de samme belastningene da kan gi sterkere reaksjoner."},
-  {f:"psp",t:"ner",k:2,
+  {f:"psp",t:"ner",
    s:"Nevrologien bygger på det biologiske perspektivet: atferd og opplevelse forklares med det som skjer i nervesystemet."},
-  {f:"huk",t:"ner",k:4,via:[[905,60],[905,500],[700,500]],
+  {f:"huk",t:"ner",via:[[905,60],[905,500],[700,500]],
    s:"Pasienten H.M. viste at hippocampus trengs for å danne nye eksplisitte minner, men ikke for å lære nye ferdigheter."},
-  {f:"kog",t:"per",k:16,via:[[960,315],[400,315]],
+  {f:"kog",t:"per",via:[[960,315],[400,315]],
    s:"Barnum-effekten er en tankefeil: vage beskrivelser føles treffende fordi vi legger merke til det som passer."},
-  {f:"met",t:"rus",k:1,
+  {f:"met",t:"rus",
    s:"Sammenhengen mellom cannabis og psykose er et skoleeksempel på korrelasjon: forskerne er uenige om retningen, slik Di Forti og Gage illustrerer."},
-  {f:"evo",t:"kog",k:10,via:[[400,135],[970,135]],
+  {f:"evo",t:"kog",via:[[400,135],[970,135]],
    s:"Ifølge røykvarslerprinsippet har det trolig vært billigere å se en fare som ikke var der enn å overse en som var der, og det kan forklare at persepsjonen tar feil i forsiktig retning."},
   {f:"kri",t:"met",skjult:true,via:[[215,60],[215,495]],
    s:"Bonanno fulgte etterlatte over tid og fant at 45,9 prosent hadde lite plager hele veien. Det viser hvorfor vi trenger studier som følger alle, ikke bare dem som søker hjelp."},
@@ -380,8 +373,8 @@ E.slice().sort((a,b)=>(!!a.skjult-!!b.skjult)||(a.L-b.L)).forEach(e=>{
   plassert.push(best); e.m=best;
 });
 E.forEach(e=>{
-  e.mk=e.k?"url(#pilK)":"url(#pil)";
-  const g=el("g",{class:"edge"+(e.k?" koble":"")+(e.skjult?" skjult":""),tabindex:"0",role:"button","aria-label":"Overgang "+e.n+": "+NAVN[e.f]+" til "+NAVN[e.t]},gE);
+  e.mk="url(#pil)";
+  const g=el("g",{class:"edge"+(e.skjult?" skjult":""),tabindex:"0",role:"button","aria-label":"Overgang "+e.n+": "+NAVN[e.f]+" til "+NAVN[e.t]},gE);
   e.path=el("path",{d:bane(e.pts),"marker-end":e.mk},g);
   const [mx,my]=e.m;
   el("circle",{cx:mx,cy:my,r:10},g);
@@ -404,7 +397,7 @@ T.forEach(t=>{
 function nullstill(){
   svg.classList.remove("dim");
   T.forEach(t=>t.g2.classList.remove("hit","sel"));
-  E.forEach(e=>{e.g.classList.remove("on","vis");e.path.setAttribute("marker-end",e.mk);});
+  E.forEach(e=>{e.g.classList.remove("on","vis","inn");e.path.setAttribute("marker-end",e.mk);});
 }
 function tenn(e){e.g.classList.add("on","vis");e.path.setAttribute("marker-end","url(#pilOn)");byId[e.f].g2.classList.add("hit");byId[e.t].g2.classList.add("hit");}
 const lenker=t=>{
@@ -422,7 +415,7 @@ const overgang=e=>{
 function velgTema(t){
   nullstill(); svg.classList.add("dim"); t.g2.classList.add("hit","sel");
   const ut=E.filter(e=>e.f===t.id), inn=E.filter(e=>e.t===t.id);
-  ut.concat(inn).forEach(tenn);
+  ut.concat(inn).forEach(tenn); inn.forEach(e=>e.g.classList.add("inn"));
   const p=$("panel"); p.textContent="";
   const h=document.createElement("h2"); h.textContent=t.del; p.append(h);
   const lag=(tittel,liste)=>{ if(!liste.length) return;
@@ -439,9 +432,6 @@ function visPop(e){
   const n=document.createElement("span"); n.className="nr"; n.textContent=e.n;
   t.append(n, document.createTextNode(NAVN[e.f]+" til "+NAVN[e.t]));
   $("popTekst").textContent=e.s;
-  const pk=$("popKoble"); pk.textContent=""; pk.classList.toggle("hide",!e.k);
-  if(e.k){ const a=document.createElement("a"); a.href="sensorkort.html#kort="+e.k; a.style.color="#c2410c";
-    a.textContent="Sensor spør om denne koblingen på sensorkort "+e.k+" →"; pk.append(a); }
   $("pop").classList.remove("hide"); $("popLukk").focus();
 }
 function lukkPop(){ if(!vist) return; const e=vist; vist=null; $("pop").classList.add("hide"); e.g.focus({preventScroll:true}); }
@@ -472,7 +462,6 @@ document.addEventListener("click",ev=>{ if(!ev.target.closest("#panel,#pop,.card
 E.forEach(e=>{ const li=document.createElement("li");
   const b=document.createElement("b"); b.textContent=NAVN[e.f]+" til "+NAVN[e.t]+": ";
   const q=document.createElement("q"); q.textContent=e.s; li.append(b,q);
-  if(e.k){ const m=document.createElement("span"); m.className="merke"; m.textContent="Sensorkort "+e.k; li.append(m); }
   $("alle").append(li); });
 
 let sist=-1;
