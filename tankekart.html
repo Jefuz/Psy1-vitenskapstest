@@ -94,7 +94,7 @@
 <div class="wrap">
   <p class="small top noprint"><a href="psy1-vitenskap-og-metode.html">← Til øvingstesten</a><a href="sensorkort.html">Sensorkort →</a></p>
   <h1>Psykologi 1: tankekart</h1>
-  <p class="sub">De 15 temaene fra sensorkortene, med 65 piler mellom dem. Hver pil har en setning du kan bruke
+  <p class="sub">De 15 temaene fra sensorkortene, med 72 piler mellom dem. Hver pil har en setning du kan bruke
     på muntlig eksamen når du skal binde ett tema til et annet. Trykk på et tema for å se overgangene derfra,
     eller på et nummer for å få opp overgangen midt på skjermen.</p>
 
@@ -106,7 +106,7 @@
       <span style="--c:var(--gru);--l:var(--grul)">Grunnlaget for faget</span>
       <span class="strek">Trykk på et tema for å se alle koblingene: heltrukne piler går derfra, stiplede går dit</span>
     </div>
-    <svg id="kart" viewBox="0 0 1140 650" role="group" aria-label="Tankekart over temaene i Psykologi 1">
+    <svg id="kart" viewBox="0 0 1140 660" role="group" aria-label="Tankekart over temaene i Psykologi 1">
       <defs>
         <marker id="pil" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="#8a93a8"/>
@@ -292,7 +292,7 @@ const E=[
    s:"Sammenhengen mellom cannabis og psykose er et skoleeksempel på korrelasjon: forskerne er uenige om retningen, slik Di Forti og Gage illustrerer."},
   {f:"evo",t:"kog",via:[[400,135],[970,135]],
    s:"Ifølge røykvarslerprinsippet har det trolig vært billigere å se en fare som ikke var der enn å overse en som var der, og det kan forklare at persepsjonen tar feil i forsiktig retning."},
-  {f:"kri",t:"met",skjult:true,via:[[215,60],[215,495]],
+  {f:"kri",t:"met",skjult:true,via:[[210,60],[210,495]],
    s:"Bonanno fulgte etterlatte over tid og fant at 45,9 prosent hadde lite plager hele veien. Det viser hvorfor vi trenger studier som følger alle, ikke bare dem som søker hjelp."},
   {f:"kri",t:"per",skjult:true,via:[[237,82],[237,330]],
    s:"Hvem som klarer seg etter en krise, ser ut til å henge sammen med både personlighet og sosial støtte, men de fleste viser resiliens."},
@@ -302,7 +302,7 @@ const E=[
    s:"Vygotskij flytter læring inn i samspillet: i den nærmeste utviklingssonen klarer barnet mer med stillas fra andre."},
   {f:"utv",t:"kog",skjult:true,via:[[160,180],[970,180]],
    s:"Skjema er et nøkkelbegrep både hos Piaget og i persepsjon: Piaget viser hvordan skjemaer bygges, og persepsjonsforskningen viser hvordan de styrer det vi ser."},
-  {f:"kog",t:"met",skjult:true,via:[[928,330],[928,485],[420,485]],
+  {f:"kog",t:"met",skjult:true,via:[[935,330],[935,485],[420,485]],
    s:"Vitenskapelig metode kan ses som et verktøy mot bekreftelsesfeil: vi tester hypoteser i stedet for å lete etter det som bekrefter dem."},
   {f:"met",t:"ner",skjult:true,
    s:"Hjerneskanning viser samvariasjon: at et område lyser opp, betyr ikke at det er der tanken sitter."},
@@ -323,7 +323,21 @@ const E=[
   {f:"str",t:"huk",
    s:"Stress påvirker hukommelsen: moderat stress kan styrke minnet for det som skjer, mens sterkt eller langvarig stress ser ut til å svekke innlæring og gjenhenting, blant annet gjennom kortisol."},
   {f:"str",t:"kog",via:[[640,148],[985,148]],
-   s:"Psykiske lidelser farger persepsjonen: ved depresjon og angst legger vi lettere merke til det negative og truende, og negative skjemaer kan holde lidelsen ved like."}
+   s:"Psykiske lidelser farger persepsjonen: ved depresjon og angst legger vi lettere merke til det negative og truende, og negative skjemaer kan holde lidelsen ved like."},
+  {f:"met",t:"evo",skjult:true,via:[[246,560],[246,330]],
+   s:"Evolusjonspsykologiske hypoteser er vanskelige å teste direkte, så forskerne sammenligner kulturer: Walter og kolleger fant små kjønnsforskjeller i partnerpreferanser på tvers av 45 land."},
+  {f:"met",t:"hor",skjult:true,via:[[340,640],[1030,640]],
+   s:"Hormonforskning bygger ofte på korrelasjon: at testosteron henger sammen med en atferd, sier ikke alene hva som er årsak og hva som er virkning."},
+  {f:"met",t:"utv",skjult:true,via:[[228,600],[228,330]],
+   s:"Utviklingspsykologien har egne metoder: Ainsworths fremmedsituasjon er strukturert observasjon, og kritikken av Piaget viser at barn kan mer når oppgavene gjøres enklere."},
+  {f:"met",t:"str",skjult:true,via:[[470,500],[470,330]],
+   s:"Stressforskningen viser hvorfor metaanalyser er nyttige: Dickerson og Kemeny samlet mange studier og fant at det å bli vurdert av andre ga størst kortisolrespons."},
+  {f:"met",t:"lae",skjult:true,via:[[500,525],[700,525],[700,330]],
+   s:"Læringspsykologien er bygget på kontrollerte eksperimenter, som hos Pavlov og Skinner, og lille Albert viser hvorfor forskningsetikken senere ble strammet inn."},
+  {f:"met",t:"huk",skjult:true,via:[[500,512],[920,512],[920,85]],
+   s:"Hukommelsesforskningen bruker både eksperimenter, som Ebbinghaus' forsøk på seg selv, og casestudier, som H.M., der én person kan vise mye, men vanskelig kan generaliseres."},
+  {f:"met",t:"mot",skjult:true,via:[[440,500],[440,70]],
+   s:"Tankesett er et eksempel på at store påstander trenger replikasjon: Sisk og kolleger fant bare små gjennomsnittlige effekter av å lære elever et vekst-tankesett."}
 ];
 
 const NS="http://www.w3.org/2000/svg", $=id=>document.getElementById(id);
