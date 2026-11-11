@@ -79,7 +79,19 @@
   #popKort .nr{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;
     background:var(--accent);color:#fff;font-weight:700;font-size:.9rem;margin-right:10px}
   #popTittel{font-size:1.05rem;font-weight:600;display:flex;align-items:center;padding-right:30px}
-  #popTekst{font-size:1.2rem;line-height:1.55;margin:16px 0 18px;quotes:"«" "»"}
+  #popTekst{margin:14px 0 18px}
+  #popTekst .ps q{font-size:1.15rem;line-height:1.5}
+  .ps{margin:8px 0 0}
+  .ps span{display:block}
+  .ps q{display:block;quotes:"«" "»"}
+  button.over{display:block;width:100%;text-align:left;background:none;border:0;border-left:3px solid var(--line);
+    font:inherit;color:inherit;cursor:pointer;border-radius:0}
+  button.over:hover,button.over:focus{border-left-color:var(--accent);background:#fafbff;outline:none}
+  .mobil{display:none}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+  .chip{border:1px solid;border-radius:999px;padding:8px 12px;font:inherit;font-size:.92rem;cursor:pointer;color:var(--ink)}
+  .chip.sel{outline:2px solid var(--accent);outline-offset:1px}
+  @media (max-width:700px){ #kartKort,.stor{display:none} .mobil{display:block} }
   @media (max-width:520px){ #popKort .hint{display:none} }
   .edge .treff{fill:transparent;stroke:none}
   #popLukk{position:absolute;top:12px;right:12px;border:0;background:#eef0f7;border-radius:50%;
@@ -94,19 +106,19 @@
 <div class="wrap">
   <p class="small top noprint"><a href="psy1-vitenskap-og-metode.html">← Til øvingstesten</a><a href="sensorkort.html">Sensorkort →</a></p>
   <h1>Psykologi 1: tankekart</h1>
-  <p class="sub">De 15 temaene fra sensorkortene, med 80 piler mellom dem. Hver pil har en setning du kan bruke
-    på muntlig eksamen når du skal binde ett tema til et annet. Trykk på et tema for å se overgangene derfra,
-    eller på et nummer for å få opp overgangen midt på skjermen.</p>
+  <p class="sub">De 15 temaene fra sensorkortene, med 68 koblinger og 80 overgangssetninger mellom dem. Hver pil har en setning du kan bruke
+    på muntlig eksamen når du skal binde ett tema til et annet. <span class="stor">Trykk på et tema for å se overgangene derfra,
+    eller på et nummer for å få opp overgangen midt på skjermen.</span></p>
 
-  <div class="card" style="margin-top:18px">
+  <div class="card" id="kartKort" style="margin-top:18px">
     <div class="key">
       <span style="--c:var(--bio);--l:var(--biol)">Kropp, gener og hjerne</span>
       <span style="--c:var(--per);--l:var(--perl)">Person, utvikling og helse</span>
       <span style="--c:var(--kog);--l:var(--kogl)">Tanke og læring</span>
       <span style="--c:var(--gru);--l:var(--grul)">Grunnlaget for faget</span>
-      <span class="strek">Trykk på et tema for å se alle koblingene: heltrukne piler går derfra, stiplede går dit</span>
+      <span class="strek">Trykk på et tema for å se alle koblingene: heltrukne går derfra eller begge veier, stiplede går dit</span>
     </div>
-    <svg id="kart" viewBox="0 0 1140 660" role="group" aria-label="Tankekart over temaene i Psykologi 1">
+    <svg id="kart" viewBox="0 0 1140 650" role="group" aria-label="Tankekart over temaene i Psykologi 1">
       <defs>
         <marker id="pil" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="#8a93a8"/>
@@ -118,6 +130,12 @@
       <g id="edges"></g>
       <g id="nodes"></g>
     </svg>
+  </div>
+
+  <div class="card mobil" style="margin-top:18px">
+    <h2>Velg et tema</h2>
+    <p class="muted small" style="margin:0">Kartet er for stort for en liten skjerm, så her velger du tema og får koblingene som en liste. Trykk på en kobling for å se den større.</p>
+    <div id="chips" class="chips"></div>
   </div>
 
   <div class="card" id="panel" aria-live="polite"></div>
@@ -149,7 +167,7 @@
     <div id="popKort">
       <button id="popLukk" aria-label="Lukk">×</button>
       <div id="popTittel"></div>
-      <q id="popTekst" style="display:block"></q>
+      <div id="popTekst"></div>
       <div class="row between">
         <button class="btn ghost small" id="popForrige">← Forrige</button>
         <span class="muted small hint">Piltastene blar, Esc lukker</span>
@@ -165,36 +183,35 @@
 /* Temaene følger sensorkortene 1 til 15 (k = kortnummer, del = tema i øvingstesten).
    c og r er kolonne og rad i rutenettet, g er fargegruppen. */
 const T=[
-  {id:"evo", k:10, del:"Evolusjonspsykologi",                       l:["Evolusjons-","psykologi"],        c:1,r:1,g:"bio"},
-  {id:"arv", k:8,  del:"Arv og miljø",                              l:["Arv og miljø"],                   c:0,r:2,g:"bio"},
-  {id:"ner", k:11, del:"Nervesystemet og hjernen",                  l:["Nervesystemet","og hjernen"],     c:2,r:3,g:"bio"},
-  {id:"hor", k:12, del:"Hormoner, sanser og hele mennesket",        l:["Hormoner og","sanser"],           c:4,r:2,g:"bio"},
-  {id:"rus", k:15, del:"Rus",                                       l:["Rus"],                            c:3,r:2,g:"bio"},
-  {id:"per", k:7,  del:"Personlighet",                              l:["Personlighet"],                   c:1,r:2,g:"per"},
-  {id:"utv", k:9,  del:"Utvikling og identitet",                    l:["Utvikling og","identitet"],       c:0,r:1,g:"per"},
-  {id:"kri", k:14, del:"Kriser",                                    l:["Kriser"],                         c:1,r:0,g:"per"},
-  {id:"str", k:13, del:"Stress og psykisk helse",                   l:["Stress og","psykisk helse"],      c:2,r:1,g:"per"},
-  {id:"lae", k:5,  del:"Læring",                                    l:["Læring"],                         c:3,r:1,g:"kog"},
-  {id:"met", k:1,  del:"Vitenskap og metode",                       l:["Vitenskap og","metode"],          c:1,r:3,g:"gru"},
-  {id:"psp", k:2,  del:"Perspektiver og faghistorie",               l:["Perspektiver og","faghistorie"],  c:2,r:2,g:"gru"},
-  {id:"kog", k:3,  del:"Persepsjon og kognisjon",                   l:["Persepsjon og","kognisjon"],      c:4,r:1,g:"kog"},
-  {id:"huk", k:4,  del:"Hukommelse",                                l:["Hukommelse"],                     c:3,r:0,g:"kog"},
-  {id:"mot", k:6,  del:"Motivasjon, mestring og læringsstrategier", l:["Motivasjon og","mestring"],       c:2,r:0,g:"kog"}
+  {id:"evo", k:10, del:"Evolusjonspsykologi",                       l:["Evolusjons-","psykologi"],        c:0,r:2,g:"bio"},
+  {id:"arv", k:8,  del:"Arv og miljø",                              l:["Arv og miljø"],                   c:0,r:1,g:"bio"},
+  {id:"ner", k:11, del:"Nervesystemet og hjernen",                  l:["Nervesystemet","og hjernen"],     c:3,r:3,g:"bio"},
+  {id:"hor", k:12, del:"Hormoner, sanser og hele mennesket",        l:["Hormoner og","sanser"],           c:2,r:3,g:"bio"},
+  {id:"rus", k:15, del:"Rus",                                       l:["Rus"],                            c:3,r:0,g:"bio"},
+  {id:"per", k:7,  del:"Personlighet",                              l:["Personlighet"],                   c:2,r:0,g:"per"},
+  {id:"utv", k:9,  del:"Utvikling og identitet",                    l:["Utvikling og","identitet"],       c:1,r:0,g:"per"},
+  {id:"kri", k:14, del:"Kriser",                                    l:["Kriser"],                         c:0,r:0,g:"per"},
+  {id:"str", k:13, del:"Stress og psykisk helse",                   l:["Stress og","psykisk helse"],      c:2,r:2,g:"per"},
+  {id:"lae", k:5,  del:"Læring",                                    l:["Læring"],                         c:4,r:2,g:"kog"},
+  {id:"met", k:1,  del:"Vitenskap og metode",                       l:["Vitenskap og","metode"],          c:2,r:1,g:"gru"},
+  {id:"psp", k:2,  del:"Perspektiver og faghistorie",               l:["Perspektiver og","faghistorie"],  c:1,r:3,g:"gru"},
+  {id:"kog", k:3,  del:"Persepsjon og kognisjon",                   l:["Persepsjon og","kognisjon"],      c:0,r:3,g:"kog"},
+  {id:"huk", k:4,  del:"Hukommelse",                                l:["Hukommelse"],                     c:4,r:3,g:"kog"},
+  {id:"mot", k:6,  del:"Motivasjon, mestring og læringsstrategier", l:["Motivasjon og","mestring"],       c:4,r:1,g:"kog"}
 ];
 const NAVN={evo:"Evolusjonspsykologi",arv:"Arv og miljø",ner:"Nervesystemet og hjernen",hor:"Hormoner og sanser",
   rus:"Rus",per:"Personlighet",utv:"Utvikling og identitet",kri:"Kriser",str:"Stress og psykisk helse",lae:"Læring",
   met:"Vitenskap og metode",psp:"Perspektiver og faghistorie",kog:"Persepsjon og kognisjon",huk:"Hukommelse",
   mot:"Motivasjon og mestring"};
 
-/* Rutenett: nodene er 170 x 80, sentrum i X(c), Y(r). Plasseringen er valgt slik at ingen
-   pil går gjennom et tema, og med så få kryssinger som mulig. */
-const W=170,H=80,X=c=>110+c*230,Y=r=>70+r*170;
-const L=c=>X(c)-W/2,Tp=r=>Y(r)-H/2;
+/* Rutenett: nodene er 170 x 80, sentrum i X(c), Y(r). Plasseringen er regnet ut slik at alle
+   linjene kan tegnes uten å gå gjennom et tema, med færrest mulig kryssinger. */
+const W=170,H=80,X=c=>110+c*230,Y=r=>70+r*170,VB=[1140,650];
 
-/* Overgangene. Nummer 1 til 23 er de første, 24 og utover kom til senere.
-   Går to piler mellom de samme temaene, tegnes de som to parallelle spor. */
+/* Overgangene. Hver setning går fra et tema til et annet, eller begge veier (begge:true).
+   Setninger mellom de samme to temaene tegnes som én linje. skjult:true vises bare når et av temaene velges. */
 const E=[
-  {f:"evo",t:"arv",
+  {f:"evo",t:"arv",begge:true,
    s:"Evolusjonen forklarer det vi har felles som art, mens tvillingstudiene forklarer hvorfor vi likevel er ulike."},
   {f:"evo",t:"per",
    s:"Evolusjonspsykologien spør hva et trekk var godt for, og noen forskere drøfter om ulike personligheter kan ha vært nyttige i ulike miljøer."},
@@ -204,7 +221,7 @@ const E=[
    s:"Tvillingstudier tyder på at rundt 40 til 50 prosent av variasjonen i personlighetstrekk henger sammen med genetiske forskjeller."},
   {f:"arv",t:"utv",
    s:"Arv og miljø virker sammen gjennom hele utviklingen: genene påvirker også hvilke miljøer barnet søker og møter."},
-  {f:"ner",t:"hor",
+  {f:"ner",t:"hor",begge:true,
    s:"Kroppen har to kommunikasjonssystemer: nervesignalene er raske og presise, hormonene langsommere, men virker lenger og bredere."},
   {f:"ner",t:"rus",
    s:"Rusmidler griper inn i synapsene, særlig i dopaminsystemet, som handler mer om å ville ha enn om å like."},
@@ -216,7 +233,7 @@ const E=[
    s:"Noen mestrer stress med rus, et eksempel på unngående mestring som lindrer nå, men gir nye problemer senere."},
   {f:"utv",t:"per",
    s:"Erikson bygger på Freud, men flytter vekten fra seksuelle drifter til sosiale utfordringer gjennom hele livet."},
-  {f:"utv",t:"kri",
+  {f:"utv",t:"kri",begge:true,
    s:"Cullberg skiller utviklingskriser, som overgangene Erikson beskriver, fra traumatiske kriser som kommer uventet."},
   {f:"str",t:"kri",
    s:"Når belastningen blir så stor at det vi pleier å gjøre, ikke strekker til, snakker vi om en krise."},
@@ -274,9 +291,9 @@ const E=[
    s:"Ifølge Lazarus avgjør vurderingen om noe blir stress: hvor truende det er, og om vi har ressurser til å mestre det. Her kommer mestringstro inn."},
   {f:"met",t:"arv",
    s:"Tvilling- og adopsjonsstudier er metodene som skiller arv fra miljø, og de bygger på antakelser som kan kritiseres, for eksempel at tvillingpar vokser opp i like miljøer."},
-  {f:"ner",t:"lae",via:[[685,520],[685,320]],
+  {f:"ner",t:"lae",
    s:"Hebbs regel sier at celler som fyrer sammen, kobles sammen, og langtidspotensiering er den biologiske siden av at vi lærer."},
-  {f:"mot",t:"rus",via:[[670,150],[670,325]],
+  {f:"mot",t:"rus",
    s:"Forklaringsstil kan avgjøre om et glipp blir et tilbakefall: den som tenker «jeg klarer det aldri», gir lettere opp."},
   {f:"arv",t:"str",
    s:"Diatese-stress-modellen sier at lidelse oppstår når en medfødt sårbarhet møter belastninger, og den kobler arv og miljø."},
@@ -284,25 +301,25 @@ const E=[
    s:"Høy nevrotisisme kan ses som en sårbarhet i diatese-stress-modellen, fordi de samme belastningene da kan gi sterkere reaksjoner."},
   {f:"psp",t:"ner",
    s:"Nevrologien bygger på det biologiske perspektivet: atferd og opplevelse forklares med det som skjer i nervesystemet."},
-  {f:"huk",t:"ner",via:[[905,60],[905,500],[700,500]],
+  {f:"huk",t:"ner",begge:true,
    s:"Pasienten H.M. viste at hippocampus trengs for å danne nye eksplisitte minner, men ikke for å lære nye ferdigheter."},
-  {f:"kog",t:"per",via:[[960,315],[400,315]],
+  {f:"kog",t:"per",
    s:"Barnum-effekten er en tankefeil: vage beskrivelser føles treffende fordi vi legger merke til det som passer."},
   {f:"met",t:"rus",
    s:"Sammenhengen mellom cannabis og psykose er et skoleeksempel på korrelasjon: forskerne er uenige om retningen, slik Di Forti og Gage illustrerer."},
-  {f:"evo",t:"kog",via:[[400,135],[970,135]],
+  {f:"evo",t:"kog",
    s:"Ifølge røykvarslerprinsippet har det trolig vært billigere å se en fare som ikke var der enn å overse en som var der, og det kan forklare at persepsjonen tar feil i forsiktig retning."},
-  {f:"kri",t:"met",skjult:true,via:[[210,60],[210,495]],
+  {f:"kri",t:"met",begge:true,skjult:true,
    s:"Bonanno fulgte etterlatte over tid og fant at 45,9 prosent hadde lite plager hele veien. Det viser hvorfor vi trenger studier som følger alle, ikke bare dem som søker hjelp."},
-  {f:"kri",t:"per",skjult:true,via:[[237,82],[237,330]],
+  {f:"kri",t:"per",begge:true,skjult:true,
    s:"Hvem som klarer seg etter en krise, ser ut til å henge sammen med både personlighet og sosial støtte, men de fleste viser resiliens."},
-  {f:"hor",t:"psp",skjult:true,via:[[960,345],[680,345]],
+  {f:"hor",t:"psp",begge:true,skjult:true,
    s:"Å forklare atferd med ett hormon, som testosteron eller oksytocin, er biologisk reduksjonisme, og det er en diskusjon om perspektiver."},
-  {f:"utv",t:"lae",skjult:true,via:[[160,160],[740,160]],
+  {f:"utv",t:"lae",begge:true,skjult:true,
    s:"Vygotskij flytter læring inn i samspillet: i den nærmeste utviklingssonen klarer barnet mer med stillas fra andre."},
-  {f:"utv",t:"kog",skjult:true,via:[[160,180],[970,180]],
+  {f:"utv",t:"kog",begge:true,skjult:true,
    s:"Skjema er et nøkkelbegrep både hos Piaget og i persepsjon: Piaget viser hvordan skjemaer bygges, og persepsjonsforskningen viser hvordan de styrer det vi ser."},
-  {f:"kog",t:"met",skjult:true,via:[[935,330],[935,485],[420,485]],
+  {f:"kog",t:"met",skjult:true,
    s:"Vitenskapelig metode kan ses som et verktøy mot bekreftelsesfeil: vi tester hypoteser i stedet for å lete etter det som bekrefter dem."},
   {f:"met",t:"ner",skjult:true,
    s:"Hjerneskanning viser samvariasjon: at et område lyser opp, betyr ikke at det er der tanken sitter."},
@@ -310,207 +327,229 @@ const E=[
    s:"Bandura ser personlighet som gjensidig påvirkning mellom person, atferd og miljø, altså personlighet forklart med læring."},
   {f:"ner",t:"per",skjult:true,
    s:"Phineas Gage blir ofte trukket fram som et tidlig tegn på at personligheten har en biologisk side, men kildene om forandringen hans er tynne."},
-  {f:"utv",t:"rus",skjult:true,via:[[170,330],[740,330]],
+  {f:"utv",t:"rus",skjult:true,
    s:"I en studie økte risikotakingen mest hos ungdom når venner var til stede, og det gjør tidlig rusdebut til et utviklingsspørsmål."},
-  {f:"per",t:"rus",via:[[400,470],[740,470]],
+  {f:"per",t:"rus",
    s:"Personlighet kan henge sammen med rus: trekk som spenningssøking og lav planmessighet ser ut til å øke risikoen for problematisk bruk."},
-  {f:"per",t:"mot",via:[[455,330],[455,150]],
+  {f:"per",t:"mot",
    s:"Planmessighet er det personlighetstrekket som ser ut til å henge sterkest sammen med skoleprestasjoner, trolig fordi det handler om utholdenhet og gode arbeidsvaner."},
-  {f:"per",t:"kog",via:[[400,300],[960,300]],
+  {f:"per",t:"kog",
    s:"Personlighet farger persepsjonen: personer med høy nevrotisisme ser ut til å legge lettere merke til trusler og tolke tvetydige situasjoner mer negativt."},
-  {f:"str",t:"utv",via:[[520,355],[160,355]],
+  {f:"utv",t:"str",
    s:"Hvordan vi takler stress, formes gjennom oppveksten: tidlig tilknytning ser ut til å påvirke både stressreguleringen og hvor sårbare vi blir senere."},
   {f:"str",t:"huk",
    s:"Stress påvirker hukommelsen: moderat stress kan styrke minnet for det som skjer, mens sterkt eller langvarig stress ser ut til å svekke innlæring og gjenhenting, blant annet gjennom kortisol."},
-  {f:"str",t:"kog",via:[[640,148],[985,148]],
+  {f:"str",t:"kog",
    s:"Psykiske lidelser farger persepsjonen: ved depresjon og angst legger vi lettere merke til det negative og truende, og negative skjemaer kan holde lidelsen ved like."},
-  {f:"met",t:"evo",skjult:true,via:[[246,560],[246,330]],
+  {f:"met",t:"evo",skjult:true,
    s:"Evolusjonspsykologiske hypoteser er vanskelige å teste direkte, så forskerne sammenligner kulturer: Walter og kolleger fant små kjønnsforskjeller i partnerpreferanser på tvers av 45 land."},
-  {f:"met",t:"hor",skjult:true,via:[[340,640],[1030,640]],
+  {f:"met",t:"hor",skjult:true,
    s:"Hormonforskning bygger ofte på korrelasjon: at testosteron henger sammen med en atferd, sier ikke alene hva som er årsak og hva som er virkning."},
-  {f:"met",t:"utv",skjult:true,via:[[228,600],[228,330]],
+  {f:"met",t:"utv",skjult:true,
    s:"Utviklingspsykologien har egne metoder: Ainsworths fremmedsituasjon er strukturert observasjon, og kritikken av Piaget viser at barn kan mer når oppgavene gjøres enklere."},
-  {f:"met",t:"str",skjult:true,via:[[470,500],[470,330]],
+  {f:"met",t:"str",skjult:true,
    s:"Stressforskningen viser hvorfor metaanalyser er nyttige: Dickerson og Kemeny samlet mange studier og fant at det å bli vurdert av andre ga størst kortisolrespons."},
-  {f:"met",t:"lae",skjult:true,via:[[500,525],[700,525],[700,330]],
+  {f:"met",t:"lae",skjult:true,
    s:"Læringspsykologien er bygget på kontrollerte eksperimenter, som hos Pavlov og Skinner, og lille Albert viser hvorfor forskningsetikken senere ble strammet inn."},
-  {f:"met",t:"huk",skjult:true,via:[[500,512],[920,512],[920,85]],
+  {f:"met",t:"huk",skjult:true,
    s:"Hukommelsesforskningen bruker både eksperimenter, som Ebbinghaus' forsøk på seg selv, og casestudier, som H.M., der én person kan vise mye, men vanskelig kan generaliseres."},
-  {f:"met",t:"mot",skjult:true,via:[[440,500],[440,70]],
+  {f:"met",t:"mot",skjult:true,
    s:"Tankesett er et eksempel på at store påstander trenger replikasjon: Sisk og kolleger fant bare små gjennomsnittlige effekter av å lære elever et vekst-tankesett."},
-  {f:"ner",t:"str",via:[[663,560],[663,335]],
+  {f:"ner",t:"str",
    s:"Det autonome nervesystemet driver stressreaksjonen: sympatikus setter kroppen i beredskap, og parasympatikus roer den ned igjen når faren er over."},
   {f:"psp",t:"evo",
    s:"Evolusjonspsykologien er en gren av det biologiske perspektivet: den spør ikke bare hvordan noe virker, men hva det var godt for."},
   {f:"psp",t:"lae",
    s:"Behaviorismen er både et perspektiv og grunnlaget for læringspsykologien: Watson og Skinner ville bare studere det som kan observeres."},
-  {f:"ner",t:"kog",skjult:true,via:[[1128,600],[1128,240]],
+  {f:"ner",t:"kog",skjult:true,
    s:"Persepsjon skjer i hjernen, ikke i øyet: blindflekken merker vi ikke fordi hjernen fyller inn det som mangler."},
-  {f:"evo",t:"lae",skjult:true,via:[[400,122],[740,122]],
+  {f:"evo",t:"lae",skjult:true,
    s:"Vi lærer ikke alt like lett: Cook og Mineka fant at aper lettere lærte frykt for slanger enn for blomster, noe som kalles forberedt læring."},
   {f:"evo",t:"rus",skjult:true,
    s:"Belønningssystemet ble formet for mat og parring, og rusmidler kan kapre det, på samme måte som søtsuget var nyttig da sukker var sjeldent."},
-  {f:"psp",t:"huk",skjult:true,via:[[695,350],[695,150]],
+  {f:"psp",t:"huk",skjult:true,
    s:"Flerlagermodellen til Atkinson og Shiffrin er typisk for det kognitive perspektivet: hukommelsen beskrives som informasjon som kodes, lagres og hentes fram."},
-  {f:"utv",t:"mot",skjult:true,
+  {f:"utv",t:"mot",begge:true,skjult:true,
    s:"I skolealderen står barnet ifølge Erikson mellom å oppleve seg som flink og å føle seg underlegen, og det minner om det Bandura kaller mestringstro."}
 ];
+
+/* Lenkene: én linje per par av temaer, med én eller to setninger. */
+const LK=[], lkMap={};
+E.forEach(e=>{ const [a,b]=[e.f,e.t].sort(), k=a+"|"+b;
+  let l=lkMap[k]; if(!l){ l=lkMap[k]={a,b,S:[]}; LK.push(l); } l.S.push(e); e.l=l; });
+LK.forEach((l,i)=>{ l.n=i+1; l.skjult=l.S.every(e=>e.skjult);
+  l.tilA=l.S.some(e=>e.begge||e.t===l.a); l.tilB=l.S.some(e=>e.begge||e.t===l.b); });
 
 const NS="http://www.w3.org/2000/svg", $=id=>document.getElementById(id);
 const el=(n,a,p)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;};
 const byId={}; T.forEach(t=>byId[t.id]=t);
 const FARGE={bio:["var(--bio)","var(--biol)"],per:["var(--per)","var(--perl)"],kog:["var(--kog)","var(--kogl)"],gru:["var(--gru)","var(--grul)"]};
 const gE=$("edges"), gN=$("nodes"), svg=$("kart");
-const par=new Set(E.map(e=>e.f+">"+e.t)), plassert=[];
 const kant=(cx,cy,tx,ty)=>{ /* der linja fra sentrum mot (tx,ty) går ut av boksen, med litt luft */
   const dx=tx-cx,dy=ty-cy,l=Math.hypot(dx,dy),ux=dx/l,uy=dy/l;
   const ut=Math.min((W/2+6)/Math.abs(ux||1e-9),(H/2+6)/Math.abs(uy||1e-9));
   return [cx+ux*ut,cy+uy*ut];
 };
-E.forEach((e,i)=>{
-  e.n=i+1;
-  const A=byId[e.f],B=byId[e.t],ax=X(A.c),ay=Y(A.r),bx=X(B.c),by=Y(B.r);
-  if(e.via){
-    e.pts=[kant(ax,ay,...e.via[0]),...e.via,kant(bx,by,...e.via[e.via.length-1])];
-  }else{
-    const dx=bx-ax,dy=by-ay,len=Math.hypot(dx,dy),ux=dx/len,uy=dy/len;
-    const sp=par.has(e.t+">"+e.f)?9:0, nx=-uy*sp, ny=ux*sp;
-    const p1=kant(ax,ay,bx,by),p2=kant(bx,by,ax,ay);
-    e.pts=[[p1[0]+nx,p1[1]+ny],[p2[0]+nx,p2[1]+ny]]; e.sp=sp;
-  }
-});
-/* Banen tegnes med avrundede hjørner. */
-const bane=p=>{ let d="M"+p[0].join(",");
-  for(let i=1;i<p.length-1;i++){
-    const [x0,y0]=p[i-1],[x1,y1]=p[i],[x2,y2]=p[i+1];
-    const r=Math.min(16,Math.hypot(x1-x0,y1-y0)/2,Math.hypot(x2-x1,y2-y1)/2);
-    const a=Math.hypot(x1-x0,y1-y0),b=Math.hypot(x2-x1,y2-y1);
-    d+=" L"+(x1-(x1-x0)/a*r)+","+(y1-(y1-y0)/a*r)+" Q"+x1+","+y1+" "+(x1+(x2-x1)/b*r)+","+(y1+(y2-y1)/b*r);
-  }
-  return d+" L"+p[p.length-1].join(",");
-};
-/* Numrene plasseres korteste linje først, der de står lengst unna numre som alt er satt. */
-const lengst=e=>{let b=null;for(let i=1;i<e.pts.length;i++){const l=Math.hypot(e.pts[i][0]-e.pts[i-1][0],e.pts[i][1]-e.pts[i-1][1]);if(!b||l>b[2])b=[e.pts[i-1],e.pts[i],l];}return b;};
-E.forEach(e=>{const [p,q,l]=lengst(e);e.x1=p[0];e.y1=p[1];e.x2=q[0];e.y2=q[1];e.L=l;});
-const segAvst=(x,y,p,q)=>{const dx=q[0]-p[0],dy=q[1]-p[1],l=dx*dx+dy*dy||1;
-  const t=Math.max(0,Math.min(1,((x-p[0])*dx+(y-p[1])*dy)/l));return Math.hypot(x-p[0]-t*dx,y-p[1]-t*dy);};
-E.slice().sort((a,b)=>(!!a.skjult-!!b.skjult)||(a.L-b.L)).forEach(e=>{
-  /* nummeret skal ikke dekke et annet nummer eller ligge oppå en annen linje */
+const pq=(p,c,q,t)=>[(1-t)*(1-t)*p[0]+2*(1-t)*t*c[0]+t*t*q[0],(1-t)*(1-t)*p[1]+2*(1-t)*t*c[1]+t*t*q[1]];
+const inni=(x,y,t,m)=>Math.abs(x-X(t.c))<W/2+m&&Math.abs(y-Y(t.r))<H/2+m;
+/* Hver linje får den minste bøyen som holder den unna alle andre temaer. */
+const BOY=[0,30,-30,60,-60,90,-90,120,-120,160,-160,200,-200,250,-250];
+LK.forEach(l=>{
+  const A=byId[l.a],B=byId[l.b],a=[X(A.c),Y(A.r)],b=[X(B.c),Y(B.r)];
+  const dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy),nx=-dy/len,ny=dx/len;
   let best=null;
-  for(const k of (e.sp?[0.38,0.3,0.46,0.24,0.54,0.2]:[0.5,0.42,0.58,0.34,0.66,0.26,0.74,0.2,0.8])){
-    const x=e.x1+(e.x2-e.x1)*k, y=e.y1+(e.y2-e.y1)*k;
+  for(const k of BOY){
+    const c=[(a[0]+b[0])/2+nx*k,(a[1]+b[1])/2+ny*k];
+    let treff=0;
+    for(let i=1;i<24;i++){ const [x,y]=pq(a,c,b,i/24);
+      T.forEach(t=>{ if(t!==A&&t!==B&&inni(x,y,t,10)) treff++; });
+      if(x<5||y<5||x>VB[0]-5||y>VB[1]-5) treff+=5; }
+    if(!best||treff<best[1]) best=[c,treff];
+    if(!treff) break;
+  }
+  const c=best[0]; l.c=c; l.p1=kant(a[0],a[1],c[0],c[1]); l.p2=kant(b[0],b[1],c[0],c[1]);
+  l.pts=[]; for(let i=0;i<=20;i++) l.pts.push(pq(l.p1,c,l.p2,i/20));
+});
+/* Numrene settes der de ikke dekker et annet nummer eller ligger oppå en annen linje. */
+const plassert=[];
+LK.slice().sort((x,y)=>(x.skjult-y.skjult)||(Math.hypot(x.p2[0]-x.p1[0],x.p2[1]-x.p1[1])-Math.hypot(y.p2[0]-y.p1[0],y.p2[1]-y.p1[1]))).forEach(l=>{
+  let best=null;
+  for(const k of [0.5,0.42,0.58,0.34,0.66,0.27,0.73,0.2,0.8]){
+    const [x,y]=pq(l.p1,l.c,l.p2,k);
     const dc=Math.min(999,...plassert.map(q=>Math.hypot(q[0]-x,q[1]-y)));
-    let dl=999; E.forEach(o=>{ if(o===e||o.skjult&&!e.skjult) return;
-      for(let i=1;i<o.pts.length;i++) dl=Math.min(dl,segAvst(x,y,o.pts[i-1],o.pts[i])); });
+    let dl=999; LK.forEach(o=>{ if(o===l||o.skjult&&!l.skjult) return; o.pts.forEach(q=>{dl=Math.min(dl,Math.hypot(q[0]-x,q[1]-y));}); });
     const sc=Math.min(dc/26,dl/12,1);
-    if(!best||sc>best[3]) best=[x,y,dc,sc];
+    if(!best||sc>best[2]) best=[x,y,sc];
     if(sc>=1) break;
   }
-  plassert.push(best); e.m=best;
+  plassert.push(best); l.m=best;
 });
-E.forEach(e=>{
-  e.mk="url(#pil)";
-  const g=el("g",{class:"edge"+(e.skjult?" skjult":""),tabindex:"0",role:"button","aria-label":"Overgang "+e.n+": "+NAVN[e.f]+" til "+NAVN[e.t]},gE);
-  e.path=el("path",{d:bane(e.pts),"marker-end":e.mk},g);
-  const [mx,my]=e.m;
+const merk=(l,on)=>{ const u=on?"url(#pilOn)":"url(#pil)";
+  if(l.tilA) l.path.setAttribute("marker-start",u); else l.path.removeAttribute("marker-start");
+  if(l.tilB) l.path.setAttribute("marker-end",u); else l.path.removeAttribute("marker-end"); };
+LK.forEach(l=>{
+  const g=el("g",{class:"edge"+(l.skjult?" skjult":""),tabindex:"0",role:"button","aria-label":"Kobling "+l.n+": "+NAVN[l.a]+" og "+NAVN[l.b]},gE);
+  l.path=el("path",{d:"M"+l.p1.join(",")+" Q"+l.c.join(",")+" "+l.p2.join(",")},g);
+  merk(l,false);
+  const [mx,my]=l.m;
   el("circle",{cx:mx,cy:my,r:10},g);
   el("circle",{cx:mx,cy:my,r:19,class:"treff"},g);
-  el("text",{x:mx,y:my+4},g).textContent=e.n;
-  e.g=g;
-  g.addEventListener("click",ev=>{ev.stopPropagation();velgPil(e,true);});
-  g.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();velgPil(e,true);}});
+  el("text",{x:mx,y:my+4},g).textContent=l.n;
+  l.g=g;
+  g.addEventListener("click",ev=>{ev.stopPropagation();velgLenke(l,true);});
+  g.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();velgLenke(l,true);}});
 });
+
 T.forEach(t=>{
   const g=el("g",{class:"node",tabindex:"0",role:"button","aria-label":t.del},gN);
-  el("rect",{x:L(t.c),y:Tp(t.r),width:W,height:H,rx:14,fill:FARGE[t.g][0],stroke:FARGE[t.g][1]},g);
+  el("rect",{x:X(t.c)-W/2,y:Y(t.r)-H/2,width:W,height:H,rx:14,fill:FARGE[t.g][0],stroke:FARGE[t.g][1]},g);
   const y0=Y(t.r)+5-(t.l.length-1)*9;
   t.l.forEach((s,i)=>el("text",{x:X(t.c),y:y0+i*18,"text-anchor":"middle"},g).textContent=s);
   t.g2=g;
   g.addEventListener("click",ev=>{ev.stopPropagation();velgTema(t);});
   g.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();velgTema(t);}});
+  /* temaknapper til mobilvisningen */
+  const b=document.createElement("button"); b.className="chip"; b.textContent=t.del;
+  b.style.background=FARGE[t.g][0]; b.style.borderColor=FARGE[t.g][1];
+  b.addEventListener("click",()=>{ velgTema(t); $("panel").scrollIntoView({behavior:"smooth",block:"start"}); });
+  t.chip=b;
 });
+["bio","per","kog","gru"].forEach(g=>T.filter(t=>t.g===g).forEach(t=>$("chips").append(t.chip)));
 
+let valgt=null;
+const retning=e=>e.begge?NAVN[e.f]+" og "+NAVN[e.t]+", begge veier":"Fra "+NAVN[e.f]+" til "+NAVN[e.t];
 function nullstill(){
-  svg.classList.remove("dim");
-  T.forEach(t=>t.g2.classList.remove("hit","sel"));
-  E.forEach(e=>{e.g.classList.remove("on","vis","inn");e.path.setAttribute("marker-end",e.mk);});
+  valgt=null; svg.classList.remove("dim");
+  T.forEach(t=>{t.g2.classList.remove("hit","sel");t.chip.classList.remove("sel");});
+  LK.forEach(l=>{l.g.classList.remove("on","vis","inn");merk(l,false);});
 }
-function tenn(e){e.g.classList.add("on","vis");e.path.setAttribute("marker-end","url(#pilOn)");byId[e.f].g2.classList.add("hit");byId[e.t].g2.classList.add("hit");}
+function tenn(l){l.g.classList.add("on","vis");merk(l,true);byId[l.a].g2.classList.add("hit");byId[l.b].g2.classList.add("hit");}
 const lenker=t=>{
   const d=document.createElement("div"); d.className="row noprint"; d.style.marginTop="14px";
   const a=document.createElement("a"); a.className="btn ghost small"; a.href="sensorkort.html#kort="+t.k; a.textContent="Sensorkort "+t.k;
   const b=document.createElement("a"); b.className="btn ghost small"; b.href="psy1-vitenskap-og-metode.html#tema="+encodeURIComponent(t.del); b.textContent="Øv på temaet i testen";
   d.append(a,b); return d;
 };
-const overgang=e=>{
-  const d=document.createElement("div"); d.className="over";
-  const b=document.createElement("b"); b.textContent=e.n+". "+NAVN[e.f]+" til "+NAVN[e.t];
+const overgang=(e,klikk)=>{
+  const d=document.createElement(klikk?"button":"div"); d.className="over"+(klikk?" klikk":"");
+  const b=document.createElement("b"); b.textContent=e.l.n+". "+retning(e);
   const q=document.createElement("q"); q.textContent=e.s;
-  d.append(b,q); return d;
+  d.append(b,q);
+  if(klikk) d.addEventListener("click",ev=>{ev.stopPropagation();velgLenke(e.l,true);});
+  return d;
 };
 function velgTema(t){
-  nullstill(); svg.classList.add("dim"); t.g2.classList.add("hit","sel");
-  const ut=E.filter(e=>e.f===t.id), inn=E.filter(e=>e.t===t.id);
-  ut.concat(inn).forEach(tenn); inn.forEach(e=>e.g.classList.add("inn"));
+  nullstill(); valgt=t; svg.classList.add("dim"); t.g2.classList.add("hit","sel"); t.chip.classList.add("sel");
+  const mine=LK.filter(l=>l.a===t.id||l.b===t.id);
+  mine.forEach(l=>{ tenn(l); if(!l.S.some(e=>e.begge||e.f===t.id)) l.g.classList.add("inn"); });
+  const S=E.filter(e=>e.f===t.id||e.t===t.id);
   const p=$("panel"); p.textContent="";
   const h=document.createElement("h2"); h.textContent=t.del; p.append(h);
   const lag=(tittel,liste)=>{ if(!liste.length) return;
     const s=document.createElement("p"); s.className="muted small"; s.style.margin="12px 0 0"; s.textContent=tittel; p.append(s);
-    liste.forEach(e=>p.append(overgang(e))); };
-  lag("Herfra kan du gå videre til",ut);
-  lag("Hit kan du komme fra",inn);
+    liste.forEach(e=>p.append(overgang(e,true))); };
+  lag("Herfra kan du gå videre til",S.filter(e=>!e.begge&&e.f===t.id));
+  lag("Hit kan du komme fra",S.filter(e=>!e.begge&&e.t===t.id));
+  lag("Begge veier",S.filter(e=>e.begge));
   p.append(lenker(t));
 }
 let vist=null;
-function visPop(e){
-  vist=e;
+function visPop(l){
+  vist=l;
   const t=$("popTittel"); t.textContent="";
-  const n=document.createElement("span"); n.className="nr"; n.textContent=e.n;
-  t.append(n, document.createTextNode(NAVN[e.f]+" til "+NAVN[e.t]));
-  $("popTekst").textContent=e.s;
+  const n=document.createElement("span"); n.className="nr"; n.textContent=l.n;
+  t.append(n, document.createTextNode(NAVN[l.a]+" og "+NAVN[l.b]));
+  const p=$("popTekst"); p.textContent="";
+  l.S.forEach(e=>{ const d=document.createElement("div"); d.className="ps";
+    const r=document.createElement("span"); r.className="muted small"; r.textContent=retning(e);
+    const q=document.createElement("q"); q.textContent=e.s; d.append(r,q); p.append(d); });
   $("pop").classList.remove("hide"); $("popLukk").focus();
 }
-function lukkPop(){ if(!vist) return; const e=vist; vist=null; $("pop").classList.add("hide"); e.g.focus({preventScroll:true}); }
-function blaPop(d){ if(!vist) return; const e=E[(vist.n-1+d+E.length)%E.length]; velgPil(e,true); }
+function lukkPop(){ if(!vist) return; const l=vist; vist=null; $("pop").classList.add("hide"); if(l.g.getClientRects().length) l.g.focus({preventScroll:true}); }
+function blaPop(d){ if(!vist) return; velgLenke(LK[(vist.n-1+d+LK.length)%LK.length],true); }
 $("popLukk").addEventListener("click",lukkPop);
 $("popForrige").addEventListener("click",()=>blaPop(-1));
 $("popNeste").addEventListener("click",()=>blaPop(1));
 $("pop").addEventListener("click",ev=>{ if(ev.target.id==="pop") lukkPop(); });
 document.addEventListener("keydown",ev=>{ if(!vist) return;
   if(ev.key==="Escape") lukkPop(); else if(ev.key==="ArrowRight") blaPop(1); else if(ev.key==="ArrowLeft") blaPop(-1); });
-function velgPil(e,pop){
-  nullstill(); svg.classList.add("dim"); tenn(e);
-  if(pop) visPop(e);
-  const p=$("panel"); p.textContent="";
-  const h=document.createElement("h2"); h.textContent="Overgang "+e.n; p.append(h);
-  p.append(overgang(e));
+function velgLenke(l,pop){
+  /* Er et tema valgt og koblingen går til det, beholdes valget mens man ser på koblingen. */
+  if(!(pop&&valgt&&(l.a===valgt.id||l.b===valgt.id))){ nullstill(); svg.classList.add("dim"); }
+  tenn(l);
+  if(pop) visPop(l);
+  if(!pop){ const p=$("panel"); p.textContent="";
+    const h=document.createElement("h2"); h.textContent="Kobling "+l.n; p.append(h);
+    l.S.forEach(e=>p.append(overgang(e,false))); }
 }
 function start(){
   nullstill();
   const p=$("panel"); p.textContent="";
-  const h=document.createElement("h2"); h.textContent="Velg et tema eller en pil";
+  const h=document.createElement("h2"); h.textContent="Velg et tema eller et nummer";
   const s=document.createElement("p"); s.className="muted"; s.style.margin="0";
-  s.textContent="Fargene viser hvilke temaer som hører sammen. Der det går piler begge veier, ligger de som to spor ved siden av hverandre.";
+  s.textContent="Fargene viser hvilke temaer som hører sammen. Pilspissene viser hvilken vei setningen går, og spisser i begge ender betyr at koblingen kan brukes begge veier.";
   p.append(h,s);
 }
 document.addEventListener("click",ev=>{ if(!ev.target.closest("#panel,#pop,.card.noprint,a,button")) start(); });
 
-E.forEach(e=>{ const li=document.createElement("li");
-  const b=document.createElement("b"); b.textContent=NAVN[e.f]+" til "+NAVN[e.t]+": ";
-  const q=document.createElement("q"); q.textContent=e.s; li.append(b,q);
+LK.forEach(l=>{ const li=document.createElement("li");
+  const b=document.createElement("b"); b.textContent=NAVN[l.a]+" og "+NAVN[l.b]; li.append(b);
+  l.S.forEach(e=>{ const d=document.createElement("div"); d.className="ps";
+    const r=document.createElement("span"); r.className="muted small"; r.textContent=retning(e);
+    const q=document.createElement("q"); q.textContent=e.s; d.append(r,q); li.append(d); });
   $("alle").append(li); });
 
 let sist=-1;
 $("trekkBtn").addEventListener("click",()=>{
   let i; do{ i=Math.floor(Math.random()*E.length); }while(i===sist&&E.length>1); sist=i;
-  const e=E[i];
+  const e=E[i], snu=e.begge&&Math.random()<0.5;
   $("trekk").classList.remove("hide");
-  $("trekkTxt").textContent="Fra «"+NAVN[e.f]+"» til «"+NAVN[e.t]+"»";
+  $("trekkTxt").textContent="Fra «"+NAVN[snu?e.t:e.f]+"» til «"+NAVN[snu?e.f:e.t]+"»";
   $("trekkSvar").classList.add("hide"); $("trekkSvar").textContent=e.s;
   $("visBtn").classList.remove("hide");
   $("trekkBtn").textContent="Trekk en ny";
 });
-$("visBtn").addEventListener("click",()=>{ $("trekkSvar").classList.remove("hide"); $("visBtn").classList.add("hide"); velgPil(E[sist]); });
+$("visBtn").addEventListener("click",()=>{ $("trekkSvar").classList.remove("hide"); $("visBtn").classList.add("hide"); velgLenke(E[sist].l,false); });
 
 const m=location.hash.match(/^#tema=(.+)$/);
 const t0=m&&T.find(t=>t.del===decodeURIComponent(m[1]).split(":")[0]);
