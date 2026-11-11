@@ -108,7 +108,7 @@
 </head>
 <body>
 <div class="wrap">
-  <p class="small noprint" style="margin:0 0 6px"><a href="psy1-vitenskap-og-metode.html">← Øvingstesten</a></p>
+  <p class="small noprint" style="margin:0 0 6px"><a href="psy1-vitenskap-og-metode.html">← Øvingstesten</a><a href="tankekart.html" style="margin-left:16px">Tankekart med overganger →</a></p>
   <h1>Sensorkort</h1>
   <p class="sub">Psykologi 1. Øving på muntlig eksamen: én er eksaminand, én er sensor, resten observerer.
     Eksaminanden ser bare oppgaven. Sensor åpner kortet.</p>
@@ -143,6 +143,7 @@
     <div class="row noprint" style="margin-top:16px">
       <button class="btn" id="sensorBtn">Vis sensorkortet</button>
       <a class="small" id="quizLink" href="#">Øv på temaet i testen →</a>
+      <a class="small" id="mapLink" href="tankekart.html" style="margin-left:16px">Overganger i tankekartet →</a>
     </div>
 
     <div id="sensor" class="hide">
@@ -310,6 +311,7 @@ function showCard(nr){
   $("cJoker").textContent=k.joker; $("cJoker").classList.add("hide"); $("jokerBtn").textContent="Vis lærerens joker";
   $("sensor").classList.add("hide"); $("sensorBtn").textContent="Vis sensorkortet";
   $("quizLink").href=quizHref(k);
+  $("mapLink").href="tankekart.html#tema="+encodeURIComponent(k.del.split(":")[0]);
   $("cardView").classList.remove("hide"); $("pick").value=String(nr);
   stopTimer(); $("cardView").scrollIntoView({behavior:"smooth",block:"start"});
   const d=drawn(); if(!d.includes(nr)){ d.push(nr); setDrawn(d); }
