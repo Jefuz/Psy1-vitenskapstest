@@ -46,12 +46,12 @@
   .node:focus{outline:none}
   .node:focus rect,.node.sel rect{stroke:var(--accent);stroke-width:3}
   .edge path{fill:none;stroke:#8a93a8;stroke-width:1.8;transition:opacity .15s}
-  .edge circle{fill:#fff;stroke:#8a93a8;stroke-width:1.5}
+  .edge circle:not(.treff){fill:#fff;stroke:#8a93a8;stroke-width:1.5}
   .edge text{font-size:11px;font-weight:700;fill:var(--ink);text-anchor:middle;pointer-events:none}
   .edge{cursor:pointer}
-  .edge.on path,.edge.on circle{stroke:var(--accent)}
+  .edge.on path,.edge.on circle:not(.treff){stroke:var(--accent)}
   .edge.on path{stroke-width:2.6}
-  .edge.on circle{fill:var(--accent)}
+  .edge.on circle:not(.treff){fill:var(--accent)}
   .edge.on text{fill:#fff}
   .dim .node:not(.hit) rect{opacity:.35}
   .dim .edge:not(.on){opacity:.18}
@@ -66,6 +66,19 @@
   .disc{background:#fff8e9;border:1px solid #f3e2b8;border-radius:12px;padding:12px 14px;
     font-size:.9rem;color:#6b5a23;margin-top:14px}
   footer{margin-top:26px;text-align:center}
+  #pop{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+    background:rgba(20,30,60,.28);z-index:10;padding:16px}
+  #pop.hide{display:none}
+  #popKort{background:#fff;border-radius:18px;box-shadow:0 12px 40px rgba(20,30,60,.25);
+    max-width:600px;width:100%;padding:26px 26px 20px;position:relative}
+  #popKort .nr{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;
+    background:var(--accent);color:#fff;font-weight:700;font-size:.9rem;margin-right:10px}
+  #popTittel{font-size:1.05rem;font-weight:600;display:flex;align-items:center;padding-right:30px}
+  #popTekst{font-size:1.2rem;line-height:1.55;margin:16px 0 18px;quotes:"«" "»"}
+  @media (max-width:520px){ #popKort .hint{display:none} }
+  .edge .treff{fill:transparent;stroke:none}
+  #popLukk{position:absolute;top:12px;right:12px;border:0;background:#eef0f7;border-radius:50%;
+    width:32px;height:32px;font-size:1.1rem;cursor:pointer;color:var(--ink)}
   @media print{
     body{background:#fff} .noprint{display:none} .card{box-shadow:none;border:0;padding:0}
     .dim .node:not(.hit) rect,.dim .edge:not(.on){opacity:1}
@@ -78,7 +91,7 @@
   <h1>Psykologi 1: tankekart</h1>
   <p class="sub">De 15 temaene fra sensorkortene, med 23 piler mellom dem. Hver pil har en setning du kan bruke
     på muntlig eksamen når du skal binde ett tema til et annet. Trykk på et tema for å se overgangene derfra,
-    eller på et nummer for å se én overgang.</p>
+    eller på et nummer for å få opp overgangen midt på skjermen.</p>
 
   <div class="card" style="margin-top:18px">
     <div class="key">
@@ -124,6 +137,19 @@
     <ol class="alle" id="alle"></ol>
     <p class="disc">Setningene er forslag, ikke fasit. Sensor er mest opptatt av at du forklarer hvorfor
       temaene henger sammen, så bruk gjerne dine egne ord og egne eksempler.</p>
+  </div>
+
+  <div id="pop" class="hide" role="dialog" aria-modal="true" aria-labelledby="popTittel">
+    <div id="popKort">
+      <button id="popLukk" aria-label="Lukk">×</button>
+      <div id="popTittel"></div>
+      <q id="popTekst" style="display:block"></q>
+      <div class="row between">
+        <button class="btn ghost small" id="popForrige">← Forrige</button>
+        <span class="muted small hint">Piltastene blar, Esc lukker</span>
+        <button class="btn ghost small" id="popNeste">Neste →</button>
+      </div>
+    </div>
   </div>
 
   <footer class="small muted">Psykologi 1, Sonans. Laget som øving til muntlig eksamen.</footer>
@@ -227,10 +253,11 @@ E.forEach((e,i)=>{
   e.path=el("path",{d:"M"+e.p.map(q=>q.join(",")).join(" L"),"marker-end":"url(#pil)"},g);
   const m=e.m||midt(e.p);
   el("circle",{cx:m[0],cy:m[1],r:11},g);
+  el("circle",{cx:m[0],cy:m[1],r:20,class:"treff"},g);
   el("text",{x:m[0],y:m[1]+4},g).textContent=e.n;
   e.g=g;
-  g.addEventListener("click",ev=>{ev.stopPropagation();velgPil(e);});
-  g.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();velgPil(e);}});
+  g.addEventListener("click",ev=>{ev.stopPropagation();velgPil(e,true);});
+  g.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();velgPil(e,true);}});
 });
 T.forEach(t=>{
   const g=el("g",{class:"node",tabindex:"0",role:"button","aria-label":t.del},gN);
@@ -273,8 +300,26 @@ function velgTema(t){
   lag("Hit kan du komme fra",inn);
   p.append(lenker(t));
 }
-function velgPil(e){
+let vist=null;
+function visPop(e){
+  vist=e;
+  const t=$("popTittel"); t.textContent="";
+  const n=document.createElement("span"); n.className="nr"; n.textContent=e.n;
+  t.append(n, document.createTextNode(NAVN[e.f]+" til "+NAVN[e.t]));
+  $("popTekst").textContent=e.s;
+  $("pop").classList.remove("hide"); $("popLukk").focus();
+}
+function lukkPop(){ if(!vist) return; const e=vist; vist=null; $("pop").classList.add("hide"); e.g.focus({preventScroll:true}); }
+function blaPop(d){ if(!vist) return; const e=E[(vist.n-1+d+E.length)%E.length]; velgPil(e,true); }
+$("popLukk").addEventListener("click",lukkPop);
+$("popForrige").addEventListener("click",()=>blaPop(-1));
+$("popNeste").addEventListener("click",()=>blaPop(1));
+$("pop").addEventListener("click",ev=>{ if(ev.target.id==="pop") lukkPop(); });
+document.addEventListener("keydown",ev=>{ if(!vist) return;
+  if(ev.key==="Escape") lukkPop(); else if(ev.key==="ArrowRight") blaPop(1); else if(ev.key==="ArrowLeft") blaPop(-1); });
+function velgPil(e,pop){
   nullstill(); svg.classList.add("dim"); tenn(e);
+  if(pop) visPop(e);
   const p=$("panel"); p.textContent="";
   const h=document.createElement("h2"); h.textContent="Overgang "+e.n; p.append(h);
   p.append(overgang(e));
@@ -287,7 +332,7 @@ function start(){
   s.textContent="Fargene viser hvilke temaer som hører sammen. Pilene viser en vei videre, men de fleste kan også gås motsatt vei.";
   p.append(h,s);
 }
-document.addEventListener("click",ev=>{ if(!ev.target.closest("#panel,.card.noprint,a,button")) start(); });
+document.addEventListener("click",ev=>{ if(!ev.target.closest("#panel,#pop,.card.noprint,a,button")) start(); });
 
 E.forEach(e=>{ const li=document.createElement("li");
   const b=document.createElement("b"); b.textContent=NAVN[e.f]+" til "+NAVN[e.t]+": ";
