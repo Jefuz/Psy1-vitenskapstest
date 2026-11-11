@@ -106,7 +106,7 @@
 <div class="wrap">
   <p class="small top noprint"><a href="psy1-vitenskap-og-metode.html">← Til øvingstesten</a><a href="sensorkort.html">Sensorkort →</a></p>
   <h1>Psykologi 1: tankekart</h1>
-  <p class="sub">De 15 temaene fra sensorkortene, med 68 koblinger og 80 overgangssetninger mellom dem. Hver pil har en setning du kan bruke
+  <p class="sub">De 15 temaene fra sensorkortene, med 77 koblinger og 89 overgangssetninger mellom dem. Hver pil har en setning du kan bruke
     på muntlig eksamen når du skal binde ett tema til et annet. <span class="stor">Trykk på et tema for å se overgangene derfra,
     eller på et nummer for å få opp overgangen midt på skjermen.</span></p>
 
@@ -183,19 +183,19 @@
 /* Temaene følger sensorkortene 1 til 15 (k = kortnummer, del = tema i øvingstesten).
    c og r er kolonne og rad i rutenettet, g er fargegruppen. */
 const T=[
-  {id:"evo", k:10, del:"Evolusjonspsykologi",                       l:["Evolusjons-","psykologi"],        c:0,r:2,g:"bio"},
-  {id:"arv", k:8,  del:"Arv og miljø",                              l:["Arv og miljø"],                   c:0,r:1,g:"bio"},
+  {id:"evo", k:10, del:"Evolusjonspsykologi",                       l:["Evolusjons-","psykologi"],        c:2,r:2,g:"bio"},
+  {id:"arv", k:8,  del:"Arv og miljø",                              l:["Arv og miljø"],                   c:0,r:0,g:"bio"},
   {id:"ner", k:11, del:"Nervesystemet og hjernen",                  l:["Nervesystemet","og hjernen"],     c:3,r:3,g:"bio"},
-  {id:"hor", k:12, del:"Hormoner, sanser og hele mennesket",        l:["Hormoner og","sanser"],           c:2,r:3,g:"bio"},
+  {id:"hor", k:12, del:"Hormoner, sanser og hele mennesket",        l:["Hormoner og","sanser"],           c:0,r:3,g:"bio"},
   {id:"rus", k:15, del:"Rus",                                       l:["Rus"],                            c:3,r:0,g:"bio"},
-  {id:"per", k:7,  del:"Personlighet",                              l:["Personlighet"],                   c:2,r:0,g:"per"},
+  {id:"per", k:7,  del:"Personlighet",                              l:["Personlighet"],                   c:0,r:2,g:"per"},
   {id:"utv", k:9,  del:"Utvikling og identitet",                    l:["Utvikling og","identitet"],       c:1,r:0,g:"per"},
-  {id:"kri", k:14, del:"Kriser",                                    l:["Kriser"],                         c:0,r:0,g:"per"},
-  {id:"str", k:13, del:"Stress og psykisk helse",                   l:["Stress og","psykisk helse"],      c:2,r:2,g:"per"},
+  {id:"kri", k:14, del:"Kriser",                                    l:["Kriser"],                         c:2,r:0,g:"per"},
+  {id:"str", k:13, del:"Stress og psykisk helse",                   l:["Stress og","psykisk helse"],      c:0,r:1,g:"per"},
   {id:"lae", k:5,  del:"Læring",                                    l:["Læring"],                         c:4,r:2,g:"kog"},
   {id:"met", k:1,  del:"Vitenskap og metode",                       l:["Vitenskap og","metode"],          c:2,r:1,g:"gru"},
-  {id:"psp", k:2,  del:"Perspektiver og faghistorie",               l:["Perspektiver og","faghistorie"],  c:1,r:3,g:"gru"},
-  {id:"kog", k:3,  del:"Persepsjon og kognisjon",                   l:["Persepsjon og","kognisjon"],      c:0,r:3,g:"kog"},
+  {id:"psp", k:2,  del:"Perspektiver og faghistorie",               l:["Perspektiver og","faghistorie"],  c:2,r:3,g:"gru"},
+  {id:"kog", k:3,  del:"Persepsjon og kognisjon",                   l:["Persepsjon og","kognisjon"],      c:1,r:3,g:"kog"},
   {id:"huk", k:4,  del:"Hukommelse",                                l:["Hukommelse"],                     c:4,r:3,g:"kog"},
   {id:"mot", k:6,  del:"Motivasjon, mestring og læringsstrategier", l:["Motivasjon og","mestring"],       c:4,r:1,g:"kog"}
 ];
@@ -370,7 +370,25 @@ const E=[
   {f:"psp",t:"huk",skjult:true,
    s:"Flerlagermodellen til Atkinson og Shiffrin er typisk for det kognitive perspektivet: hukommelsen beskrives som informasjon som kodes, lagres og hentes fram."},
   {f:"utv",t:"mot",begge:true,skjult:true,
-   s:"I skolealderen står barnet ifølge Erikson mellom å oppleve seg som flink og å føle seg underlegen, og det minner om det Bandura kaller mestringstro."}
+   s:"I skolealderen står barnet ifølge Erikson mellom å oppleve seg som flink og å føle seg underlegen, og det minner om det Bandura kaller mestringstro."},
+  {f:"evo",t:"ner",
+   s:"Hjernen er formet av evolusjon, men bildet av en reptilhjerne innerst er en forenkling som ikke stemmer med hvordan hjernen faktisk utviklet seg."},
+  {f:"evo",t:"hor",
+   s:"Hormonsystemet er en gammel tilpasning: stressresponsen med adrenalin og kortisol finnes hos mange arter, trolig fordi den hjalp dem å overleve akutte farer."},
+  {f:"evo",t:"kri",
+   s:"Sorg kan ses som prisen for tilknytning: de samme båndene som holdt oss i live, gjør det vondt å miste noen."},
+  {f:"evo",t:"huk",
+   s:"Hukommelsen er trolig formet for overlevelse, ikke for nøyaktighet: vi husker lettere det som er farlig og følelsesladet, og vi rekonstruerer i stedet for å lagre kopier."},
+  {f:"evo",t:"mot",
+   s:"Samarbeid og gjensidig altruisme (Trivers) kan forklare hvorfor behovet for å høre til ser ut til å være så sterkt."},
+  {f:"kri",t:"mot",begge:true,
+   s:"Hvordan vi mestrer en krise, henger sammen med opplevd kontroll, og lært hjelpeløshet viser hva som kan skje når vi tror at ingenting nytter."},
+  {f:"kri",t:"rus",
+   s:"Rus kan bli en måte å døyve en krise på, slik Sara i caset fester mer, men det er unngående mestring som kan forlenge plagene."},
+  {f:"arv",t:"kri",
+   s:"Hvem som får varige plager etter en krise, kan forstås med diatese-stress: arvelig sårbarhet og oppvekst påvirker hvor hardt belastningen slår inn."},
+  {f:"kri",t:"kog",
+   s:"En krise kan farge hvordan verden oppfattes: i sjokkfasen kan alt føles uvirkelig, og senere tolkes tvetydige signaler lettere som trusler."}
 ];
 
 /* Lenkene: én linje per par av temaer, med én eller to setninger. */
@@ -452,9 +470,8 @@ T.forEach(t=>{
   const b=document.createElement("button"); b.className="chip"; b.textContent=t.del;
   b.style.background=FARGE[t.g][0]; b.style.borderColor=FARGE[t.g][1];
   b.addEventListener("click",()=>{ velgTema(t); $("panel").scrollIntoView({behavior:"smooth",block:"start"}); });
-  t.chip=b;
+  t.chip=b; $("chips").append(b);
 });
-["bio","per","kog","gru"].forEach(g=>T.filter(t=>t.g===g).forEach(t=>$("chips").append(t.chip)));
 
 let valgt=null;
 const retning=e=>e.begge?NAVN[e.f]+" og "+NAVN[e.t]+", begge veier":"Fra "+NAVN[e.f]+" til "+NAVN[e.t];
