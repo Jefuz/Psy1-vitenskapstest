@@ -45,9 +45,11 @@
   .node text{font-size:15px;font-weight:600;fill:var(--ink);pointer-events:none}
   .node:focus{outline:none}
   .node:focus rect,.node.sel rect{stroke:var(--accent);stroke-width:3}
-  .edge path{fill:none;stroke:#8a93a8;stroke-width:1.8;transition:opacity .15s}
-  .edge circle:not(.treff){fill:#fff;stroke:#8a93a8;stroke-width:1.5}
-  .edge text{font-size:11px;font-weight:700;fill:var(--ink);text-anchor:middle;pointer-events:none}
+  .edge path{fill:none;stroke:#c5cbd7;stroke-width:1.1;transition:opacity .15s}
+  .edge:hover path{stroke:#8a93a8}
+  .edge circle:not(.treff){fill:#fff;stroke:#c5cbd7;stroke-width:1}
+  .edge:hover circle:not(.treff){stroke:#8a93a8}
+  .edge text{font-size:10px;font-weight:600;fill:#6b7385;text-anchor:middle;pointer-events:none}
   .edge{cursor:pointer}
   .edge.on.inn path{stroke-dasharray:7 4}
   .edge.skjult{display:none}
@@ -106,7 +108,7 @@
 <div class="wrap">
   <p class="small top noprint"><a href="psy1-vitenskap-og-metode.html">← Til øvingstesten</a><a href="sensorkort.html">Sensorkort →</a></p>
   <h1>Psykologi 1: tankekart</h1>
-  <p class="sub">De 15 temaene fra sensorkortene, med 77 koblinger og 89 overgangssetninger mellom dem. Hver pil har en setning du kan bruke
+  <p class="sub">De 15 temaene fra sensorkortene, med 87 koblinger og 101 overgangssetninger mellom dem. Hver pil har en setning du kan bruke
     på muntlig eksamen når du skal binde ett tema til et annet. <span class="stor">Trykk på et tema for å se overgangene derfra,
     eller på et nummer for å få opp overgangen midt på skjermen.</span></p>
 
@@ -118,10 +120,10 @@
       <span style="--c:var(--gru);--l:var(--grul)">Grunnlaget for faget</span>
       <span class="strek">Trykk på et tema for å se alle koblingene: heltrukne går derfra eller begge veier, stiplede går dit</span>
     </div>
-    <svg id="kart" viewBox="0 0 1140 650" role="group" aria-label="Tankekart over temaene i Psykologi 1">
+    <svg id="kart" viewBox="-30 -60 1200 770" role="group" aria-label="Tankekart over temaene i Psykologi 1">
       <defs>
-        <marker id="pil" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-          <path d="M0,0 L10,5 L0,10 z" fill="#8a93a8"/>
+        <marker id="pil" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="5.5" markerHeight="5.5" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#b3bac8"/>
         </marker>
         <marker id="pilOn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
           <path d="M0,0 L10,5 L0,10 z" fill="#3f51b5"/>
@@ -183,20 +185,20 @@
 /* Temaene følger sensorkortene 1 til 15 (k = kortnummer, del = tema i øvingstesten).
    c og r er kolonne og rad i rutenettet, g er fargegruppen. */
 const T=[
-  {id:"evo", k:10, del:"Evolusjonspsykologi",                       l:["Evolusjons-","psykologi"],        c:2,r:2,g:"bio"},
-  {id:"arv", k:8,  del:"Arv og miljø",                              l:["Arv og miljø"],                   c:0,r:0,g:"bio"},
-  {id:"ner", k:11, del:"Nervesystemet og hjernen",                  l:["Nervesystemet","og hjernen"],     c:3,r:3,g:"bio"},
-  {id:"hor", k:12, del:"Hormoner, sanser og hele mennesket",        l:["Hormoner og","sanser"],           c:0,r:3,g:"bio"},
-  {id:"rus", k:15, del:"Rus",                                       l:["Rus"],                            c:3,r:0,g:"bio"},
-  {id:"per", k:7,  del:"Personlighet",                              l:["Personlighet"],                   c:0,r:2,g:"per"},
-  {id:"utv", k:9,  del:"Utvikling og identitet",                    l:["Utvikling og","identitet"],       c:1,r:0,g:"per"},
-  {id:"kri", k:14, del:"Kriser",                                    l:["Kriser"],                         c:2,r:0,g:"per"},
-  {id:"str", k:13, del:"Stress og psykisk helse",                   l:["Stress og","psykisk helse"],      c:0,r:1,g:"per"},
-  {id:"lae", k:5,  del:"Læring",                                    l:["Læring"],                         c:4,r:2,g:"kog"},
+  {id:"evo", k:10, del:"Evolusjonspsykologi",                       l:["Evolusjons-","psykologi"],        c:1,r:2,g:"bio"},
+  {id:"arv", k:8,  del:"Arv og miljø",                              l:["Arv og miljø"],                   c:4,r:3,g:"bio"},
+  {id:"ner", k:11, del:"Nervesystemet og hjernen",                  l:["Nervesystemet","og hjernen"],     c:0,r:1,g:"bio"},
+  {id:"hor", k:12, del:"Hormoner, sanser og hele mennesket",        l:["Hormoner og","sanser"],           c:0,r:0,g:"bio"},
+  {id:"rus", k:15, del:"Rus",                                       l:["Rus"],                            c:1,r:3,g:"bio"},
+  {id:"per", k:7,  del:"Personlighet",                              l:["Personlighet"],                   c:4,r:2,g:"per"},
+  {id:"utv", k:9,  del:"Utvikling og identitet",                    l:["Utvikling og","identitet"],       c:3,r:0,g:"per"},
+  {id:"kri", k:14, del:"Kriser",                                    l:["Kriser"],                         c:2,r:3,g:"per"},
+  {id:"str", k:13, del:"Stress og psykisk helse",                   l:["Stress og","psykisk helse"],      c:3,r:3,g:"per"},
+  {id:"lae", k:5,  del:"Læring",                                    l:["Læring"],                         c:4,r:0,g:"kog"},
   {id:"met", k:1,  del:"Vitenskap og metode",                       l:["Vitenskap og","metode"],          c:2,r:1,g:"gru"},
-  {id:"psp", k:2,  del:"Perspektiver og faghistorie",               l:["Perspektiver og","faghistorie"],  c:2,r:3,g:"gru"},
-  {id:"kog", k:3,  del:"Persepsjon og kognisjon",                   l:["Persepsjon og","kognisjon"],      c:1,r:3,g:"kog"},
-  {id:"huk", k:4,  del:"Hukommelse",                                l:["Hukommelse"],                     c:4,r:3,g:"kog"},
+  {id:"psp", k:2,  del:"Perspektiver og faghistorie",               l:["Perspektiver og","faghistorie"],  c:2,r:0,g:"gru"},
+  {id:"kog", k:3,  del:"Persepsjon og kognisjon",                   l:["Persepsjon og","kognisjon"],      c:1,r:0,g:"kog"},
+  {id:"huk", k:4,  del:"Hukommelse",                                l:["Hukommelse"],                     c:0,r:3,g:"kog"},
   {id:"mot", k:6,  del:"Motivasjon, mestring og læringsstrategier", l:["Motivasjon og","mestring"],       c:4,r:1,g:"kog"}
 ];
 const NAVN={evo:"Evolusjonspsykologi",arv:"Arv og miljø",ner:"Nervesystemet og hjernen",hor:"Hormoner og sanser",
@@ -214,7 +216,7 @@ const E=[
   {f:"evo",t:"arv",begge:true,
    s:"Evolusjonen forklarer det vi har felles som art, mens tvillingstudiene forklarer hvorfor vi likevel er ulike."},
   {f:"evo",t:"per",
-   s:"Evolusjonspsykologien spør hva et trekk var godt for, og noen forskere drøfter om ulike personligheter kan ha vært nyttige i ulike miljøer."},
+   s:"Ifølge Nettle er hver av de fem dimensjonene en avveining: høy ekstroversjon kan gi flere allierte og partnere, men også mer risiko, så ingen verdi er best i alle miljøer."},
   {f:"arv",t:"ner",
    s:"Genene gir oppskriften på nervesystemet, men miljøet påvirker hvilke gener som faktisk kommer til uttrykk."},
   {f:"arv",t:"per",
@@ -232,9 +234,9 @@ const E=[
   {f:"str",t:"rus",
    s:"Noen mestrer stress med rus, et eksempel på unngående mestring som lindrer nå, men gir nye problemer senere."},
   {f:"utv",t:"per",
-   s:"Erikson bygger på Freud, men flytter vekten fra seksuelle drifter til sosiale utfordringer gjennom hele livet."},
+   s:"Erikson bygger på Freuds psykoseksuelle faser, men flytter vekten fra drifter til sosiale utfordringer gjennom hele livet, fra tillit mot mistillit til identitet mot rolleforvirring."},
   {f:"utv",t:"kri",begge:true,
-   s:"Cullberg skiller utviklingskriser, som overgangene Erikson beskriver, fra traumatiske kriser som kommer uventet."},
+   s:"Cullberg skiller utviklingskriser, som Eriksons fase identitet mot rolleforvirring i ungdomstiden, fra traumatiske kriser som kommer uventet."},
   {f:"str",t:"kri",
    s:"Når belastningen blir så stor at det vi pleier å gjøre, ikke strekker til, snakker vi om en krise."},
   {f:"lae",t:"rus",
@@ -244,13 +246,13 @@ const E=[
   {f:"lae",t:"mot",
    s:"Bandura binder dem sammen: vi lærer ved å se på modeller, og å se andre mestre er også en av kildene til mestringstro."},
   {f:"met",t:"per",
-   s:"Femfaktormodellen er et resultat av metode: statistisk analyse av spørreskjema samler trekk som henger sammen, i fem faktorer."},
+   s:"Femfaktormodellen er bygget med statistisk analyse av spørreskjema: et ledd som «Jeg har vanskelig for å si nei» hører til fasetten føyelighet, og seks fasetter samles i dimensjonen medmenneskelighet."},
   {f:"psp",t:"met",
    s:"Perspektivene skiller seg også i metode: behavioristene måler observerbar atferd, mens psykoanalysen tolker det ubevisste."},
   {f:"psp",t:"per",
-   s:"Personlighet er der perspektivene møtes tydeligst: Freud ser drifter, Rogers ser vekst, og trekkteoriene måler stabile forskjeller."},
+   s:"Personlighet er der perspektivene møtes tydeligst: Freud ser en kamp mellom id, ego og superego, Rogers ser vekst, og trekkteoriene måler stabile forskjeller."},
   {f:"psp",t:"utv",
-   s:"Utviklingsteoriene speiler perspektivene: Freud er psykodynamisk, Piaget kognitiv og Vygotskij sosiokulturell."},
+   s:"Utviklingsteoriene speiler perspektivene: Freud er psykodynamisk, Piaget kognitiv med fire stadier fra det sensorimotoriske til det formelt operasjonelle, og Vygotskij sosiokulturell."},
   {f:"psp",t:"kog",
    s:"Det kognitive perspektivet ser mennesket som en informasjonsbehandler, og persepsjonen er det første steget."},
   {f:"kog",t:"huk",
@@ -298,7 +300,7 @@ const E=[
   {f:"arv",t:"str",
    s:"Diatese-stress-modellen sier at lidelse oppstår når en medfødt sårbarhet møter belastninger, og den kobler arv og miljø."},
   {f:"per",t:"str",
-   s:"Høy nevrotisisme kan ses som en sårbarhet i diatese-stress-modellen, fordi de samme belastningene da kan gi sterkere reaksjoner."},
+   s:"Høy nevrotisisme, med fasetter som angst og sårbarhet, kan ses som en sårbarhet i diatese-stress-modellen, fordi de samme belastningene da kan gi sterkere reaksjoner."},
   {f:"psp",t:"ner",
    s:"Nevrologien bygger på det biologiske perspektivet: atferd og opplevelse forklares med det som skjer i nervesystemet."},
   {f:"huk",t:"ner",begge:true,
@@ -326,13 +328,13 @@ const E=[
   {f:"lae",t:"per",skjult:true,
    s:"Bandura ser personlighet som gjensidig påvirkning mellom person, atferd og miljø, altså personlighet forklart med læring."},
   {f:"ner",t:"per",skjult:true,
-   s:"Phineas Gage blir ofte trukket fram som et tidlig tegn på at personligheten har en biologisk side, men kildene om forandringen hans er tynne."},
+   s:"Phineas Gage fikk en jernstang gjennom frontallappen i 1848 og blir ofte trukket fram som tegn på at personligheten har en biologisk side, men kildene om forandringen hans er tynne."},
   {f:"utv",t:"rus",skjult:true,
-   s:"I en studie økte risikotakingen mest hos ungdom når venner var til stede, og det gjør tidlig rusdebut til et utviklingsspørsmål."},
+   s:"I en studie økte risikotakingen mest hos ungdom når venner var til stede. En vanlig forklaring er at frontallappen, som er involvert i impulskontroll, modnes sent, og det gjør tidlig rusdebut til et utviklingsspørsmål."},
   {f:"per",t:"rus",
-   s:"Personlighet kan henge sammen med rus: trekk som spenningssøking og lav planmessighet ser ut til å øke risikoen for problematisk bruk."},
+   s:"Ruslidelser henger ifølge Kotov og kolleger mer sammen med svak impulskontroll og lav medmenneskelighet enn med nevrotisisme, og fasetter som spenningssøking og impulsivitet kan øke risikoen."},
   {f:"per",t:"mot",
-   s:"Planmessighet er det personlighetstrekket som ser ut til å henge sterkest sammen med skoleprestasjoner, trolig fordi det handler om utholdenhet og gode arbeidsvaner."},
+   s:"Planmessighet samvarierer med karakterer, stort sett uavhengig av intelligens (Poropat 2009), og fasetter som selvdisiplin og prestasjonsstreben ligner det motivasjonsforskningen kaller utholdenhet."},
   {f:"per",t:"kog",
    s:"Personlighet farger persepsjonen: personer med høy nevrotisisme ser ut til å legge lettere merke til trusler og tolke tvetydige situasjoner mer negativt."},
   {f:"utv",t:"str",
@@ -388,7 +390,31 @@ const E=[
   {f:"arv",t:"kri",
    s:"Hvem som får varige plager etter en krise, kan forstås med diatese-stress: arvelig sårbarhet og oppvekst påvirker hvor hardt belastningen slår inn."},
   {f:"kri",t:"kog",
-   s:"En krise kan farge hvordan verden oppfattes: i sjokkfasen kan alt føles uvirkelig, og senere tolkes tvetydige signaler lettere som trusler."}
+   s:"En krise kan farge hvordan verden oppfattes: i sjokkfasen kan alt føles uvirkelig, og senere tolkes tvetydige signaler lettere som trusler."},
+  {f:"psp",t:"mot",
+   s:"Maslows behovspyramide og Rogers' tanke om selvaktualisering viser at det humanistiske perspektivet også er en motivasjonsteori."},
+  {f:"kog",t:"mot",
+   s:"Attribusjon er kognisjon om årsaker: om vi forklarer et nederlag med lite innsats eller dårlige evner, påvirker om vi prøver igjen (Weiner)."},
+  {f:"ner",t:"utv",
+   s:"Hjernen modnes og formes av erfaring: myeliniseringen, som gjør signalene raskere, fortsetter langt opp i tjueårene, og drosjesjåførene i London fikk større hippocampus."},
+  {f:"per",t:"huk",begge:true,
+   s:"Freud mente at egoet fortrenger vonde minner for å beskytte seg mot angst, men forskningen tyder på at traumer oftere huskes for godt enn at de glemmes."},
+  {f:"kri",t:"huk",
+   s:"Etter en traumatisk krise kan minnene bli påtrengende, og gjenopplevelse er et kjennetegn ved posttraumatisk stresslidelse."},
+  {f:"lae",t:"kog",skjult:true,
+   s:"Bandura viste at modellæring krever oppmerksomhet og hukommelse, og dermed flyttet læringspsykologien inn i hodet."},
+  {f:"ner",t:"mot",skjult:true,
+   s:"Dopaminsystemet handler mer om å ville ha enn om å like, og frontallappen er involvert i planlegging og impulskontroll, så motivasjonen har en biologisk side."},
+  {f:"rus",t:"huk",skjult:true,
+   s:"Alkohol kan hindre at hippocampus lagrer nye minner, og derfor kan man få hukommelsestap etter en fest."},
+  {f:"hor",t:"utv",skjult:true,
+   s:"Puberteten styres av hormoner, og endringene i kropp og følelser skjer samtidig med identitetsarbeidet Erikson og Marcia beskriver."},
+  {f:"arv",t:"rus",skjult:true,
+   s:"Rusproblemer går ofte i familier, og tvillingstudier tyder på at både arv og miljø bidrar."},
+  {f:"kri",t:"utv",
+   s:"En krise kan sette identiteten i spill: etter et brudd kan en som hadde overtatt identiteten sin, gå inn i et moratorium og begynne å utforske på nytt (Marcia)."},
+  {f:"str",t:"per",
+   s:"Freuds forsvarsmekanismer kan ses som en tidlig teori om mestring: egoet beskytter seg mot angst, for eksempel med fortrengning eller rasjonalisering, når id og superego trekker hver sin vei."}
 ];
 
 /* Lenkene: én linje per par av temaer, med én eller to setninger. */
@@ -411,7 +437,7 @@ const kant=(cx,cy,tx,ty)=>{ /* der linja fra sentrum mot (tx,ty) går ut av boks
 const pq=(p,c,q,t)=>[(1-t)*(1-t)*p[0]+2*(1-t)*t*c[0]+t*t*q[0],(1-t)*(1-t)*p[1]+2*(1-t)*t*c[1]+t*t*q[1]];
 const inni=(x,y,t,m)=>Math.abs(x-X(t.c))<W/2+m&&Math.abs(y-Y(t.r))<H/2+m;
 /* Hver linje får den minste bøyen som holder den unna alle andre temaer. */
-const BOY=[0,30,-30,60,-60,90,-90,120,-120,160,-160,200,-200,250,-250];
+const BOY=[0,30,-30,60,-60,90,-90,120,-120,160,-160,200,-200,250,-250,300,-300,360,-360];
 LK.forEach(l=>{
   const A=byId[l.a],B=byId[l.b],a=[X(A.c),Y(A.r)],b=[X(B.c),Y(B.r)];
   const dx=b[0]-a[0],dy=b[1]-a[1],len=Math.hypot(dx,dy),nx=-dy/len,ny=dx/len;
@@ -421,7 +447,7 @@ LK.forEach(l=>{
     let treff=0;
     for(let i=1;i<24;i++){ const [x,y]=pq(a,c,b,i/24);
       T.forEach(t=>{ if(t!==A&&t!==B&&inni(x,y,t,10)) treff++; });
-      if(x<5||y<5||x>VB[0]-5||y>VB[1]-5) treff+=5; }
+      if(x<-25||y<-55||x>VB[0]+25||y>VB[1]+55) treff+=5; }
     if(!best||treff<best[1]) best=[c,treff];
     if(!treff) break;
   }
@@ -450,9 +476,9 @@ LK.forEach(l=>{
   l.path=el("path",{d:"M"+l.p1.join(",")+" Q"+l.c.join(",")+" "+l.p2.join(",")},g);
   merk(l,false);
   const [mx,my]=l.m;
-  el("circle",{cx:mx,cy:my,r:10},g);
+  el("circle",{cx:mx,cy:my,r:9},g);
   el("circle",{cx:mx,cy:my,r:19,class:"treff"},g);
-  el("text",{x:mx,y:my+4},g).textContent=l.n;
+  el("text",{x:mx,y:my+3.5},g).textContent=l.n;
   l.g=g;
   g.addEventListener("click",ev=>{ev.stopPropagation();velgLenke(l,true);});
   g.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();velgLenke(l,true);}});
